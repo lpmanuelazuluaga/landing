@@ -199,16 +199,33 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 - **Workflow de CI en GitHub Actions:** se ejecutará por primera vez con el
   primer push.
-- **Vercel:** CLI no instalada en esta máquina; ni proyecto, ni deploy, ni
-  previews con noindex comprobados en Vercel.
+- **Vercel:** CLI 61.1.0 instalada, sin sesión iniciada; ni proyecto, ni
+  deploy, ni previews con noindex comprobados en Vercel.
 - **Rendimiento** (Lighthouse, Core Web Vitals): requiere despliegue.
 - **Dispositivos reales** (Safari iOS, Android).
 - **Adecuación legal** del banner y de los textos para Colombia.
 
 ## GitHub
 
-- Remoto `origin` → `https://github.com/lpmanuelazuluaga/landing.git`.
+- Remoto `origin` → `https://lpmanuelazuluaga@github.com/lpmanuelazuluaga/landing.git`
+  (el usuario en la URL indica a Git Credential Manager qué cuenta usar).
+- Identidad de commits **solo en este repositorio** (`git config --local`):
+  `lpmanuelazuluaga <342586824+lpmanuelazuluaga@users.noreply.github.com>`.
+  No expone emails personales.
 - Rama `main`. Nunca force push ni reescritura de historial publicado.
+- **Estado del primer push (2026-10-14): bloqueado.** GitHub respondió 403
+  porque Git Credential Manager entregó la credencial de otra cuenta guardada en
+  esta máquina, sin permiso sobre el repositorio. Nada llegó al remoto. Para
+  resolverlo, en una terminal propia:
+
+  ```bash
+  git credential-manager github list
+  git credential-manager github login --username lpmanuelazuluaga --browser --force
+  # en el navegador, la sesión activa de GitHub debe ser lpmanuelazuluaga
+  # (si hay otra abierta, usar una ventana privada o --device)
+  git credential-manager github list   # debe aparecer lpmanuelazuluaga
+  git push -u origin main
+  ```
 - El repositorio es **público**: nada de secretos, datos personales ni documentos
   internos de la agencia.
 - Ramas y commits según `docs/CONVENTIONS.md` (`feat/registro-<cambio>`,
@@ -235,15 +252,19 @@ Opción web (recomendada para el primer vínculo):
 5. Deploy. Producción se despliega desde `main`; cada rama y PR genera un
    preview (comportamiento por defecto de la integración con Git).
 
-Opción CLI (sintaxis a confirmar con `vercel --help` de la versión instalada):
+Opción CLI (instalada en esta máquina: `vercel@61.1.0`, publicada el
+2026-09-29; sintaxis comprobada con `--help` de esa versión). Requiere que el
+repositorio ya tenga el primer push:
 
 ```bash
-npm install -g vercel
 vercel login
 vercel whoami                         # confirmar que es la cuenta del cliente
-vercel link --yes --project landing-registro
-vercel git connect                    # deploy automático desde main; previews por rama
+vercel link --yes --project landing-registro [--team <slug-del-team>]
+vercel git connect https://github.com/lpmanuelazuluaga/landing.git
 ```
+
+`vercel link` crea `.vercel/` en local (ignorado por Git). Con la conexión a
+Git, producción se despliega desde `main` y cada rama o PR genera un preview.
 
 Comprobar tras el primer deploy: la URL `*.vercel.app` responde `X-Robots-Tag:
 noindex, nofollow` y no carga ningún script de tracking.
@@ -258,8 +279,9 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 ## Tareas pendientes para Bruno
 
-1. Autorizar el primer push a `main` (commit inicial ya preparado en local).
-2. Vercel: iniciar sesión en la cuenta del cliente, confirmar plan Pro y crear
+1. Autenticar la cuenta `lpmanuelazuluaga` en Git Credential Manager y hacer el
+   primer push a `main` (commits ya preparados en local; ver "GitHub").
+2. Vercel: `vercel login` en la cuenta del cliente, confirmar plan Pro y crear
    el proyecto (sección "Vercel").
 3. Comprobar en GitHub → Actions que el workflow `check` termina en verde.
 4. Entregar la landing de referencia y los materiales (copy, imágenes, marca)

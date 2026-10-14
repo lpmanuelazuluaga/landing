@@ -7,9 +7,10 @@
 
 export const LANDING = {
   slug: "registro",
-  /** Ruta pública. Para indexarla, añadirla a PUBLISHED_LANDINGS (src/lib/landings.ts). */
-  path: "/registro",
-  thanksPath: "/registro/gracias",
+  /** Ruta pública: la raíz del dominio (route group "(registro)", sin segmento en la URL).
+      Para indexarla, añadirla a PUBLISHED_LANDINGS (src/lib/landings.ts). */
+  path: "/",
+  thanksPath: "/gracias",
   /** Etiqueta del lead en el CRM. Una variante A/B lleva la suya (p. ej. "registro-b"). */
   leadSource: "registro",
 } as const;

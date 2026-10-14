@@ -21,9 +21,10 @@ pendientes en `docs/HANDOFF.md`.
   (`landing-registro`).
 - Temática: desarrollo personal, amor propio y relaciones de pareja.
 - Mercado e idioma: español de Colombia (`es-CO`, `es_CO`, país `CO`).
-- Una sola landing: `registro` → `src/app/registro/` (`/registro`), más su
-  página de gracias. El registro es un modal dentro de la landing, sin ruta
-  propia. La raíz `/` redirige a `/registro` (`next.config.ts`).
+- Una sola landing, en la raíz del dominio: `src/app/(registro)/` → `/`, y su
+  página de gracias en `/gracias`. El registro es un modal dentro de la
+  landing: abrirlo no cambia la URL (ni hash ni query). Solo un registro
+  confirmado navega a `/gracias`.
 - Repositorio **público**: nada de secretos, datos personales ni documentos
   internos en el código, los commits o `docs/`.
 - **Fase actual: solo infraestructura.** El diseño reproducirá una landing de

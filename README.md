@@ -42,9 +42,8 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| `/` | Redirige a `/registro` (307, conserva la query) | — |
-| `/registro` | Landing de Registro: estructura generada, **sin diseño ni copy** (carpeta `src/app/registro/`, `leadSource`: `registro`) | No (fuera de `PUBLISHED_LANDINGS`) |
-| `/registro/gracias` | Confirmación de registro (placeholder) | No, nunca |
+| `/` | Landing de Registro (única del sitio): estructura generada, **sin diseño ni copy**. Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| `/gracias` | Confirmación tras un registro entregado (placeholder) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |
 | `/robots.txt`, `/sitemap.xml` | Según la regla de indexación | — |

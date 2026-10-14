@@ -13,7 +13,7 @@ empezar** (espera la landing de referencia y los materiales del cliente).
 | Nombre técnico | `landing-registro` (`package.json`; npm y Vercel exigen minúsculas, por eso no `Landing-Registro`) |
 | Temática | Desarrollo personal, amor propio y relaciones de pareja |
 | Idioma y mercado | Español de Colombia: `lang="es-CO"`, `og:locale` `es_CO`, país por defecto `CO` |
-| Landing inicial | `registro` → `/registro` (y `/registro/gracias`) |
+| Landing | Una sola, `registro`, en la raíz `/`; gracias en `/gracias` |
 | Ruta local | `C:\Users\Bruno\Desktop\Manuela Zuluaga` |
 | Repositorio GitHub | https://github.com/lpmanuelazuluaga/landing (público, rama `main`) |
 | Proyecto Vercel | `landing`, equipo `manuela-zuluaga` (plan Hobby), conectado al repositorio (ver "Vercel") |
@@ -38,10 +38,10 @@ ninguna dependencia respecto de la plantilla.
 **Hay** (heredado de la plantilla y adaptado):
 
 - `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente.
-- Una sola landing, en `/registro`, con su página de gracias. El registro se
-  hace en un modal dentro de la landing, sin ruta propia. La raíz `/` redirige
-  a `/registro` (307, conserva `utm_*` y click IDs; `next.config.ts`).
-- `/registro` y `/registro/gracias` generadas con `npm run new:landing`: solo
+- Una sola landing, en la raíz del dominio (`/`), con su página de gracias en
+  `/gracias`. El registro se hace en un modal dentro de la landing: abrirlo no
+  cambia la URL. Solo tras un registro confirmado se navega a `/gracias`.
+- `/` y `/gracias` generadas con `npm run new:landing`: solo
   estructura mínima (un `h1` con texto `TODO`, el formulario base y la página de
   gracias). **No es diseño ni copy**: se reemplaza entero en la fase visual.
 - Tokens de color neutros, sin identidad (`src/styles/theme.css`).
@@ -63,12 +63,12 @@ scripts/                      new-landing.mjs (generador), smoke.mjs
 templates/landing/            molde que copia el generador
 src/
   app/
-    layout.tsx                layout raíz (sin page.tsx: "/" redirige a /registro)
+    layout.tsx                layout raíz
     not-found.tsx error.tsx   404 y error
     robots.ts  sitemap.ts     según la regla de indexación
     (legal)/privacidad|cookies  rutas legales (texto pendiente del cliente)
     api/leads/route.ts        recepción de leads
-    registro/                 Landing de Registro
+    (registro)/               Landing de Registro, en "/" (route group: no suma segmento a la URL)
       page.tsx layout.tsx     composición de secciones y clase .lp-registro
       content.ts              copy y config (LANDING, META, HERO, THANKS) — hoy TODO
       landing.css             estilos propios bajo .lp-registro
@@ -92,7 +92,7 @@ descargarlos. Revisados el 2026-10-14: sin GPS ni datos de autor en los
 metadatos.
 
 - No se importan desde el código. En la fase visual, las imágenes que se usen
-  se convierten a JPG/WebP optimizado y se copian a `src/app/registro/_assets/`
+  se convierten a JPG/WebP optimizado y se copian a `src/app/(registro)/_assets/`
   (`docs/CONVENTIONS.md`, "Imágenes").
 - `main/relacion.png` es en realidad un JPEG con extensión `.png`; corregirlo al
   optimizarla.
@@ -116,20 +116,17 @@ metadatos.
 
 ```bash
 npm run new:landing -- <slug>          # → src/app/<slug>/  (/<slug>)
-npm run new:landing -- <slug> --root   # → src/app/(<slug>)/  (/); antes, quitar la redirección de "/" en next.config.ts
+npm run new:landing -- <slug> --root   # → src/app/(<slug>)/  (/), exige que no haya otra página en "/"
 ```
 
 - Slug en kebab-case y en español (`masterclass`, `lista-de-espera`). Nunca
   sobrescribe; rechaza slugs reservados (`api`, `gracias`, `privacidad`…).
 - Después: completar `content.ts`, construir `_sections/`, añadir la ruta a la
   tabla del README.
-- **Decisión del 2026-10-14:** la landing queda en `/registro` y la raíz
-  redirige ahí. Si algún día debe ocupar `/`: quitar la redirección de
-  `next.config.ts`, mover la carpeta con
-  `git mv src/app/registro "src/app/(registro)"` y en `content.ts` cambiar
-  `path` a `/` y `thanksPath` a `/gracias`. La clase `.lp-registro` no cambia.
-- Si se crea otra landing, revisar la redirección de `/`: hoy asume que hay una
-  sola.
+- **Decisión del 2026-10-14:** la Landing de Registro ocupa la raíz, dentro del
+  route group `src/app/(registro)/` (los paréntesis no generan segmento en la
+  URL). No existe `src/app/page.tsx`: dos páginas en `/` rompen el build. Una
+  landing nueva iría en `src/app/<slug>/` (`/<slug>`).
 - Publicar (indexar) una ruta = añadirla a `PUBLISHED_LANDINGS`
   (`src/lib/landings.ts`) **y** activar las variables de indexación. Hoy está
   vacío a propósito.
@@ -137,13 +134,13 @@ npm run new:landing -- <slug> --root   # → src/app/(<slug>)/  (/); antes, quit
 ## Cómo incorporar componentes
 
 - Antes de crear uno, revisar `src/components/ui/` (Container, Dialog, Reveal).
-- Componentes con identidad visual de la landing → `src/app/registro/_components/`
+- Componentes con identidad visual de la landing → `src/app/(registro)/_components/`
   o `_sections/`. Al núcleo (`src/components/ui/`) solo sube lo que no tiene
   diseño propio.
 - Una landing nunca importa de otra.
 - Copy en `content.ts`; nunca hex en JSX (tokens semánticos `bg-accent`,
   `text-muted`…); nunca clases interpoladas (`bg-${x}`).
-- Fuentes con `next/font` en `src/app/registro/layout.tsx`, no en el layout
+- Fuentes con `next/font` en `src/app/(registro)/layout.tsx`, no en el layout
   raíz. Imágenes importadas desde `_assets/`. Hero con `loading="eager"` +
   `fetchPriority="high"` (`priority` está deprecado en Next 16).
 - Formularios: la UI es de la landing, la lógica siempre `useLeadForm` +
@@ -204,8 +201,8 @@ Guía de activación de cada una en `docs/INTEGRATIONS.md`.
 | `npm run build` | ✔ todas las páginas estáticas (○); solo `/api/leads` dinámica (ƒ) |
 | `npm run check` | ✔ |
 | `npm run smoke` | ✔ 17/17 |
-| `/`, `/registro`, `/registro/gracias`, `/privacidad`, `/cookies` | ✔ 200, `X-Robots-Tag` y meta `noindex, nofollow`, sin canonical, `lang="es-CO"`, `og:locale` `es_CO`, sin GTM/Clarity/Pixel |
-| `/registro` | ✔ un solo `h1`, título "Registro \| Manuela Zuluaga", honeypot presente |
+| `/`, `/gracias`, `/privacidad`, `/cookies` | ✔ 200, `X-Robots-Tag` y meta `noindex, nofollow`, sin canonical, `lang="es-CO"`, `og:locale` `es_CO`, sin GTM/Clarity/Pixel |
+| `/` (landing en la raíz) | ✔ responde 200 directo, sin redirección; un solo `h1`, título "Registro \| Manuela Zuluaga", honeypot presente. `/registro` y `/registro/gracias` dan 404 |
 | Sitemap | ✔ vacío; `PUBLISHED_LANDINGS` vacío |
 | Formularios sin destino real | ✔ `LEADS_WEBHOOK_URL` vacía → `/api/leads` responde 503, nunca éxito falso |
 | `.gitignore` | ✔ ignora `.env*` (salvo `.env.example`), `.vercel`, `.next/`, `node_modules/`, `*.tsbuildinfo`, `next-env.d.ts` |
@@ -313,7 +310,6 @@ noindex, nofollow` y no carga ningún script de tracking.
 4. Entregar la landing de referencia y los materiales (copy, imágenes, marca)
    con el PROMPT 2.
 5. Decidir con el cliente:
-   - si la Landing de Registro vive en `/` o en `/registro`;
    - campos del formulario (¿teléfono obligatorio?, `site.leads.requirePhone`);
    - voz del copy (tuteo o usted) para `src/content/ui.ts`;
    - CRM o automatización de destino de los leads;

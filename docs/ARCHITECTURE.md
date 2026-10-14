@@ -30,7 +30,6 @@ src/
   app/
     layout.tsx                <html lang>, metadataBase, plantilla de títulos, tracking
     globals.css               @import tailwind + tema + base mínima
-                              (sin page.tsx: "/" redirige a /registro desde next.config.ts)
     not-found.tsx             404 de cualquier URL inexistente
     error.tsx                 error de render con retry()
     robots.ts  sitemap.ts     según la regla de indexación
@@ -38,7 +37,7 @@ src/
     (legal)/cookies/
     api/leads/route.ts        recepción de leads
     <slug>/                   cada landing (creada con npm run new:landing)
-    registro/                 Landing de Registro (estructura generada, sin diseño)
+    (registro)/               Landing de Registro en "/" (route group; estructura generada, sin diseño)
   components/
     ui/                       Container, Dialog (<dialog> nativo), Reveal
     tracking/                 Tracking, ConsentGatedScripts, ConsentBanner, AttributionCapture

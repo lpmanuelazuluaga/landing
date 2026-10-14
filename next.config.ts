@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
     qualities: [75],
   },
 
+  async redirects() {
+    /* El sitio tiene una sola landing, en /registro. La raíz redirige ahí y
+       conserva la query (utm_*, click IDs). 307 mientras la URL no sea
+       definitiva (AGENTS.md, regla 14). */
+    return [{ source: "/", destination: "/registro", permanent: false }];
+  },
+
   async headers() {
     if (isSiteIndexable()) return [];
 

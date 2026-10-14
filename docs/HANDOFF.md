@@ -38,7 +38,9 @@ ninguna dependencia respecto de la plantilla.
 **Hay** (heredado de la plantilla y adaptado):
 
 - `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente.
-- `/` provisional ("Proyecto en preparación"), funcional y siempre noindex.
+- Una sola landing, en `/registro`, con su página de gracias. El registro se
+  hace en un modal dentro de la landing, sin ruta propia. La raíz `/` redirige
+  a `/registro` (307, conserva `utm_*` y click IDs; `next.config.ts`).
 - `/registro` y `/registro/gracias` generadas con `npm run new:landing`: solo
   estructura mínima (un `h1` con texto `TODO`, el formulario base y la página de
   gracias). **No es diseño ni copy**: se reemplaza entero en la fase visual.
@@ -61,7 +63,7 @@ scripts/                      new-landing.mjs (generador), smoke.mjs
 templates/landing/            molde que copia el generador
 src/
   app/
-    layout.tsx  page.tsx      layout raíz y "/" provisional
+    layout.tsx                layout raíz (sin page.tsx: "/" redirige a /registro)
     not-found.tsx error.tsx   404 y error
     robots.ts  sitemap.ts     según la regla de indexación
     (legal)/privacidad|cookies  rutas legales (texto pendiente del cliente)
@@ -114,18 +116,20 @@ metadatos.
 
 ```bash
 npm run new:landing -- <slug>          # → src/app/<slug>/  (/<slug>)
-npm run new:landing -- <slug> --root   # → src/app/(<slug>)/  (/), exige borrar antes src/app/page.tsx
+npm run new:landing -- <slug> --root   # → src/app/(<slug>)/  (/); antes, quitar la redirección de "/" en next.config.ts
 ```
 
 - Slug en kebab-case y en español (`masterclass`, `lista-de-espera`). Nunca
   sobrescribe; rechaza slugs reservados (`api`, `gracias`, `privacidad`…).
 - Después: completar `content.ts`, construir `_sections/`, añadir la ruta a la
   tabla del README.
-- **Si la Landing de Registro debe ocupar `/`** (decisión pendiente): borrar
-  `src/app/page.tsx` y mover la carpeta con
-  `git mv src/app/registro "src/app/(registro)"`; luego en `content.ts` cambiar
-  `path` a `/` y `thanksPath` a `/gracias`. El nombre de la clase `.lp-registro`
-  no cambia.
+- **Decisión del 2026-10-14:** la landing queda en `/registro` y la raíz
+  redirige ahí. Si algún día debe ocupar `/`: quitar la redirección de
+  `next.config.ts`, mover la carpeta con
+  `git mv src/app/registro "src/app/(registro)"` y en `content.ts` cambiar
+  `path` a `/` y `thanksPath` a `/gracias`. La clase `.lp-registro` no cambia.
+- Si se crea otra landing, revisar la redirección de `/`: hoy asume que hay una
+  sola.
 - Publicar (indexar) una ruta = añadirla a `PUBLISHED_LANDINGS`
   (`src/lib/landings.ts`) **y** activar las variables de indexación. Hoy está
   vacío a propósito.

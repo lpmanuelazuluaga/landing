@@ -1,7 +1,11 @@
 <!-- BEGIN:nextjs-agent-rules -->
+
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
 <!-- END:nextjs-agent-rules -->
 
 # Reglas del proyecto para agentes de IA
@@ -17,7 +21,9 @@ pendientes en `docs/HANDOFF.md`.
   (`landing-registro`).
 - Temática: desarrollo personal, amor propio y relaciones de pareja.
 - Mercado e idioma: español de Colombia (`es-CO`, `es_CO`, país `CO`).
-- Landing inicial: `registro` → `src/app/registro/` (`/registro`).
+- Una sola landing: `registro` → `src/app/registro/` (`/registro`), más su
+  página de gracias. El registro es un modal dentro de la landing, sin ruta
+  propia. La raíz `/` redirige a `/registro` (`next.config.ts`).
 - Repositorio **público**: nada de secretos, datos personales ni documentos
   internos en el código, los commits o `docs/`.
 - **Fase actual: solo infraestructura.** El diseño reproducirá una landing de

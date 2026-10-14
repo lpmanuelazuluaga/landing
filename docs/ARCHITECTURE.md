@@ -30,7 +30,7 @@ src/
   app/
     layout.tsx                <html lang>, metadataBase, plantilla de títulos, tracking
     globals.css               @import tailwind + tema + base mínima
-    page.tsx                  "/" provisional: "Proyecto en preparación" (noindex)
+                              (sin page.tsx: "/" redirige a /registro desde next.config.ts)
     not-found.tsx             404 de cualquier URL inexistente
     error.tsx                 error de render con retry()
     robots.ts  sitemap.ts     según la regla de indexación

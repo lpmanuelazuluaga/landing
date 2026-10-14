@@ -42,7 +42,7 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| `/` | Pantalla provisional "Proyecto en preparación" | No |
+| `/` | Redirige a `/registro` (307, conserva la query) | — |
 | `/registro` | Landing de Registro: estructura generada, **sin diseño ni copy** (carpeta `src/app/registro/`, `leadSource`: `registro`) | No (fuera de `PUBLISHED_LANDINGS`) |
 | `/registro/gracias` | Confirmación de registro (placeholder) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |

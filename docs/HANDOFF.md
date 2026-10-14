@@ -16,8 +16,9 @@ empezar** (espera la landing de referencia y los materiales del cliente).
 | Landing inicial | `registro` → `/registro` (y `/registro/gracias`) |
 | Ruta local | `C:\Users\Bruno\Desktop\Manuela Zuluaga` |
 | Repositorio GitHub | https://github.com/lpmanuelazuluaga/landing (público, rama `main`) |
-| Proyecto Vercel | **Pendiente**: no creado (ver "Vercel") |
-| URL de producción | **Pendiente**: se usará el dominio `*.vercel.app` por defecto |
+| Proyecto Vercel | `landing`, equipo `manuela-zuluaga` (plan Hobby), conectado al repositorio (ver "Vercel") |
+| URL de producción | **Pendiente** del primer deploy correcto: dominio `*.vercel.app` por defecto |
+| Materiales del cliente | `recursos_landings/` (originales, versionados a pedido; ver "Materiales") |
 | Dominio definitivo | **Pendiente**: no conectar hasta que el cliente lo defina |
 | Plantilla de origen | `landing-starter`, commit `28d7cef` (copia limpia, sin su historial) |
 
@@ -55,6 +56,7 @@ y la landing de referencia.
 ```
 .github/workflows/check.yml   CI: lint + typecheck + build + smoke (PR y push a main)
 docs/                         ARCHITECTURE, CONVENTIONS, INTEGRATIONS, HANDOFF
+recursos_landings/            materiales originales del cliente (no los usa el build)
 scripts/                      new-landing.mjs (generador), smoke.mjs
 templates/landing/            molde que copia el generador
 src/
@@ -78,6 +80,22 @@ src/
 ```
 
 Detalle de cada capa en `docs/ARCHITECTURE.md`.
+
+## Materiales
+
+`recursos_landings/Landing-Registro/Img/` guarda los originales entregados para
+la Landing de Registro (`hero/` móvil y escritorio, `main/`). Se versionan por
+decisión de la agencia, sabiendo que el repositorio es público: cualquiera puede
+descargarlos. Revisados el 2026-10-14: sin GPS ni datos de autor en los
+metadatos.
+
+- No se importan desde el código. En la fase visual, las imágenes que se usen
+  se convierten a JPG/WebP optimizado y se copian a `src/app/registro/_assets/`
+  (`docs/CONVENTIONS.md`, "Imágenes").
+- `main/relacion.png` es en realidad un JPEG con extensión `.png`; corregirlo al
+  optimizarla.
+- No guardar aquí nada que no pueda ser público (contratos, datos personales,
+  documentos internos).
 
 ## Comandos
 
@@ -189,6 +207,8 @@ Guía de activación de cada una en `docs/INTEGRATIONS.md`.
 | `.gitignore` | ✔ ignora `.env*` (salvo `.env.example`), `.vercel`, `.next/`, `node_modules/`, `*.tsbuildinfo`, `next-env.d.ts` |
 | Secretos y datos privados en lo versionado | ✔ ninguno (búsqueda de claves, tokens, URLs de webhooks, emails y referencias a otros clientes) |
 | Repositorio remoto | ✔ existe, público, rama por defecto `main`, vacío antes del primer push |
+| Primer push a `main` | ✔ 71 archivos, autor `lpmanuelazuluaga` (noreply); sin `.env`, `node_modules` ni `.next` en el remoto |
+| CI en GitHub Actions (workflow `check`) | ✔ en verde en el primer push: `npm ci`, lint, typecheck, build y smoke |
 | Vercel: plan y uso comercial | ✔ docs de Vercel (actualizadas 2026-09-14): Hobby es solo para uso personal no comercial; cobrar por crear o alojar el sitio es uso comercial → **requiere Pro** |
 
 Avisos conocidos y no bloqueantes: `npm warn deprecated eslint@9.39.5` (heredado
@@ -197,10 +217,8 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 ## NO VERIFICADO
 
-- **Workflow de CI en GitHub Actions:** se ejecutará por primera vez con el
-  primer push.
-- **Vercel:** CLI 61.1.0 instalada, sin sesión iniciada; ni proyecto, ni
-  deploy, ni previews con noindex comprobados en Vercel.
+- **Vercel:** proyecto creado, pero sin ningún deploy correcto todavía; ni
+  producción ni previews con noindex comprobados en Vercel.
 - **Rendimiento** (Lighthouse, Core Web Vitals): requiere despliegue.
 - **Dispositivos reales** (Safari iOS, Android).
 - **Adecuación legal** del banner y de los textos para Colombia.
@@ -213,19 +231,21 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
   `lpmanuelazuluaga <342586824+lpmanuelazuluaga@users.noreply.github.com>`.
   No expone emails personales.
 - Rama `main`. Nunca force push ni reescritura de historial publicado.
-- **Estado del primer push (2026-10-14): bloqueado.** GitHub respondió 403
-  porque Git Credential Manager entregó la credencial de otra cuenta guardada en
-  esta máquina, sin permiso sobre el repositorio. Nada llegó al remoto. Para
-  resolverlo, en una terminal propia:
+- **Credenciales en una máquina con varias cuentas de GitHub:** el primer push
+  devolvió 403 porque Git Credential Manager entregó la credencial de otra
+  cuenta guardada. Se resolvió así (2026-10-14), con una ventana privada del
+  navegador con la sesión de `lpmanuelazuluaga`:
 
   ```bash
-  git credential-manager github list
-  git credential-manager github login --username lpmanuelazuluaga --browser --force
-  # en el navegador, la sesión activa de GitHub debe ser lpmanuelazuluaga
-  # (si hay otra abierta, usar una ventana privada o --device)
+  git credential-manager github login --username lpmanuelazuluaga --device --force --no-ui
+  # abrir github.com/login/device en esa ventana privada e introducir el código
   git credential-manager github list   # debe aparecer lpmanuelazuluaga
-  git push -u origin main
+  git push --dry-run                   # comprueba permisos sin escribir
   ```
+
+  El flujo `--browser` falló con `ERR_CONNECTION_REFUSED` en `127.0.0.1`
+  (el proceso que espera la respuesta ya se había cerrado); `--device` no
+  depende de él.
 - El repositorio es **público**: nada de secretos, datos personales ni documentos
   internos de la agencia.
 - Ramas y commits según `docs/CONVENTIONS.md` (`feat/registro-<cambio>`,
@@ -235,36 +255,38 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 ## Vercel
 
-Requisitos antes de crear nada:
+Estado (2026-10-14):
 
-1. Sesión iniciada en la **cuenta de Vercel del cliente** (no en la de otro
-   cliente ni en una personal).
-2. **Plan Pro** en esa cuenta: el proyecto es comercial.
-3. La Vercel GitHub App con acceso al repositorio `lpmanuelazuluaga/landing`.
+- Proyecto **`landing`** en el equipo **`manuela-zuluaga`**, creado por la web
+  con la cuenta del cliente (GitHub `lpmanuelazuluaga` vinculado). Conectado a
+  `lpmanuelazuluaga/landing`: producción desde `main`, previews por rama y PR.
+- **Plan: Hobby.** Según los términos de Vercel, Hobby es solo para uso personal
+  no comercial, y el trabajo pagado para un cliente cuenta como comercial
+  ([Fair Use Guidelines](https://vercel.com/docs/limits/fair-use-guidelines)).
+  Pro cuesta USD 20 al mes por desarrollador. **Decisión pendiente de la agencia.**
+- **Primer deploy fallido:** `No Output Directory named "public" found after the
+  Build completed`. El proyecto se creó con el repositorio todavía vacío, Vercel
+  no detectó Next.js y lo dejó con **Framework Preset "Other"**. Corrección:
+  Settings → Build and Deployment → Framework Preset **Next.js**, sin override de
+  Build Command, Output Directory ni Install Command. El código no tiene nada que
+  ver: el mismo commit compila en GitHub Actions.
+- Sin variables de entorno ni dominio, a propósito.
 
-Opción web (recomendada para el primer vínculo):
+Para un proyecto nuevo: crearlo **después** del primer push (así detecta
+Next.js), sin variables y sin dominio. Root directory `./`; Node 24.x sale de
+`engines`.
 
-1. vercel.com → Add New → Project → Import Git Repository → `lpmanuelazuluaga/landing`.
-2. Framework: Next.js (autodetectado). Root directory: `./`. Build y output por
-   defecto. Node 24.x (lo toma de `engines`).
-3. Nombre del proyecto: `landing-registro`.
-4. **No** cargar variables de entorno todavía. **No** añadir dominio.
-5. Deploy. Producción se despliega desde `main`; cada rama y PR genera un
-   preview (comportamiento por defecto de la integración con Git).
-
-Opción CLI (instalada en esta máquina: `vercel@61.1.0`, publicada el
-2026-09-29; sintaxis comprobada con `--help` de esa versión). Requiere que el
-repositorio ya tenga el primer push:
+CLI instalada en esta máquina: `vercel@61.1.0` (publicada el 2026-09-29),
+sin sesión. Sintaxis comprobada con `--help` de esa versión:
 
 ```bash
 vercel login
 vercel whoami                         # confirmar que es la cuenta del cliente
-vercel link --yes --project landing-registro [--team <slug-del-team>]
-vercel git connect https://github.com/lpmanuelazuluaga/landing.git
+vercel link --yes --project landing --team manuela-zuluaga
+vercel inspect <deployment-url> --logs
 ```
 
-`vercel link` crea `.vercel/` en local (ignorado por Git). Con la conexión a
-Git, producción se despliega desde `main` y cada rama o PR genera un preview.
+`vercel link` crea `.vercel/` en local (ignorado por Git).
 
 Comprobar tras el primer deploy: la URL `*.vercel.app` responde `X-Robots-Tag:
 noindex, nofollow` y no carga ningún script de tracking.
@@ -279,11 +301,11 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 ## Tareas pendientes para Bruno
 
-1. Autenticar la cuenta `lpmanuelazuluaga` en Git Credential Manager y hacer el
-   primer push a `main` (commits ya preparados en local; ver "GitHub").
-2. Vercel: `vercel login` en la cuenta del cliente, confirmar plan Pro y crear
-   el proyecto (sección "Vercel").
-3. Comprobar en GitHub → Actions que el workflow `check` termina en verde.
+1. Vercel: corregir el Framework Preset a Next.js y confirmar el primer deploy
+   correcto (sección "Vercel").
+2. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial.
+3. Comprobar en el deploy: `X-Robots-Tag: noindex, nofollow`, sin tracking, y un
+   preview de una rama.
 4. Entregar la landing de referencia y los materiales (copy, imágenes, marca)
    con el PROMPT 2.
 5. Decidir con el cliente:

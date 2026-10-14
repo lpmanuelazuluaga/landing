@@ -25,6 +25,7 @@ scripts/
   new-landing.mjs             crea una landing desde templates/landing
   smoke.mjs                   pruebas sobre el build de producción
 templates/landing/            plantilla de landing (se compila y se lintea como el resto)
+recursos_landings/            materiales originales del cliente; el build no los usa
 src/
   app/
     layout.tsx                <html lang>, metadataBase, plantilla de títulos, tracking

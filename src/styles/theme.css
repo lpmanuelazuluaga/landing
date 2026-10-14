@@ -1,0 +1,42 @@
+/*
+  Tokens de marca del proyecto: el ÚNICO @theme.
+
+  Los valores de partida son neutros y deliberadamente sin identidad. Al iniciar
+  un cliente se reemplazan por los de su guía de marca (marcados TODO).
+
+  Manuela Zuluaga: paleta y tipografías PENDIENTES. Se definen a partir de la
+  landing de referencia y los materiales de marca (fase de briefing visual).
+
+  Los componentes usan siempre los nombres semánticos (bg-background,
+  text-foreground, bg-accent…), nunca hex en JSX. Las paletas crudas del cliente,
+  con sus propios nombres, pueden añadirse aquí debajo de los semánticos.
+
+  Una landing que se aparta del tema redefine estos mismos tokens dentro de su
+  clase de ámbito (.lp-<slug>) en su landing.css: Tailwind compila las
+  utilidades a var(--token), así que el cambio queda limitado a ese subárbol.
+*/
+@theme {
+  /* ── Color (TODO: marca) ── */
+  --color-background: #ffffff;
+  --color-foreground: #18181b;
+  --color-surface: #f4f4f5;
+  --color-muted: #52525b; /* texto secundario: 7,7:1 sobre el fondo */
+  --color-border: #e4e4e7;
+  --color-accent: #18181b;
+  --color-accent-foreground: #ffffff;
+  --color-focus: #2563eb;
+  --color-danger: #b91c1c;
+  --color-success: #15803d;
+
+  /* ── Tipografía ──
+     Por defecto, la pila de sistema de Tailwind (--font-sans). Las fuentes de
+     marca se declaran con next/font en el layout que las usa: ver
+     docs/CONVENTIONS.md, "Fuentes". */
+
+  /* ── Layout ── */
+  --container-page: 72rem; /* max-w-page */
+  --container-narrow: 42rem; /* max-w-narrow */
+  --spacing-gutter: 1.25rem; /* px-gutter */
+  --spacing-gutter-lg: 2rem; /* sm:px-gutter-lg */
+  --spacing-section: 6rem; /* py-section */
+}

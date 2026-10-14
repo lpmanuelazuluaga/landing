@@ -1,0 +1,20 @@
+/*
+  Estilos propios de la landing "__SLUG__".
+
+  TODO selector va bajo .lp-__SLUG__: con la navegación del cliente, las hojas
+  de varias landings pueden convivir en el documento, y un selector suelto se
+  filtraría a las demás.
+
+  @layer components permite que las utilidades de Tailwind del JSX pisen estas
+  reglas cuando haga falta.
+*/
+@layer components {
+  .lp-__SLUG__ {
+    /* Tokens propios si esta landing se aparta del tema de marca, p. ej.:
+       --color-accent: #000000; */
+
+    /* Fuente propia (aplicada con font.variable en layout.tsx), p. ej.:
+       --font-sans: var(--font-landing), ui-sans-serif, system-ui, sans-serif; */
+    font-family: var(--font-sans);
+  }
+}

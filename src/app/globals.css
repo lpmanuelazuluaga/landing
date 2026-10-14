@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "../styles/theme.css";
+
+/*
+  CSS global mínimo. Aquí NO van estilos de ninguna landing: cada una tiene su
+  landing.css bajo su clase de ámbito. Solo bases universales.
+*/
+
+/* noscript: → estilos para cuando el navegador no ejecuta JavaScript. */
+@custom-variant noscript (@media (scripting: none));
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Bloquea el scroll del fondo mientras hay un <dialog> modal abierto. */
+  html:has(dialog:modal) {
+    overflow: hidden;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* iOS hace zoom al enfocar campos de menos de 16 px. Una utilidad text-sm en
+     un campo pisaría esta base: no usarla en inputs en móvil. */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

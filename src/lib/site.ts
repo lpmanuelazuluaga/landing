@@ -26,7 +26,10 @@ export const site = {
     /** Si el teléfono es obligatorio en todos los formularios del sitio.
         Manuela Zuluaga: sí (WhatsApp), decisión del 2026-10-14. */
     requirePhone: true,
-    /** Exigir la casilla de aceptación de la política de privacidad. */
-    requireConsent: true,
+    /** Exigir la casilla de aceptación de la política de privacidad.
+        Manuela Zuluaga: desactivada el 2026-10-14 porque todavía no hay
+        política. La Ley 1581 de 2012 exige autorización para tratar datos
+        personales: volver a true en cuanto exista la política. */
+    requireConsent: false,
   },
 } as const;

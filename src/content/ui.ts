@@ -11,6 +11,8 @@ export const ui = {
     email: "Correo electrónico",
     /* El teléfono que se pide es el de WhatsApp (recordatorios del evento). */
     phone: "WhatsApp",
+    phoneCountry: "Prefijo del país",
+    phonePlaceholder: "Tu número",
     optional: "(opcional)",
     consentBefore: "He leído y acepto la",
     consentLink: "política de privacidad",

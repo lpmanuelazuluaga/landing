@@ -32,14 +32,17 @@ Tailwind CSS 4.3 · ESLint 9 (`eslint-config-next` 16.3.8) · npm 11 · Node 24
 Next 16.3.8 y no 16.2.x: la línea 16.2 tiene avisos de seguridad críticos sin
 parche (RCE en servidores Windows, en la optimización de imágenes AVIF y en
 `next/og`); 16.3.8 es la primera versión que los corrige todos. No se añadió
-ninguna dependencia respecto de la plantilla.
+ninguna dependencia respecto de la plantilla salvo `country-flag-icons` (banderas
+del selector de prefijo, ver `docs/ARCHITECTURE.md` → "Dependencias").
 
 ## Qué hay y qué no hay
 
 **Hay:**
 
 - `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente;
-  WhatsApp obligatorio en el formulario (`leads.requirePhone`).
+  WhatsApp obligatorio en el formulario (`leads.requirePhone`) y casilla de
+  privacidad desactivada (`leads.requireConsent: false`) mientras no haya
+  política: ver "Pendientes".
 - Una sola landing, en la raíz del dominio (`/`), con su página de gracias en
   `/gracias`. El registro se hace en un modal dentro de la landing: abrirlo no
   cambia la URL. Solo tras un registro confirmado se navega a `/gracias`.
@@ -52,8 +55,9 @@ ninguna dependencia respecto de la plantilla.
   de landings, smoke test y CI.
 
 **No hay, a propósito:** preguntas frecuentes, garantía, soporte por WhatsApp
-ni precio (secciones de la referencia sin copy del cliente), ni dependencias
-nuevas: todo el diseño se hizo con Tailwind, CSS y SVG propios.
+ni precio (secciones de la referencia sin copy del cliente). El diseño se hizo
+con Tailwind, CSS y SVG propios; la única dependencia nueva son las banderas
+del selector de prefijo.
 
 ## Diseño de la landing
 
@@ -65,7 +69,7 @@ ni foto de la referencia.
 | # | Sección (`_sections/`) | Diseño de la referencia que reproduce |
 | --- | --- | --- |
 | 0 | `CountdownBar` (`_components/`) | Agregada a pedido (no está en la referencia): barra fija superior de vidrio esmerilado sobre papel claro, "El amor no se sana" y cuenta regresiva (la fecha solo como texto para lectores de pantalla) a `EVENT.startsAt` (25 de octubre, 10 am, hora de Colombia). Al llegar la hora muestra "Online en vivo" |
-| 1 | `Hero` | Hero (opción A aprobada: foto a sangre en lugar del recorte en arco). Escritorio: foto a la derecha, texto sobre degradado y franja vertical. Tablet: foto arriba. Móvil: foto vertical con el texto sobre la mesa |
+| 1 | `Hero` | Hero (opción A aprobada: foto a sangre en lugar del recorte en arco). Escritorio: foto a la derecha, texto sobre degradado y franja vertical; el texto se acerca al borde izquierdo (~13 % del ancho: 256 px a 1909, 193 a 1440) y a 1024 px queda en la columna normal. Tablet: foto arriba. Móvil: foto vertical con el texto sobre la mesa |
 | 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios). La fecha lleva la bandera de Colombia en SVG (los emojis de banderas no se ven en Windows) |
 | 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
 | 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
@@ -74,13 +78,21 @@ ni foto de la referencia.
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo y tarjetas escalonadas, en un carrusel infinito (las tarjetas van triplicadas y el carrusel se recoloca en la copia del medio al terminar cada desplazamiento). Móvil: una tarjeta por vista; escritorio: tres |
 | 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
-| 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia); la política de privacidad sigue enlazada desde el formulario |
+| 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia) |
 
 - **Registro:** todos los botones "Reservar mi lugar ahora" abren el mismo modal
   (`_components/Registration.tsx`, sobre `Dialog` con `bare`). El modal es la
   tarjeta de oferta de la referencia: papel, sello con el logo, título, detalles
   del evento y formulario. Errores por campo, Esc y clic fuera cierran, el foco
   vuelve al botón.
+- **WhatsApp con prefijo:** selector de país con bandera y prefijo (Colombia
+  +57 por defecto, 28 países en `_components/countries.ts`). Es un `<select>`
+  nativo transparente sobre la bandera, así que usa el selector del sistema y
+  es accesible. El número se envía como `+57 300 000 0000`; si la persona ya
+  escribe un prefijo (`+…`), se respeta.
+- **Sin casilla de privacidad** (2026-10-14, a pedido): no hay política todavía.
+  Reactivarla es un solo cambio (`site.leads.requireConsent = true`) y debe
+  hacerse antes de lanzar anuncios (Ley 1581 de 2012).
 - **Tipografías:** Cormorant Garamond (títulos, la de la referencia) y DM Sans
   (cuerpo, elección del cliente), con `next/font` en `fonts.ts`.
 - **Texturas de papel** (`_assets/paper-*.jpg`): generadas para el proyecto
@@ -271,7 +283,7 @@ Guía de activación de cada una en `docs/INTEGRATIONS.md`.
 | `/`, `/gracias`, `/privacidad`, `/cookies` | ✔ 200, `X-Robots-Tag` y meta `noindex, nofollow`, sin canonical, `lang="es-CO"`, `og:locale` `es_CO`, sin GTM/Clarity/Pixel |
 | `/` (landing en la raíz) | ✔ responde 200 directo, sin redirección; un solo `h1`, título "El amor no se sana · Masterclass gratuita \| Manuela Zuluaga", honeypot presente. `/registro` y `/registro/gracias` dan 404 |
 | Diseño a 360, 390, 768, 1024 y 1440 px (capturas en Chrome headless) | ✔ sin scroll horizontal; revisado contra la referencia sección por sección |
-| Registro de punta a punta (build de producción + webhook falso en 127.0.0.1 + Chrome) | ✔ 19/19: el modal abre sin cambiar la URL, foco al primer campo, Esc cierra y devuelve el foco, envío vacío marca los 4 campos sin enviar nada, envío válido → 1 lead con fuente `registro`, WhatsApp, país `CO`, consentimiento, `utm_*` y `X-Webhook-Secret` → navega a `/gracias`; `generate_lead` una sola vez con el mismo `event_id` que `Idempotency-Key` |
+| Registro de punta a punta (build de producción + webhook falso en 127.0.0.1 + Chrome) | ✔ 23/23: el modal abre sin cambiar la URL, foco al primer campo, Esc cierra y devuelve el foco, envío vacío marca los 3 campos sin enviar nada, sin casilla ni enlace de privacidad, selector con Colombia (+57) por defecto y 28 países, elegir Argentina muestra +54, envío válido → 1 lead con fuente `registro`, WhatsApp `+54 11 2345 6789`, país `CO`, `consent: false`, `utm_*` y `X-Webhook-Secret` → navega a `/gracias`; `generate_lead` una sola vez con el mismo `event_id` que `Idempotency-Key` |
 | Contraste de los colores del diseño | ✔ todos AA (error 7:1, textos semitransparentes sobre noche ≥ 8,4:1, malva sobre papel ≥ 5,1:1) |
 | `npm run smoke` con WhatsApp obligatorio | ✔ 17/17. El lead válido del smoke ahora lleva teléfono: sin él, `requirePhone` lo rechazaba con 400 antes de probar el 503 |
 | Sitemap | ✔ vacío; `PUBLISHED_LANDINGS` vacío |
@@ -387,6 +399,9 @@ noindex, nofollow` y no carga ningún script de tracking.
    Sin él, el formulario muestra error a quien intente registrarse: **no
    lanzar anuncios hasta configurarlo**.
 5. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).
+   Con la política lista, volver a activar la casilla del formulario
+   (`site.leads.requireConsent = true`): hoy está apagada y el registro no
+   recoge autorización expresa para tratar los datos.
 6. Originales del hero en mejor calidad y, si existe, el logo en vector.
 7. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial y
    verificar la URL pública de producción.

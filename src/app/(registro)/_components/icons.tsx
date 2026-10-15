@@ -71,6 +71,14 @@ export function IconCheckCircle(props: IconProps) {
   );
 }
 
+export function IconChevronDown(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </Svg>
+  );
+}
+
 export function IconClose(props: IconProps) {
   return (
     <Svg {...props}>

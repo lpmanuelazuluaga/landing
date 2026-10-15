@@ -58,7 +58,10 @@ export function Hero() {
         className="absolute left-[54.5%] top-[69%] hidden size-24 text-rosa/85 lg:block"
       />
 
-      <div className="mx-auto flex max-w-content flex-col justify-center px-gutter pb-14 pt-[72vw] sm:px-gutter-lg md:pb-16 md:pt-[50vw] lg:min-h-[clamp(42rem,56vw,58rem)] lg:py-24">
+      {/* En escritorio el texto se separa de la columna central y se acerca al
+          borde izquierdo (~13 % del ancho), dejando más aire a la foto. Nunca
+          queda más adentro que la columna: a 1024 px es la misma. */}
+      <div className="mx-auto flex max-w-content flex-col justify-center px-gutter pb-14 pt-[72vw] sm:px-gutter-lg md:pb-16 md:pt-[50vw] lg:mx-0 lg:min-h-[clamp(42rem,56vw,58rem)] lg:max-w-none lg:py-24 lg:pl-[min(13.4vw,calc((100vw-var(--container-content))/2+var(--spacing-gutter-lg)))]">
         <div className="max-w-[31rem]">
           <Logo className="w-36 text-crema md:w-44" />
           <Title as="h1" id="hero-titulo" lines={HERO.title} tone="oscuro" size="hero" className="mt-7 md:mt-9" />

@@ -158,8 +158,9 @@ metadatos.
   "Imágenes"): hero escritorio y móvil, `quien-es-manuela` (1600 px), `espejo`
   (recorte cuadrado centrado en Manuela) y `relacion` (era un JPEG con extensión
   `.png`; la copia ya es `.jpg`). El logo, recortado y en PNG con transparencia.
-- Los PNG del hero son de 256 colores: en degradados oscuros puede haber
-  bandas. Si existen los originales en JPG, reemplazarlos.
+- El PNG móvil del hero se reemplazó el 2026-10-14 por una versión a color
+  completo (684×2160). El de escritorio sigue en 256 colores: en degradados
+  oscuros puede haber bandas; si existe el original en JPG, reemplazarlo.
 - No guardar aquí nada que no pueda ser público (contratos, datos personales,
   documentos internos).
 

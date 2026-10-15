@@ -96,7 +96,7 @@ ni foto de la referencia.
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio) y tarjeta |
 | 8 | `Testimonios` | Palabra de fondo y seis portadas de video escalonadas en un carrusel infinito con avance continuo. Cada portada abre su video en un modal. Copias laterales ocultas para accesibilidad; controles de pausa y navegación. Móvil: una tarjeta por vista; escritorio: tres |
 | 9 | `Acceso` | Puerta de fondo, con imágenes distintas para móvil y escritorio, y tarjeta con sello (sin precio) |
-| 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia) |
+| 10 | `Footer` | Pie con logo y derechos. En móvil, salto de línea después de «Manuela Zuluaga.»; en escritorio, texto continuo. Sin enlaces legales (decisión de la agencia) |
 
 - **Detalles del hero (2026-10-14):** fecha y hora en elementos separados:
   "25 de octubre" (calendario) y "10am Colombia" (reloj), a pedido de Bruno.

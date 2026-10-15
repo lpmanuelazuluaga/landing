@@ -16,7 +16,9 @@ export function Footer() {
         <div className="mt-8 flex flex-col items-center gap-6 text-center text-[0.9375rem] md:flex-row md:justify-between md:text-left">
           <Logo className="w-36 text-rosa" />
           <p className="text-crema/85">
-            © {year} <strong className="font-semibold text-rosa">{site.name}</strong>. {FOOTER.rights}
+            © {year} <strong className="font-semibold text-rosa">{site.name}</strong>.
+            <br className="md:hidden" />{" "}
+            {FOOTER.rights}
           </p>
         </div>
       </div>

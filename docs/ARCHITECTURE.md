@@ -189,7 +189,7 @@ LeadForm (UI de la landing)
 ```
 
 En `registro`, `useLeadForm.beforeNavigate` permite mostrar una confirmación
-visual de 1,2 s después de la entrega y de la conversión. Es opcional, sin
+visual de 1,8 s después de la entrega y de la conversión. Es opcional, sin
 estilos en el núcleo, y sus errores no bloquean la navegación. El modal
 precarga `/gracias` al abrirse; durante la confirmación conserva su altura,
 vuelve inerte el formulario y lleva el foco al mensaje. Con reducción de

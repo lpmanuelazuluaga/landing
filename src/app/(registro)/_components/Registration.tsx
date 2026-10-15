@@ -78,7 +78,7 @@ function RegistrationDialog({ open, onClose }: { open: boolean; onClose: () => v
     /* Con movimiento reducido se navega directamente, sin pausa decorativa. */
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setConfirmed(true);
-    await new Promise<void>((resolve) => window.setTimeout(resolve, 1200));
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 1800));
   }
 
   return (

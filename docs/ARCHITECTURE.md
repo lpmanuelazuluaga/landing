@@ -180,8 +180,13 @@ LeadForm (UI de la landing)
 | `tailwindcss`, `@tailwindcss/postcss` | Estilos con tokens |
 | `eslint`, `eslint-config-next` | Reglas de Core Web Vitals, accesibilidad y hooks |
 | `country-flag-icons` 1.6.20 (exacta, MIT, sin dependencias) | Banderas del selector de prefijo de WhatsApp en el modal de registro. SVG y no emojis porque Windows no muestra los emojis de banderas (aparecen como dos letras). Se importa país por país desde `country-flag-icons/react/3x2`, así que el bundle solo lleva las ~28 banderas de `_components/countries.ts` |
+| `lenis` 1.3.26 (exacta, MIT) | Suavizado leve del scroll solicitado para toda la landing: 0,65 s de inercia y multiplicador de rueda 0,9. Lo administra `_components/SmoothScroll.tsx`, montado solo por `RegistrationProvider`; se destruye al abrir el modal, con reducción de movimiento y al abandonar la landing. El gesto táctil y el carrusel horizontal usan su desplazamiento nativo |
 
-Fuera de esa bandera (pedido de diseño del 2026-10-14), no se instala nada más por defecto. `server-only` se importa sin paquete: Next lo
+Las banderas y el suavizado del scroll responden a pedidos de diseño concretos.
+Lenis usa el scroll de la ventana, sin transformar el contenido ni importar su
+CSS global: no se usan `autoToggle` ni su bloqueo de scroll, y la altura del
+documento ya es automática. El modal conserva el bloqueo nativo de `Dialog`.
+`server-only` se importa sin paquete: Next lo
 resuelve internamente (`docs/02-guides/data-security.md`). Las dependencias
 opcionales y su criterio de activación están en `INTEGRATIONS.md` y
 `CONVENTIONS.md`.

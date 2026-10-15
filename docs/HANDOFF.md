@@ -33,7 +33,8 @@ Next 16.3.8 y no 16.2.x: la línea 16.2 tiene avisos de seguridad críticos sin
 parche (RCE en servidores Windows, en la optimización de imágenes AVIF y en
 `next/og`); 16.3.8 es la primera versión que los corrige todos. No se añadió
 ninguna dependencia respecto de la plantilla salvo `country-flag-icons` (banderas
-del selector de prefijo, ver `docs/ARCHITECTURE.md` → "Dependencias").
+del selector de prefijo) y `lenis` (suavizado del scroll), justificadas en
+`docs/ARCHITECTURE.md` → "Dependencias".
 
 ## Qué hay y qué no hay
 
@@ -56,8 +57,8 @@ del selector de prefijo, ver `docs/ARCHITECTURE.md` → "Dependencias").
 
 **No hay, a propósito:** preguntas frecuentes, garantía, soporte por WhatsApp
 ni precio (secciones de la referencia sin copy del cliente). El diseño se hizo
-con Tailwind, CSS y SVG propios; la única dependencia nueva son las banderas
-del selector de prefijo.
+con Tailwind, CSS y SVG propios, con dependencias para las banderas del selector
+de prefijo y el suavizado del scroll.
 
 ## Diseño de la landing
 
@@ -130,6 +131,19 @@ ni foto de la referencia.
   movimiento (20 casos): encuadre correcto y una sola descarga de la puerta,
   marca de agua solo en móvil, correo de ejemplo y contraste del botón verde
   tanto normal como en hover. `check` y smoke (17/17) aprobados.
+- **Hero y scroll (2026-10-15):** en escritorio (desde 1024 px), «Online en
+  vivo» pasa a la segunda fila, a la derecha de «Masterclass gratuita». La
+  landing tiene un suavizado leve de scroll con Lenis 1.3.26: duración 0,65 s,
+  easing cúbico de salida y `wheelMultiplier: 0.9`. Se monta solo en `/`, se
+  retira al abrir el modal o activar reducción de movimiento y se limpia al
+  salir. El tacto, el teclado y el desplazamiento horizontal del carrusel
+  conservan su manejo nativo. No se añade CSS global de Lenis. QA en Chrome
+  con 360, 390, 768, 1024 y 1440 px y ambas preferencias de movimiento: sin
+  desbordamiento horizontal y filas correctas. Un gesto de rueda de 300 px
+  termina en 270 px con transición gradual; con reducción de movimiento
+  conserva 300 px. Teclado, scroll táctil, modal con scroll interno y carrusel
+  horizontal probados sin interferencias ni errores de JavaScript. `check`
+  y smoke (17/17) aprobados.
 - **Cursor y cursiva:** cursor de mano en botones habilitados, enlaces,
   selectores y casillas de la landing y gracias. La primera línea del título
   del hero lleva la clase `italic` directamente (`Title.italicFirstLine`).

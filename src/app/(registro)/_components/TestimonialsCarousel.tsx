@@ -110,6 +110,7 @@ export function TestimonialsCarousel({ items, placeholder }: { items: readonly T
     <div>
       <ul
         ref={listRef}
+        data-lenis-prevent-horizontal=""
         className="relative -mx-gutter flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-gutter pb-12 pt-1 [scrollbar-width:none] sm:-mx-gutter-lg sm:px-gutter-lg lg:-mx-5 lg:items-start lg:gap-5 lg:px-5 lg:[mask-image:linear-gradient(90deg,transparent,black_1.25rem,black_calc(100%-1.25rem),transparent)]"
       >
         {loop.map((item, index) => {

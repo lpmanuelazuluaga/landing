@@ -43,13 +43,20 @@ export function EventDetails({
     return (
       <ul
         className={cn(
-          "grid grid-cols-[auto_auto] justify-start gap-x-5 gap-y-2.5 text-[0.9375rem] md:flex md:flex-wrap md:items-center md:gap-x-6",
+          "grid grid-cols-[auto_auto] justify-start gap-x-5 gap-y-2.5 text-[0.9375rem] md:flex md:flex-wrap md:items-center md:gap-x-6 lg:grid",
           colors.text,
           className,
         )}
       >
-        {HERO_ITEMS.map(({ icon: Icon, text }) => (
-          <li key={text} className="flex items-center gap-2">
+        {HERO_ITEMS.map(({ icon: Icon, text }, index) => (
+          <li
+            key={text}
+            className={cn(
+              "flex items-center gap-2",
+              index === 2 && "lg:col-start-2 lg:row-start-2",
+              index === 3 && "lg:col-start-1 lg:row-start-2",
+            )}
+          >
             <Icon className={cn("size-5 shrink-0", colors.icon)} />
             <span className="whitespace-nowrap">{text}</span>
           </li>

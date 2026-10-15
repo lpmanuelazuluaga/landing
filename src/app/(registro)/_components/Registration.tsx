@@ -8,6 +8,7 @@ import { LogoSeal, Ornament } from "./decor";
 import { EventDetails } from "./EventDetails";
 import { IconArrowCircle, IconClose } from "./icons";
 import { LeadForm } from "./LeadForm";
+import { SmoothScroll } from "./SmoothScroll";
 import { Divider, Title } from "./text";
 
 /*
@@ -30,6 +31,7 @@ export function RegistrationProvider({ children }: { children: React.ReactNode }
   return (
     <RegistrationContext value={value}>
       {children}
+      <SmoothScroll paused={isOpen} />
       <RegistrationDialog open={isOpen} onClose={() => setIsOpen(false)} />
     </RegistrationContext>
   );

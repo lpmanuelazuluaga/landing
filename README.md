@@ -9,6 +9,8 @@ las fotos y la marca del cliente. Todavía tiene contenido provisional marcado
 (testimonios de ejemplo, dato de prueba, foto temporal, siguiente paso de la
 gracias) y todo es noindex. Detalle y pendientes en `docs/HANDOFF.md`.
 
+Versión de revisión en Vercel: https://landing-omega-one-60.vercel.app/.
+
 Next.js 16.3.8 (App Router, Turbopack) · React 19.2.4 · TypeScript estricto ·
 Tailwind CSS 4 · npm · Node 24.
 
@@ -43,8 +45,8 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| `/` | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
-| `/gracias` | Confirmación tras un registro entregado (siguiente paso pendiente) | No, nunca |
+| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| [`/gracias`](https://landing-omega-one-60.vercel.app/gracias) | Confirmación tras un registro entregado (siguiente paso pendiente) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |
 | `/robots.txt`, `/sitemap.xml` | Según la regla de indexación | — |

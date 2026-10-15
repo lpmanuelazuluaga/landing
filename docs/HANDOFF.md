@@ -1,9 +1,9 @@
 # Handoff: Landing de Registro (Manuela Zuluaga)
 
 Para: Bruno y cualquier desarrollador que continúe el proyecto.
-Estado al 2026-10-14. **Fase: diseño implementado en local, en revisión de la
-agencia.** Antes de publicar falta reemplazar el contenido provisional y
-configurar el destino de los leads (ver "Tareas pendientes").
+Estado al 2026-10-14. **Fase: diseño desplegado en Vercel, en revisión de la
+agencia.** Antes de lanzar la campaña falta reemplazar el contenido provisional
+y configurar el destino de los leads (ver "Tareas pendientes").
 
 ## Datos del proyecto
 
@@ -18,7 +18,7 @@ configurar el destino de los leads (ver "Tareas pendientes").
 | Ruta local | `C:\Users\Bruno\Desktop\Manuela Zuluaga` |
 | Repositorio GitHub | https://github.com/lpmanuelazuluaga/landing (público, rama `main`) |
 | Proyecto Vercel | `landing`, equipo `manuela-zuluaga` (plan Hobby), conectado al repositorio (ver "Vercel") |
-| URL de producción | **Pendiente** del primer deploy correcto: dominio `*.vercel.app` por defecto |
+| URL de producción | https://landing-omega-one-60.vercel.app/ (versión de revisión, noindex) |
 | Materiales del cliente | `recursos_landings/` (originales, versionados a pedido; ver "Materiales") |
 | Dominio definitivo | **Pendiente**: no conectar hasta que el cliente lo defina |
 | Plantilla de origen | `landing-starter`, commit `28d7cef` (copia limpia, sin su historial) |
@@ -281,6 +281,8 @@ Guía de activación de cada una en `docs/INTEGRATIONS.md`.
 | Repositorio remoto | ✔ existe, público, rama por defecto `main`, vacío antes del primer push |
 | Primer push a `main` | ✔ 71 archivos, autor `lpmanuelazuluaga` (noreply); sin `.env`, `node_modules` ni `.next` en el remoto |
 | CI en GitHub Actions (workflow `check`) | ✔ en verde en el primer push: `npm ci`, lint, typecheck, build y smoke |
+| Diseño en `main` y despliegue de Vercel | ✔ PR #1 integrado en `e7f1f87`; CI en verde y estado Vercel `success`. La URL de producción responde 200 con el diseño y los últimos ajustes del hero móvil (`pt-[72vw]` y degradado fijo), `X-Robots-Tag: noindex, nofollow` y sin GTM/Clarity/Pixel en el HTML |
+| Verificación local tras integrar el diseño | ✔ `npm run check` y `npm run smoke` (17/17) aprobados el 2026-10-14 |
 | Vercel: plan y uso comercial | ✔ docs de Vercel (actualizadas 2026-09-14): Hobby es solo para uso personal no comercial; cobrar por crear o alojar el sitio es uso comercial → **requiere Pro** |
 
 Avisos conocidos y no bloqueantes: `npm warn deprecated eslint@9.39.5` (heredado
@@ -289,9 +291,9 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 ## NO VERIFICADO
 
-- **Vercel:** el deploy de `main` compiló (commit `6162f58`), pero la URL pública
-  de producción no se verificó (las URLs generadas piden login por la protección
-  de despliegues). El diseño todavía no está subido.
+- **Nueva revisión visual del despliegue:** el navegador integrado no pudo
+  conectarse en esta sesión. La URL se comprobó por HTTP; se conservan las
+  verificaciones visuales locales documentadas arriba.
 - **Animaciones en movimiento:** las capturas se tomaron con reducción de
   movimiento; marquesina, sello y apariciones se revisaron en código, no en video.
 - **Rendimiento** (Lighthouse, Core Web Vitals): requiere despliegue.
@@ -335,6 +337,9 @@ Estado (2026-10-14):
 - Proyecto **`landing`** en el equipo **`manuela-zuluaga`**, creado por la web
   con la cuenta del cliente (GitHub `lpmanuelazuluaga` vinculado). Conectado a
   `lpmanuelazuluaga/landing`: producción desde `main`, previews por rama y PR.
+- Diseño integrado en `main` mediante PR #1 (`e7f1f87`) y desplegado con éxito.
+  URL pública comprobada: https://landing-omega-one-60.vercel.app/.
+  Se usa para revisión, conserva noindex y no activa el destino de leads.
 - **Plan: Hobby.** Según los términos de Vercel, Hobby es solo para uso personal
   no comercial, y el trabajo pagado para un cliente cuenta como comercial
   ([Fair Use Guidelines](https://vercel.com/docs/limits/fair-use-guidelines)).
@@ -377,8 +382,8 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 ## Tareas pendientes para Bruno
 
-1. Revisar y aprobar el diseño en local; después, subir la rama del diseño y
-   revisarla en el preview de Vercel antes de pasarla a `main`.
+1. Revisar y aprobar el diseño en https://landing-omega-one-60.vercel.app/.
+   La rama del diseño ya está integrada en `main` y desplegada.
 2. Reemplazar el contenido provisional (tabla "Contenido provisional") y poner
    cada valor de `PLACEHOLDERS` en `false`.
 3. Grupo de WhatsApp para la página de gracias.
@@ -387,8 +392,7 @@ noindex, nofollow` y no carga ningún script de tracking.
    lanzar anuncios hasta configurarlo**.
 5. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).
 6. Originales del hero en mejor calidad y, si existe, el logo en vector.
-7. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial y
-   verificar la URL pública de producción.
+7. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial.
 8. Herramientas de tracking (GTM o directo) y criterio de consentimiento;
    dominio definitivo.
 9. Solo al publicar: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_INDEXABLE=true` y

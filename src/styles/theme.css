@@ -1,41 +1,46 @@
 /*
   Tokens de marca del proyecto: el ÚNICO @theme.
 
-  Los valores de partida son neutros y deliberadamente sin identidad. Al iniciar
-  un cliente se reemplazan por los de su guía de marca (marcados TODO).
-
-  Manuela Zuluaga: paleta y tipografías PENDIENTES. Se definen a partir de la
-  landing de referencia y los materiales de marca (fase de briefing visual).
+  Manuela Zuluaga: paleta entregada por el cliente (2026-10-14) más un tono
+  oscuro derivado y aprobado (--color-noche). Las tipografías de marca
+  (Cormorant Garamond y DM Sans) se declaran con next/font en el layout de la
+  landing, no aquí (docs/CONVENTIONS.md, "Fuentes").
 
   Los componentes usan siempre los nombres semánticos (bg-background,
-  text-foreground, bg-accent…), nunca hex en JSX. Las paletas crudas del cliente,
-  con sus propios nombres, pueden añadirse aquí debajo de los semánticos.
+  text-foreground, bg-accent…) o los de la paleta (bg-burgundy, text-crema…),
+  nunca hex en JSX.
 
-  Una landing que se aparta del tema redefine estos mismos tokens dentro de su
-  clase de ámbito (.lp-<slug>) en su landing.css: Tailwind compila las
-  utilidades a var(--token), así que el cambio queda limitado a ese subárbol.
+  Contraste verificado (WCAG): tierra sobre crema 8,6:1 · burgundy sobre crema
+  12:1 · malva sobre crema 5,4:1 · rosa sobre noche 8:1 · crema sobre noche
+  14,4:1. Malva sobre arena (4:1) solo para textos grandes.
 */
 @theme {
-  /* ── Color (TODO: marca) ── */
-  --color-background: #ffffff;
-  --color-foreground: #18181b;
-  --color-surface: #f4f4f5;
-  --color-muted: #52525b; /* texto secundario: 7,7:1 sobre el fondo */
-  --color-border: #e4e4e7;
-  --color-accent: #18181b;
-  --color-accent-foreground: #ffffff;
-  --color-focus: #2563eb;
-  --color-danger: #b91c1c;
-  --color-success: #15803d;
+  /* ── Paleta del cliente ── */
+  --color-burgundy: #4d0e13;
+  --color-rosa: #c8a49f; /* Rosa Arcilla */
+  --color-arena: #d8c4ac;
+  --color-crema: #eee4da;
+  --color-malva: #844d43;
+  --color-tierra: #4a3a32;
+  --color-noche: #1e1412; /* derivado de Tierra para fondos oscuros */
+  --color-papel: #f7f2ed; /* extremo claro de los degradados (crema aclarado) */
 
-  /* ── Tipografía ──
-     Por defecto, la pila de sistema de Tailwind (--font-sans). Las fuentes de
-     marca se declaran con next/font en el layout que las usa: ver
-     docs/CONVENTIONS.md, "Fuentes". */
+  /* ── Semánticos ── */
+  --color-background: #eee4da;
+  --color-foreground: #4a3a32;
+  --color-surface: #f7f2ed;
+  --color-muted: #844d43; /* texto secundario: 5,4:1 sobre el fondo */
+  --color-border: #c8a49f;
+  --color-accent: #4d0e13;
+  --color-accent-foreground: #eee4da;
+  --color-focus: #844d43; /* en secciones oscuras se redefine a rosa */
+  --color-danger: #a3161d;
+  --color-success: #2f6b3a;
 
   /* ── Layout ── */
   --container-page: 72rem; /* max-w-page */
   --container-narrow: 42rem; /* max-w-narrow */
+  --container-content: 61rem; /* max-w-content: columna de la referencia (~976 px) */
   --spacing-gutter: 1.25rem; /* px-gutter */
   --spacing-gutter-lg: 2rem; /* sm:px-gutter-lg */
   --spacing-section: 6rem; /* py-section */

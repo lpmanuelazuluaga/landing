@@ -10,6 +10,11 @@ type DialogProps = {
   labelledBy: string;
   children: React.ReactNode;
   className?: string;
+  /**
+   * Sin el aspecto por defecto (caja, fondo y padding): la landing dibuja su
+   * propia tarjeta con className y children. El comportamiento no cambia.
+   */
+  bare?: boolean;
 };
 
 /**
@@ -20,7 +25,7 @@ type DialogProps = {
  * también evita que WebKit anule su backdrop-filter. El bloqueo del scroll de
  * fondo está en globals.css (html:has(dialog:modal)).
  */
-export function Dialog({ open, onClose, labelledBy, children, className }: DialogProps) {
+export function Dialog({ open, onClose, labelledBy, children, className, bare = false }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -43,11 +48,13 @@ export function Dialog({ open, onClose, labelledBy, children, className }: Dialo
         if (event.target === event.currentTarget) onClose();
       }}
       className={cn(
-        "m-auto max-h-[calc(100dvh-2rem)] w-[min(100%-2rem,32rem)] overflow-auto rounded-lg bg-background p-0 text-foreground backdrop:bg-black/60",
+        bare
+          ? "m-auto bg-transparent p-0"
+          : "m-auto max-h-[calc(100dvh-2rem)] w-[min(100%-2rem,32rem)] overflow-auto rounded-lg bg-background p-0 text-foreground backdrop:bg-black/60",
         className,
       )}
     >
-      <div className="p-6">{children}</div>
+      {bare ? children : <div className="p-6">{children}</div>}
     </dialog>
   );
 }

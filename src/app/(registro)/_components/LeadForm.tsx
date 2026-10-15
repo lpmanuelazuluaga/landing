@@ -6,17 +6,21 @@ import { cn } from "@/lib/cn";
 import { site } from "@/lib/site";
 import { useLeadForm } from "@/lib/leads/useLeadForm";
 import { ui } from "@/content/ui";
-import { LANDING } from "../content";
+import { CTA, LANDING } from "../content";
+import { IconArrowCircle } from "./icons";
 
 /*
-  Formulario de lead de esta landing. La lógica (validación, idempotencia,
-  doble envío, conversión, redirección) está en useLeadForm y es común a todo
-  el sitio; este archivo es solo la UI, y se rediseña por completo para cada
-  cliente conservando los name="" y el honeypot.
+  Formulario de registro de la masterclass (vive en el modal). La lógica
+  (validación, idempotencia, doble envío, conversión y redirección a /gracias
+  solo tras un 200) está en useLeadForm; aquí va solo la UI, con el lenguaje de
+  la referencia: campos rectos, borde rosa, botón con degradado.
+
+  Se conservan los name="" y el honeypot hp_check. Nombre, correo y WhatsApp
+  son obligatorios (site.leads.requirePhone).
 */
 
 const FIELD =
-  "mt-1 block min-h-11 w-full rounded-md border bg-background px-3 text-base text-foreground placeholder:text-muted";
+  "mt-1.5 block min-h-12 w-full rounded-[3px] border bg-white/75 px-3.5 text-base text-tierra placeholder:text-tierra/45 transition-colors focus:border-malva focus:bg-white";
 
 export function LeadForm() {
   const { status, errors, submit } = useLeadForm({
@@ -39,7 +43,7 @@ export function LeadForm() {
   }
 
   return (
-    <form noValidate onSubmit={onSubmit} className="space-y-4" aria-describedby={`${id}-status`}>
+    <form noValidate onSubmit={onSubmit} className="space-y-4 text-left" aria-describedby={`${id}-status`}>
       <Field id={`${id}-name`} label={ui.form.name} error={errors.name}>
         <input
           id={`${id}-name`}
@@ -47,9 +51,10 @@ export function LeadForm() {
           type="text"
           autoComplete="name"
           required
+          placeholder="Tu nombre"
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? `${id}-name-error` : undefined}
-          className={cn(FIELD, errors.name ? "border-danger" : "border-border")}
+          className={cn(FIELD, errors.name ? "border-danger" : "border-rosa")}
         />
       </Field>
 
@@ -61,9 +66,10 @@ export function LeadForm() {
           inputMode="email"
           autoComplete="email"
           required
+          placeholder="tu@correo.com"
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? `${id}-email-error` : undefined}
-          className={cn(FIELD, errors.email ? "border-danger" : "border-border")}
+          className={cn(FIELD, errors.email ? "border-danger" : "border-rosa")}
         />
       </Field>
 
@@ -79,32 +85,33 @@ export function LeadForm() {
           inputMode="tel"
           autoComplete="tel"
           required={site.leads.requirePhone}
+          placeholder="+57 300 000 0000"
           aria-invalid={Boolean(errors.phone)}
           aria-describedby={errors.phone ? `${id}-phone-error` : undefined}
-          className={cn(FIELD, errors.phone ? "border-danger" : "border-border")}
+          className={cn(FIELD, errors.phone ? "border-danger" : "border-rosa")}
         />
       </Field>
 
       {site.leads.requireConsent ? (
         <div>
-          <label className="flex items-start gap-2 text-sm">
+          <label className="flex items-start gap-3 text-[0.9375rem] leading-snug text-tierra">
             <input
               name="consent"
               type="checkbox"
               required
               aria-invalid={Boolean(errors.consent)}
               aria-describedby={errors.consent ? `${id}-consent-error` : undefined}
-              className="mt-0.5 size-5"
+              className="mt-0.5 size-5 shrink-0 accent-burgundy"
             />
             <span>
               {ui.form.consentBefore}{" "}
-              <Link href={site.legal.privacyPath} className="underline underline-offset-2">
+              <Link href={site.legal.privacyPath} target="_blank" className="font-medium text-burgundy underline underline-offset-2">
                 {ui.form.consentLink}
               </Link>
             </span>
           </label>
           {errors.consent ? (
-            <p id={`${id}-consent-error`} className="mt-1 text-sm text-danger">
+            <p id={`${id}-consent-error`} className="mt-1.5 text-sm text-danger">
               {errors.consent}
             </p>
           ) : null}
@@ -122,13 +129,14 @@ export function LeadForm() {
       <button
         type="submit"
         disabled={busy}
-        className="inline-flex min-h-12 w-full items-center justify-center rounded-md bg-accent px-6 font-semibold text-accent-foreground disabled:opacity-60"
+        className="btn-cta flex min-h-15 w-full items-center justify-center gap-3 px-6 text-[0.9375rem] font-semibold uppercase tracking-[0.04em] text-crema disabled:cursor-wait disabled:opacity-70"
       >
-        {status === "submitting" ? ui.form.submitting : ui.form.submit}
+        {status === "submitting" ? ui.form.submitting : CTA.label}
+        <IconArrowCircle className="size-5 shrink-0" />
       </button>
 
-      <p id={`${id}-status`} role="status" aria-live="polite" className="text-sm">
-        {status === "success" ? ui.form.success : null}
+      <p id={`${id}-status`} role="status" aria-live="polite" className="min-h-5 text-center text-sm">
+        {status === "success" ? <span className="text-success">{ui.form.success}</span> : null}
         {status === "error" ? <span className="text-danger">{ui.form.error}</span> : null}
       </p>
     </form>
@@ -148,12 +156,12 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="text-sm font-medium">
+      <label htmlFor={id} className="text-[0.875rem] font-semibold uppercase tracking-[0.08em] text-tierra">
         {label}
       </label>
       {children}
       {error ? (
-        <p id={`${id}-error`} className="mt-1 text-sm text-danger">
+        <p id={`${id}-error`} className="mt-1.5 text-sm text-danger">
           {error}
         </p>
       ) : null}

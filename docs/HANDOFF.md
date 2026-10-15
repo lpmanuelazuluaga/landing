@@ -114,6 +114,17 @@ ni foto de la referencia.
   nativo transparente sobre la bandera, así que usa el selector del sistema y
   es accesible. El número se envía como `+57 300 000 0000`; si la persona ya
   escribe un prefijo (`+…`), se respeta.
+- **Gracias:** grupo de WhatsApp confirmado y enlazado desde el botón «Unirme
+  al grupo de WhatsApp» (`THANKS.whatsappUrl`); `thanksNextStep: false`.
+  Los tres checks se dibujan en secuencia al cargar y «Confirmado» tiene un
+  barrido de luz de izquierda a derecha con pausa entre pasadas. Con reducción
+  de movimiento quedan estáticos y legibles. No se disparan conversiones aquí.
+- **Cursor y cursiva:** cursor de mano en botones habilitados, enlaces,
+  selectores y casillas de la landing y gracias. La primera línea del título
+  del hero lleva la clase `italic` directamente (`Title.italicFirstLine`).
+  Verificados en Chrome a 360, 390 y 1440 px, con y sin reducción de movimiento
+  (12 casos): sin scroll horizontal, enlace de WhatsApp exacto, dibujo completo
+  de los checks y barrido del brillo hacia la derecha. `check` y smoke aprobados.
 - **Sin casilla de privacidad** (2026-10-14, a pedido): no hay política todavía.
   Reactivarla es un solo cambio (`site.leads.requireConsent = true`) y debe
   hacerse antes de lanzar anuncios (Ley 1581 de 2012).
@@ -136,7 +147,6 @@ ni foto de la referencia.
 | --- | --- | --- |
 | Testimonios | Tres tarjetas con etiqueta "Ejemplo" y texto que dice que es de ejemplo | Testimonios reales (texto, captura o video) y su autorización |
 | Foto de "El acceso" | La del hero, en duotono, con etiqueta "Foto temporal" | La foto definitiva |
-| Gracias | Bloque "Pendiente" en lugar del siguiente paso | Enlace al grupo de WhatsApp |
 
 **Después del evento:** la barra superior pasa a mostrar "Online en vivo" y la
 landing sigue invitando a registrarse. Pasado el 25 de octubre, actualizar
@@ -425,17 +435,16 @@ noindex, nofollow` y no carga ningún script de tracking.
    La rama del diseño ya está integrada en `main` y desplegada.
 2. Reemplazar el contenido provisional (tabla "Contenido provisional") y poner
    cada valor de `PLACEHOLDERS` en `false`.
-3. Grupo de WhatsApp para la página de gracias.
-4. Destino de los leads (CRM o automatización) y `LEADS_WEBHOOK_URL` en Vercel.
+3. Destino de los leads (CRM o automatización) y `LEADS_WEBHOOK_URL` en Vercel.
    Sin él, el formulario muestra error a quien intente registrarse: **no
    lanzar anuncios hasta configurarlo**.
-5. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).
+4. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).
    Con la política lista, volver a activar la casilla del formulario
    (`site.leads.requireConsent = true`): hoy está apagada y el registro no
    recoge autorización expresa para tratar los datos.
-6. Originales del hero en mejor calidad y, si existe, el logo en vector.
-7. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial.
-8. Herramientas de tracking (GTM o directo) y criterio de consentimiento;
+5. Originales del hero en mejor calidad y, si existe, el logo en vector.
+6. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial.
+7. Herramientas de tracking (GTM o directo) y criterio de consentimiento;
    dominio definitivo.
-9. Solo al publicar: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_INDEXABLE=true` y
+8. Solo al publicar: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_INDEXABLE=true` y
    la ruta en `PUBLISHED_LANDINGS`.

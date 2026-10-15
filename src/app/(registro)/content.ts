@@ -37,8 +37,8 @@ export const PLACEHOLDERS = {
   testimonials: true,
   /** Foto de fondo de "El acceso": se usa una temporal. */
   accessPhoto: true,
-  /** Siguiente paso de la página de gracias: falta el grupo de WhatsApp. */
-  thanksNextStep: true,
+  /** Grupo de WhatsApp confirmado y enlazado en la página de gracias. */
+  thanksNextStep: false,
 } as const;
 
 export const META = {
@@ -199,8 +199,9 @@ export const THANKS = {
   kicker: "Masterclass gratuita",
   /** Mensaje de sistema: solo se llega aquí tras un registro confirmado. */
   title: [["Registro"], [{ strong: "confirmado" }]] as readonly Rich[],
-  /** PENDIENTE (PLACEHOLDERS.thanksNextStep): enlace al grupo de WhatsApp. */
-  nextStep: "Aquí irá el enlace al grupo de WhatsApp de la masterclass.",
+  nextStep: "Únete al grupo de WhatsApp de la masterclass.",
+  whatsappLabel: "Unirme al grupo de WhatsApp",
+  whatsappUrl: "https://chat.whatsapp.com/CkIGjqekWXe5d44D95wSso?s=cl&p=i&ilr=4&iam=2",
 };
 
 export const FOOTER = {

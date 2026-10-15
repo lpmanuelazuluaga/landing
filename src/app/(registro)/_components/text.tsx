@@ -53,6 +53,7 @@ export function Title({
   as: Tag = "h2",
   tone = "claro",
   size = "section",
+  italicFirstLine = false,
   className,
   id,
 }: {
@@ -60,13 +61,14 @@ export function Title({
   as?: "h1" | "h2" | "h3";
   tone?: Tone;
   size?: keyof typeof TITLE_SIZE;
+  italicFirstLine?: boolean;
   className?: string;
   id?: string;
 }) {
   return (
     <Tag id={id} className={cn("font-serif font-normal uppercase text-balance", TITLE_SIZE[size], TITLE_TONE[tone], className)}>
       {lines.map((line, index) => (
-        <span key={index} className="block">
+        <span key={index} className={cn("block", italicFirstLine && index === 0 && "italic")}>
           {line.map((segment, i) =>
             typeof segment === "string" ? (
               segment

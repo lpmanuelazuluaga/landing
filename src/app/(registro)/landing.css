@@ -29,6 +29,13 @@
     color: var(--color-burgundy);
   }
 
+  .lp-registro button:not(:disabled),
+  .lp-registro a[href],
+  .lp-registro select:not(:disabled),
+  .lp-registro input[type="checkbox"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   /* ── Fondos ─────────────────────────────────────────────────────────── */
 
   /* Secciones claras: degradado horizontal blanco → arena de la referencia. */
@@ -232,6 +239,85 @@
     }
     .lp-registro .escenario [data-pieza="texto"] {
       text-align: center;
+    }
+  }
+
+  /* ── Confirmación de registro ──────────────────────────────────────── */
+
+  .lp-registro .registro-confirmacion strong {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-registro .gracias-detalles li:nth-child(1) {
+      --check-delay: 0.15s;
+    }
+    .lp-registro .gracias-detalles li:nth-child(2) {
+      --check-delay: 0.35s;
+    }
+    .lp-registro .gracias-detalles li:nth-child(3) {
+      --check-delay: 0.55s;
+    }
+    .lp-registro .gracias-detalles svg {
+      transform-origin: center;
+      animation: lp-check-entrada 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--check-delay) both;
+    }
+    .lp-registro .gracias-detalles circle,
+    .lp-registro .gracias-detalles path {
+      stroke-dasharray: 1;
+      animation: lp-check-trazo 0.55s ease var(--check-delay) both;
+    }
+    .lp-registro .gracias-detalles path {
+      animation-duration: 0.35s;
+      animation-delay: calc(var(--check-delay) + 0.3s);
+    }
+
+    @supports (background-clip: text) {
+      .lp-registro .registro-confirmacion strong {
+        background-image: linear-gradient(
+          110deg,
+          var(--color-burgundy) 40%,
+          var(--color-malva) 47%,
+          color-mix(in srgb, var(--color-rosa) 50%, var(--color-burgundy)) 50%,
+          var(--color-malva) 53%,
+          var(--color-burgundy) 60%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 50%;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: lp-confirmado-brillo 4.8s ease-in-out 1.1s infinite;
+      }
+    }
+  }
+
+  @keyframes lp-check-entrada {
+    from {
+      opacity: 0;
+      transform: scale(0.65);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes lp-check-trazo {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes lp-confirmado-brillo {
+    0%,
+    12% {
+      background-position: 100% 50%;
+    }
+    50%,
+    100% {
+      background-position: 0% 50%;
     }
   }
 

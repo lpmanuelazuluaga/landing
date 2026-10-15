@@ -74,8 +74,8 @@ export function IconArrowCircle(props: IconProps) {
 export function IconCheckCircle(props: IconProps) {
   return (
     <Svg {...props}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="m8.3 12.3 2.5 2.5 5-5.3" />
+      <circle cx="12" cy="12" r="9" pathLength="1" />
+      <path d="m8.3 12.3 2.5 2.5 5-5.3" pathLength="1" />
     </Svg>
   );
 }

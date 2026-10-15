@@ -64,7 +64,7 @@ export function Hero() {
       <div className="mx-auto flex max-w-content flex-col justify-center px-gutter pb-14 pt-[72vw] sm:px-gutter-lg md:pb-16 md:pt-[50vw] lg:mx-0 lg:min-h-[clamp(42rem,56vw,58rem)] lg:max-w-none lg:py-24 lg:pl-[min(13.4vw,calc((100vw-var(--container-content))/2+var(--spacing-gutter-lg)))]">
         <div className="max-w-[31rem]">
           <Logo className="w-36 text-crema md:w-44" />
-          <Title as="h1" id="hero-titulo" lines={HERO.title} tone="oscuro" size="hero" className="mt-7 [&>span:first-child]:italic md:mt-9" />
+          <Title as="h1" id="hero-titulo" lines={HERO.title} tone="oscuro" size="hero" italicFirstLine className="mt-7 md:mt-9" />
           <p className="mt-7 border-l-[3px] border-rosa pl-5 text-[1.1875rem] leading-snug text-crema md:text-[1.3125rem]">
             {HERO.subtitle}
           </p>

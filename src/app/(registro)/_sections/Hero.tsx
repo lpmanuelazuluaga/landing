@@ -28,7 +28,7 @@ export function Hero() {
   } = getImageProps({ ...common, src: heroMobile, loading: "eager", fetchPriority: "high" });
 
   return (
-    <section aria-labelledby="hero-titulo" className="tono-oscuro relative isolate overflow-hidden bg-noche">
+    <section aria-labelledby="hero-titulo" className="tono-oscuro relative isolate overflow-clip bg-noche">
       {/* Foto + degradados para leer el texto (izquierda en escritorio, abajo en móvil). */}
       <div className="absolute inset-x-0 top-0 -z-10 h-full md:h-[56.25vw] lg:bottom-0 lg:right-[clamp(5.5rem,8.5vw,9rem)] lg:h-auto">
         <picture>

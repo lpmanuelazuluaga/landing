@@ -72,7 +72,7 @@ ni foto de la referencia.
 | 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, 1,6 s), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro, centrados en su propio eje; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
-| 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |
+| 8 | `Testimonios` | "Depoimentos": palabra de fondo y tarjetas escalonadas, en un carrusel infinito (las tarjetas van triplicadas y el carrusel se recoloca en la copia del medio al terminar cada desplazamiento). Móvil: una tarjeta por vista; escritorio: tres |
 | 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
 | 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia); la política de privacidad sigue enlazada desde el formulario |
 

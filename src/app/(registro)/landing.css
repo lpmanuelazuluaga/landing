@@ -141,6 +141,17 @@
     transform: translateY(0);
   }
 
+  .lp-registro .btn-whatsapp {
+    background-image: linear-gradient(100deg, var(--color-whatsapp), var(--color-whatsapp-hover));
+    border-color: var(--color-whatsapp-hover);
+    box-shadow: 0 16px 32px -16px color-mix(in srgb, var(--color-whatsapp) 55%, transparent);
+  }
+  .lp-registro .btn-whatsapp:hover {
+    background-image: linear-gradient(100deg, var(--color-whatsapp-hover), var(--color-whatsapp-hover));
+    filter: none;
+    box-shadow: 0 20px 36px -16px color-mix(in srgb, var(--color-whatsapp) 65%, transparent);
+  }
+
   /* ── Divisores ──────────────────────────────────────────────────────── */
 
   .lp-registro .divisor-inicio {

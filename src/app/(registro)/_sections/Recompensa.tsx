@@ -13,8 +13,14 @@ import { Divider, Title } from "../_components/text";
 */
 export function Recompensa() {
   return (
-    <section aria-labelledby="recompensa-titulo" className="fondo-luz">
-      <div className="mx-auto max-w-content px-gutter pb-20 pt-6 text-center sm:px-gutter-lg md:pb-24">
+    <section aria-labelledby="recompensa-titulo" className="fondo-luz relative overflow-clip">
+      <p
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[55vw] top-8 whitespace-nowrap font-serif text-[20vw] uppercase leading-none text-tierra/[0.13] sm:hidden"
+      >
+        {RECOMPENSA.kicker}
+      </p>
+      <div className="relative z-10 mx-auto max-w-content px-gutter pb-20 pt-6 text-center sm:px-gutter-lg md:pb-24">
         <ScrollHint className="text-malva" />
         <Reveal>
           <Kicker className="mt-7 justify-center text-tierra">{RECOMPENSA.kicker}</Kicker>

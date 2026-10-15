@@ -3,7 +3,7 @@ import { noindexMetadata } from "@/lib/seo";
 import { DECOR, PLACEHOLDERS, THANKS } from "../content";
 import { LogoSeal, Ornament, PlaceholderTag } from "../_components/decor";
 import { EventDetails } from "../_components/EventDetails";
-import { IconArrowCircle } from "../_components/icons";
+import { IconWhatsApp } from "../_components/icons";
 import { Divider, Title } from "../_components/text";
 
 /*
@@ -37,10 +37,10 @@ export default function ThanksPage() {
             href={THANKS.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-cta mt-4 inline-flex min-h-15 w-full items-center justify-center gap-2 px-4 py-3 text-[0.9375rem] font-semibold uppercase leading-snug tracking-[0.02em] text-crema"
+            className="btn-cta btn-whatsapp mt-4 inline-flex min-h-15 w-full items-center justify-center gap-3 px-4 py-3 text-[0.9375rem] font-semibold uppercase leading-snug tracking-[0.02em] text-whatsapp-foreground"
           >
+            <IconWhatsApp className="size-6 shrink-0" />
             {THANKS.whatsappLabel}
-            <IconArrowCircle className="size-5 shrink-0" />
           </a>
         </div>
       </div>

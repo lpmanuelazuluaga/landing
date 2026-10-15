@@ -35,8 +35,8 @@ export const LANDING = {
 export const PLACEHOLDERS = {
   /** Testimonios de ejemplo: faltan los reales (texto, foto o video y autorización). */
   testimonials: true,
-  /** Foto de fondo de "El acceso": se usa una temporal. */
-  accessPhoto: true,
+  /** Fondo definitivo de "El acceso", con puerta para escritorio y móvil. */
+  accessPhoto: false,
   /** Grupo de WhatsApp confirmado y enlazado en la página de gracias. */
   thanksNextStep: false,
 } as const;
@@ -184,7 +184,7 @@ export const TESTIMONIOS = {
 export const ACCESO = {
   kicker: "El acceso",
   title: [["Las puertas se abren."], [{ strong: "¿Te animas?" }]] as readonly Rich[],
-  /** FOTO TEMPORAL (PLACEHOLDERS.accessPhoto). */
+  /** La puerta es un fondo decorativo. */
   photoAlt: "",
 };
 

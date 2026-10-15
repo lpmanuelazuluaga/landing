@@ -71,6 +71,15 @@ export function IconArrowCircle(props: IconProps) {
   );
 }
 
+export function IconWhatsApp(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M20.5 11.6a8.4 8.4 0 0 1-12.5 7.3l-4.5 1.5L5 16a8.4 8.4 0 1 1 15.5-4.4Z" />
+      <path d="m8.2 7.4 1.3-.2.9 2.3-1 1.1a7.3 7.3 0 0 0 3.7 3.7l1.1-1 2.3.9-.2 1.3c-.1.7-.7 1.2-1.4 1.2-4.4-.2-7.9-3.7-8.1-8.1 0-.7.5-1.3 1.2-1.4Z" />
+    </Svg>
+  );
+}
+
 export function IconCheckCircle(props: IconProps) {
   return (
     <Svg {...props}>

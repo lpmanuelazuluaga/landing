@@ -1,7 +1,7 @@
 # Handoff: Landing de Registro (Manuela Zuluaga)
 
 Para: Bruno y cualquier desarrollador que continúe el proyecto.
-Estado al 2026-10-14. **Fase: diseño desplegado en Vercel, en revisión de la
+Estado al 2026-10-15. **Fase: diseño desplegado en Vercel, en revisión de la
 agencia.** Antes de lanzar la campaña falta reemplazar el contenido provisional
 y configurar el destino de los leads (ver "Tareas pendientes").
 
@@ -77,7 +77,7 @@ ni foto de la referencia.
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio) y tarjeta |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo y tarjetas escalonadas, en un carrusel infinito (las tarjetas van triplicadas y el carrusel se recoloca en la copia del medio al terminar cada desplazamiento). Móvil: una tarjeta por vista; escritorio: tres |
-| 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
+| 9 | `Acceso` | Puerta de fondo, con imágenes distintas para móvil y escritorio, y tarjeta con sello (sin precio) |
 | 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia) |
 
 - **Detalles del hero (2026-10-14):** fecha y hora en elementos separados:
@@ -119,6 +119,17 @@ ni foto de la referencia.
   Los tres checks se dibujan en secuencia al cargar y «Confirmado» tiene un
   barrido de luz de izquierda a derecha con pausa entre pasadas. Con reducción
   de movimiento quedan estáticos y legibles. No se disparan conversiones aquí.
+- **Ajustes del 2026-10-15:** puerta definitiva en «El acceso» con `<picture>`
+  y `getImageProps` (móvil por debajo de 768 px, carga diferida, una sola imagen
+  descargada); `accessPhoto: false`. «Recompensa» tiene la misma palabra de
+  fondo recortada que «Sobre», solo en móvil. El botón de WhatsApp es verde con
+  ícono de chat y teléfono, texto blanco con contraste AA (4,89:1 como mínimo)
+  y hover más oscuro. El ejemplo del correo del modal es `ejemplo@correo.com`
+  (`ui.form.emailPlaceholder`).
+  Verificado en Chrome a 360, 390, 768, 1024 y 1440 px, con y sin reducción de
+  movimiento (20 casos): encuadre correcto y una sola descarga de la puerta,
+  marca de agua solo en móvil, correo de ejemplo y contraste del botón verde
+  tanto normal como en hover. `check` y smoke (17/17) aprobados.
 - **Cursor y cursiva:** cursor de mano en botones habilitados, enlaces,
   selectores y casillas de la landing y gracias. La primera línea del título
   del hero lleva la clase `italic` directamente (`Title.italicFirstLine`).
@@ -146,7 +157,6 @@ ni foto de la referencia.
 | Qué | Cómo se ve hoy | Qué falta |
 | --- | --- | --- |
 | Testimonios | Tres tarjetas con etiqueta "Ejemplo" y texto que dice que es de ejemplo | Testimonios reales (texto, captura o video) y su autorización |
-| Foto de "El acceso" | La del hero, en duotono, con etiqueta "Foto temporal" | La foto definitiva |
 
 **Después del evento:** la barra superior pasa a mostrar "Online en vivo" y la
 landing sigue invitando a registrarse. Pasado el 25 de octubre, actualizar
@@ -207,6 +217,10 @@ metadatos.
 - El PNG móvil del hero se reemplazó el 2026-10-14 por una versión a color
   completo (684×2160). El de escritorio sigue en 256 colores: en degradados
   oscuros puede haber bandas; si existe el original en JPG, reemplazarlo.
+- El 2026-10-15 se incorporaron `main/puerta-seccion.png` (1672×941) y
+  `main/seccion-puerta-mobile.png` (941×1672), sin EXIF ni XMP. Las copias de
+  la landing son `_assets/acceso-desktop.jpg` y `acceso-mobile.jpg`, JPG de
+  calidad 94 y menos de 400 KB cada una. Los originales se conservan.
 - No guardar aquí nada que no pueda ser público (contratos, datos personales,
   documentos internos).
 

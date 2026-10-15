@@ -37,6 +37,11 @@
   --color-danger: #a3161d;
   --color-success: #2f6b3a;
 
+  /* Botón del grupo de WhatsApp: verde pedido por el cliente, texto blanco AA. */
+  --color-whatsapp: #12823f;
+  --color-whatsapp-hover: #0e7136;
+  --color-whatsapp-foreground: #ffffff;
+
   /* ── Layout ── */
   --container-page: 72rem; /* max-w-page */
   --container-narrow: 42rem; /* max-w-narrow */

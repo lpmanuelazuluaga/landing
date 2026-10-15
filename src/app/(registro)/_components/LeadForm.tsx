@@ -78,7 +78,7 @@ export function LeadForm() {
           inputMode="email"
           autoComplete="email"
           required
-          placeholder="tu@correo.com"
+          placeholder={ui.form.emailPlaceholder}
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? `${id}-email-error` : undefined}
           className={cn(FIELD, errors.email ? "border-danger" : "border-rosa")}

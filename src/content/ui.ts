@@ -9,6 +9,7 @@ export const ui = {
   form: {
     name: "Nombre",
     email: "Correo electrónico",
+    emailPlaceholder: "ejemplo@correo.com",
     /* El teléfono que se pide es el de WhatsApp (recordatorios del evento). */
     phone: "WhatsApp",
     phoneCountry: "Prefijo del país",

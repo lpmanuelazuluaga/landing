@@ -1,30 +1,29 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { ACCESO, DECOR, PLACEHOLDERS } from "../content";
-import fotoTemporal from "../_assets/hero-desktop.jpg";
+import accesoDesktop from "../_assets/acceso-desktop.jpg";
+import accesoMobile from "../_assets/acceso-mobile.jpg";
 import { Kicker, LogoSeal, PlaceholderTag } from "../_components/decor";
 import { EventDetails } from "../_components/EventDetails";
 import { CtaButton } from "../_components/Registration";
 import { Divider, Title } from "../_components/text";
 
 /*
-  "El acceso": reproduce "O que você terá acesso" de la referencia. Foto de
-  fondo en duotono oscuro y tarjeta de papel con el sello del logo sobre el
+  "El acceso": puerta de fondo con encuadres de escritorio y móvil; tarjeta
+  de papel con el sello del logo sobre el
   borde, ✦✦✦, título, los detalles del evento como lista con checks y el
   botón. Sin precio (la masterclass es gratuita).
-
-  FOTO TEMPORAL (PLACEHOLDERS.accessPhoto): se reutiliza la del hero hasta
-  recibir la definitiva.
 */
 export function Acceso() {
+  const common = { alt: ACCESO.photoAlt, fill: true, sizes: "100vw" } as const;
+  const { props: { srcSet: desktop } } = getImageProps({ ...common, src: accesoDesktop });
+  const { props: { srcSet: mobile, ...rest } } = getImageProps({ ...common, src: accesoMobile, loading: "lazy" });
+
   return (
     <section aria-labelledby="acceso-titulo" className="tono-oscuro relative isolate overflow-clip bg-noche">
-      <Image
-        src={fotoTemporal}
-        alt={ACCESO.photoAlt}
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover object-[70%_30%] opacity-90 [filter:sepia(0.55)_saturate(0.75)_brightness(0.62)]"
-      />
+      <picture>
+        <source media="(min-width: 768px)" srcSet={desktop} />
+        <img {...rest} srcSet={mobile} alt={rest.alt} className="-z-20 object-cover object-center" />
+      </picture>
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(30_20_18/0.35)_0%,rgb(30_20_18/0.2)_40%,var(--color-noche)_100%)]" />
       {PLACEHOLDERS.accessPhoto ? (
         <PlaceholderTag className="absolute left-4 top-4 bg-noche/60 text-crema md:left-6 md:top-6">Foto temporal</PlaceholderTag>

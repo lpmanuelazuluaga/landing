@@ -82,6 +82,17 @@ src/
 Las carpetas con `_` no generan rutas (convención de carpetas privadas de Next).
 Borrar la carpeta borra la landing entera, imágenes incluidas.
 
+**Decoraciones de Recompensa y Para ti:** la marca de agua móvil de
+`Recompensa` divide el copy en «Reco» + media M arriba a la derecha y la otra
+media M + «pensa» abajo a la izquierda del encabezado. Las ventanas de la M
+miden `0.4175em`, la mitad de su avance en Cormorant Garamond a peso 400;
+si cambia la tipografía, se debe recalibrar ese ancho. Las barras de las tres
+tarjetas pulsan cada 6 s, escalonadas 1,4 s. Las tarjetas de vidrio 01 y 03
+de `ParaTi` tienen un reflejo tenue cada 9 s, solo debajo de 768 px.
+Son estilos de `landing.css`, sin dependencias ni eventos nuevos, activados
+solo con `prefers-reduced-motion: no-preference`; no alteran el layout ni
+interceptan gestos o clics.
+
 **Testimonios en video:** `content.ts` conserva la asociación numerada entre
 los seis enlaces originales y las versiones de reproducción. Las portadas
 JPEG de `_assets/` se importan en `Testimonios` y se sirven con `next/image`.

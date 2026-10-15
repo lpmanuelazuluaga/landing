@@ -198,6 +198,73 @@
     mask-size: contain;
   }
 
+  /* Una misma M se reparte entre las dos esquinas. Su avance en Cormorant
+     Garamond es 0,835 em: cada ventana muestra exactamente la mitad. */
+  .lp-registro .recompensa-palabra {
+    font-size: 14.6vw;
+    font-kerning: none;
+  }
+  .lp-registro .recompensa-media-m {
+    display: inline-flex;
+    flex: 0 0 0.4175em;
+    width: 0.4175em;
+    overflow: hidden;
+  }
+  .lp-registro .recompensa-media-m > span {
+    flex: none;
+  }
+  .lp-registro .recompensa-media-m-final {
+    justify-content: flex-end;
+  }
+
+  @keyframes lp-recompensa-luz {
+    0%, 28%, 78%, 100% {
+      opacity: 0.35;
+      box-shadow: 0 0 0 transparent;
+    }
+    44%, 56% {
+      opacity: 1;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--color-malva) 50%, transparent);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-registro .recompensa-barra {
+      animation: lp-recompensa-luz 6s ease-in-out infinite;
+    }
+  }
+
+  /* Reflejo discreto sobre las tarjetas de vidrio 01 y 03 de móvil. */
+  @media (width < 48rem) {
+    .lp-registro .para-ti-tarjeta {
+      position: relative;
+    }
+    .lp-registro .para-ti-tarjeta::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background-image: linear-gradient(110deg, transparent 36%, rgb(238 228 218 / 0.09) 50%, transparent 64%);
+      background-size: 280% 100%;
+      background-position: 100% 50%;
+      opacity: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .lp-registro .para-ti-tarjeta::after {
+        animation: lp-para-ti-reflejo 9s ease-in-out infinite;
+      }
+      .lp-registro .para-ti-tarjeta:nth-child(3)::after {
+        animation-delay: -4.5s;
+      }
+    }
+  }
+  @keyframes lp-para-ti-reflejo {
+    0%, 18% { background-position: 100% 50%; opacity: 0; }
+    30% { opacity: 1; }
+    58% { opacity: 1; }
+    72%, 100% { background-position: 0% 50%; opacity: 0; }
+  }
+
   /* ── Escenario de "Para ti si…" (escritorio) ──────────────────────────
      Cada pieza ([data-pieza]) parte del centro del escenario y se desplaza
      con `translate` desde --desde hasta --hasta cuando Escenario marca

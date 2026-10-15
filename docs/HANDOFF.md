@@ -139,6 +139,18 @@ ni foto de la referencia.
   decorativo (`aria-hidden`) y estático. Verificado en Chrome a 360, 390, 430,
   768 y 1440 px con ambas preferencias de movimiento, sin desbordamiento
   horizontal; `check` y smoke (17/17) aprobados.
+- **Palabra partida y efectos sutiles (2026-10-15):** la marca de agua de
+  «Recompensa» muestra «RECO» y media M arriba a la derecha; la otra media M
+  y «PENSA» aparecen abajo a la izquierda del encabezado, antes del divisor.
+  Tipografía de `14.6vw`; cada mitad usa un recorte de `0.4175em`, medido en
+  Cormorant Garamond. Las barras de las tres tarjetas tienen un pulso de luz
+  de 6 s con desfase; las tarjetas de vidrio 01 y 03 de «Para ti» reciben un
+  reflejo suave de 9 s, solo en móvil. Todo se mantiene estático con reducción
+  de movimiento. QA en Chrome a 360, 390, 430, 768 y 1440 px y ambas
+  preferencias de movimiento: mitades y esquinas correctas, sin desbordamiento
+  horizontal, fases distintas de luz y reflejo verificadas. `check` y smoke
+  (17/17) aprobados. El cliente confirmó que el audio funciona; este ajuste
+  conserva el reproductor existente.
 - **Testimonios reales (2026-10-15):** seis portadas numeradas asociadas a los
   seis enlaces entregados, con aviso para pulsarlas y modal de reproducción.
   Reemplazan los comentarios de ejemplo y la valoración provisional;

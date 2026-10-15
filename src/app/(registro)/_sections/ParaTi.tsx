@@ -20,7 +20,8 @@ import { Divider, Title } from "../_components/text";
   (--desde) y final (--hasta) como valores de `translate` desde el centro del
   escenario; las esquinas se calculan con unidades de contenedor (cqw/cqh).
 
-  Móvil y tablet: gráfico arriba y lista debajo, sin animación.
+  Móvil y tablet: gráfico arriba y lista debajo. Las tarjetas de vidrio de
+  móvil tienen un reflejo tenue que recorre su superficie.
 
   El gráfico es decorativo (aria-hidden): la lista ordenada lleva el contenido
   en el orden de lectura correcto.
@@ -65,7 +66,7 @@ const TEXT_MOTION = [
 /* Móvil: tarjeta de vidrio muy transparente para 01 y 03 (se intercalan con
    02 y 04 sin tarjeta) y así cada punto queda separado. */
 const GLASS =
-  "max-md:rounded-2xl max-md:border max-md:border-rosa/20 max-md:bg-[linear-gradient(135deg,rgb(238_228_218/0.08),rgb(238_228_218/0.025))] max-md:shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_18px_36px_-24px_rgb(0_0_0/0.8)] max-md:backdrop-blur-[3px]";
+  "para-ti-tarjeta max-md:rounded-2xl max-md:border max-md:border-rosa/20 max-md:bg-[linear-gradient(135deg,rgb(238_228_218/0.08),rgb(238_228_218/0.025))] max-md:shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_18px_36px_-24px_rgb(0_0_0/0.8)] max-md:backdrop-blur-[3px]";
 
 const motion = ({ desde, hasta }: { desde: string; hasta: string }) =>
   ({ "--desde": desde, "--hasta": hasta }) as CSSProperties;

@@ -56,6 +56,9 @@ export const CTA = {
 /** Detalles del evento (hero, modal, "El acceso" y gracias). */
 export const EVENT = {
   date: "25 de oct · 10 am Colombia",
+  /** Fecha y hora separadas para los detalles del hero. */
+  heroDate: "25 de octubre",
+  heroTime: "10am Colombia",
   format: "Online en vivo",
   price: "Masterclass gratuita",
   /** Inicio para la cuenta regresiva: hora de Colombia (UTC−5, sin horario de verano). */

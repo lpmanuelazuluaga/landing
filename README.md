@@ -45,7 +45,7 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. Hero con fecha y hora separadas. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
 | [`/gracias`](https://landing-omega-one-60.vercel.app/gracias) | Confirmación tras un registro entregado (siguiente paso pendiente) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |

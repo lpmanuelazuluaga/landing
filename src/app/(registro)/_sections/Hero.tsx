@@ -67,7 +67,7 @@ export function Hero() {
           </p>
           <p className="mt-4 text-[1rem] leading-relaxed text-crema/75 md:text-[1.0625rem]">{HERO.body}</p>
           <CtaButton className="mt-8 md:mt-9" />
-          <EventDetails tone="oscuro" className="mt-6" />
+          <EventDetails variant="hero" tone="oscuro" className="mt-6" />
         </div>
       </div>
     </section>

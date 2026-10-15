@@ -76,6 +76,11 @@ ni foto de la referencia.
 | 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
 | 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia); la política de privacidad sigue enlazada desde el formulario |
 
+- **Detalles del hero (2026-10-14):** fecha y hora en elementos separados:
+  "25 de octubre" (calendario) y "10am Colombia" (reloj), a pedido de Bruno.
+  Textos en `EVENT.heroDate` y `EVENT.heroTime`; variante `hero` de `EventDetails`.
+  Verificado en Chrome a 360, 390 y 1440 px, con y sin reducción de movimiento:
+  cuatro elementos legibles y sin scroll horizontal. `check` y smoke aprobados.
 - **Registro:** todos los botones "Reservar mi lugar ahora" abren el mismo modal
   (`_components/Registration.tsx`, sobre `Dialog` con `bare`). El modal es la
   tarjeta de oferta de la referencia: papel, sello con el logo, título, detalles

@@ -1,7 +1,11 @@
 <!-- BEGIN:nextjs-agent-rules -->
+
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
 <!-- END:nextjs-agent-rules -->
 
 # Reglas del proyecto para agentes de IA
@@ -17,15 +21,25 @@ pendientes en `docs/HANDOFF.md`.
   (`landing-registro`).
 - Temática: desarrollo personal, amor propio y relaciones de pareja.
 - Mercado e idioma: español de Colombia (`es-CO`, `es_CO`, país `CO`).
-- Landing inicial: `registro` → `src/app/registro/` (`/registro`).
+- Una sola landing, en la raíz del dominio: `src/app/(registro)/` → `/`, y su
+  página de gracias en `/gracias`. El registro es un modal dentro de la
+  landing: abrirlo no cambia la URL (ni hash ni query). Solo un registro
+  confirmado navega a `/gracias`.
 - Repositorio **público**: nada de secretos, datos personales ni documentos
   internos en el código, los commits o `docs/`.
-- **Fase actual: solo infraestructura.** El diseño reproducirá una landing de
-  referencia que todavía no se entregó. Hasta recibirla, no diseñar secciones,
-  no fijar paleta ni tipografías, no escribir copy comercial ni instalar
-  dependencias de animación o efectos.
-- Voz del copy (tuteo o usted): PENDIENTE de definir con el cliente.
-  `src/content/ui.ts` sigue en tuteo neutro.
+- **Fase actual: diseño implementado, en revisión.** La landing reproduce con
+  fidelidad una landing de referencia (captura de escritorio entregada por la
+  agencia; no versionada) con el copy, las fotos y la marca del cliente. No
+  rediseñar por iniciativa propia: cualquier cambio visual se consulta. Nunca
+  reutilizar textos, logos ni fotos de la referencia.
+- Marca: paleta en `src/styles/theme.css`; títulos Cormorant Garamond y cuerpo
+  DM Sans (`src/app/(registro)/fonts.ts`). Logo del cliente en `_assets/logo.png`
+  (se tiñe con `Logo`, como máscara).
+- Copy aprobado y literal en `content.ts` (con las correcciones de ortografía
+  autorizadas). No cambiar el texto sin autorización. Voz: tuteo.
+- Contenido provisional en `PLACEHOLDERS` (`content.ts`): siempre con etiqueta
+  visible, y el build falla si la landing se publica con alguno en `true`.
+  Nunca presentar testimonios o datos de ejemplo como reales.
 
 ## Antes de escribir código
 

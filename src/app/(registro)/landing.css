@@ -1,0 +1,306 @@
+/*
+  Estilos propios de la landing "registro".
+
+  TODO selector va bajo .lp-registro: con la navegación del cliente, las hojas
+  de varias landings pueden convivir en el documento, y un selector suelto se
+  filtraría a las demás.
+
+  @layer components permite que las utilidades de Tailwind del JSX pisen estas
+  reglas cuando haga falta. Aquí solo va lo que no se resuelve con utilidades:
+  fuentes, fondos con textura, degradados de la referencia, el botón, formas y
+  animaciones.
+*/
+@layer components {
+  .lp-registro {
+    /* Fuentes de marca (aplicadas con font.variable en layout.tsx). */
+    --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+    --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+    font-family: var(--font-sans);
+    color: var(--color-tierra);
+    background-color: var(--color-crema);
+    /* Las decoraciones (textos verticales, marca de agua) sobresalen a
+       propósito: clip evita el scroll horizontal sin crear un contenedor de
+       scroll. */
+    overflow-x: clip;
+  }
+
+  .lp-registro ::selection {
+    background: var(--color-rosa);
+    color: var(--color-burgundy);
+  }
+
+  /* ── Fondos ─────────────────────────────────────────────────────────── */
+
+  /* Secciones claras: degradado horizontal blanco → arena de la referencia. */
+  .lp-registro .fondo-luz {
+    background-color: var(--color-crema);
+    background-image: linear-gradient(90deg, var(--color-papel) 0%, #efe7df 42%, #dccab7 100%);
+  }
+
+  /* Papel arrugado claro (hero claro, mentora, tarjetas). Textura propia. */
+  .lp-registro .fondo-papel {
+    background-color: #e8ddd2;
+    background-image:
+      linear-gradient(90deg, rgb(247 242 237 / 0.72), rgb(232 221 210 / 0.5)),
+      url("./_assets/paper-light.jpg");
+    background-size: auto, cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Secciones oscuras: noche con papel arrugado y un brillo cálido. */
+  .lp-registro .fondo-noche {
+    background-color: var(--color-noche);
+    background-image:
+      linear-gradient(rgb(30 20 18 / 0.4), rgb(30 20 18 / 0.4)),
+      url("./_assets/paper-dark.jpg");
+    background-size: auto, cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .lp-registro .fondo-noche-brillo-izq {
+    background-color: var(--color-noche);
+    background-image:
+      radial-gradient(60% 55% at 12% 8%, rgb(132 77 67 / 0.55), transparent 70%),
+      linear-gradient(rgb(30 20 18 / 0.4), rgb(30 20 18 / 0.4)),
+      url("./_assets/paper-dark.jpg");
+    background-size: auto, auto, cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .lp-registro .fondo-noche-brillo-abajo {
+    background-color: var(--color-noche);
+    background-image:
+      radial-gradient(45% 60% at 50% 115%, rgb(132 77 67 / 0.5), transparent 70%),
+      linear-gradient(rgb(30 20 18 / 0.4), rgb(30 20 18 / 0.4)),
+      url("./_assets/paper-dark.jpg");
+    background-size: auto, auto, cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Barra fija superior: vidrio esmerilado de papel claro. El fondo es
+     translúcido y desenfoca lo que pasa por debajo; la textura de papel va en
+     una capa aparte, suave. Opacidad elegida para que el texto mantenga AA
+     incluso sobre el hero oscuro. */
+  .lp-registro .barra-vidrio {
+    background-color: rgb(247 242 237 / 0.8);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
+    box-shadow: 0 12px 30px -20px rgb(30 20 18 / 0.5);
+  }
+  .lp-registro .barra-vidrio::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("./_assets/paper-light.jpg") center / cover no-repeat;
+    opacity: 0.25;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* Marquesina: banda vino con brillo central. */
+  .lp-registro .fondo-marquesina {
+    background-image: linear-gradient(90deg, var(--color-burgundy) 0%, var(--color-malva) 48%, #6a2b26 70%, var(--color-burgundy) 100%);
+  }
+
+  /* Texto y foco en fondos oscuros. */
+  .lp-registro .tono-oscuro {
+    --color-focus: var(--color-rosa);
+    color: var(--color-crema);
+  }
+
+  /* ── Botón de la referencia ─────────────────────────────────────────── */
+
+  .lp-registro .btn-cta {
+    background-image: linear-gradient(90deg, var(--color-malva) 0%, #6a2b26 45%, var(--color-burgundy) 100%);
+    border: 1px solid rgb(200 164 159 / 0.45);
+    box-shadow:
+      0 18px 36px -20px rgb(77 14 19 / 0.75),
+      inset 0 1px 0 rgb(255 255 255 / 0.12);
+    transition:
+      filter 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .lp-registro .btn-cta:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+    box-shadow:
+      0 22px 40px -18px rgb(77 14 19 / 0.85),
+      inset 0 1px 0 rgb(255 255 255 / 0.16);
+  }
+  .lp-registro .btn-cta:active {
+    transform: translateY(0);
+  }
+
+  /* ── Divisores ──────────────────────────────────────────────────────── */
+
+  .lp-registro .divisor-inicio {
+    background-image: linear-gradient(90deg, var(--color-tierra) 0%, var(--color-malva) 55%, rgb(200 164 159 / 0) 100%);
+  }
+  .lp-registro .divisor-centro {
+    background-image: linear-gradient(90deg, rgb(132 77 67 / 0) 0%, var(--color-malva) 30%, var(--color-tierra) 50%, var(--color-malva) 70%, rgb(132 77 67 / 0) 100%);
+  }
+  .lp-registro .divisor-inicio-oscuro {
+    background-image: linear-gradient(90deg, var(--color-rosa) 0%, rgb(200 164 159 / 0.5) 55%, rgb(200 164 159 / 0) 100%);
+  }
+  .lp-registro .divisor-centro-oscuro {
+    background-image: linear-gradient(90deg, rgb(200 164 159 / 0) 0%, var(--color-rosa) 30%, var(--color-arena) 50%, var(--color-rosa) 70%, rgb(200 164 159 / 0) 100%);
+  }
+
+  /* ── Formas ─────────────────────────────────────────────────────────── */
+
+  /* Arco de la referencia: esquina superior izquierda en cuarto de elipse. */
+  .lp-registro .arco {
+    border-top-left-radius: 58% 34%;
+  }
+
+  /* Texto vertical que se lee de abajo hacia arriba. */
+  .lp-registro .vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  /* Tono sepia de la foto de pareja, como en la referencia. */
+  .lp-registro .foto-sepia {
+    filter: sepia(0.92) saturate(1.05) hue-rotate(-12deg) contrast(1.05) brightness(0.9);
+  }
+
+  /* Marca de agua tipográfica (palabra gigante detrás del título). */
+  .lp-registro .marca-agua {
+    color: rgb(74 58 50 / 0.07);
+  }
+
+  /* Logo como máscara: el mismo PNG se tiñe con el color de cada fondo. */
+  .lp-registro .logo-mascara {
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+
+  /* ── Escenario de "Para ti si…" (escritorio) ──────────────────────────
+     Cada pieza ([data-pieza]) parte del centro del escenario y se desplaza
+     con `translate` desde --desde hasta --hasta cuando Escenario marca
+     data-abierto. container-type: size habilita cqw/cqh para llegar a las
+     esquinas sin importar el ancho. */
+  @media (width >= 64rem) {
+    .lp-registro .escenario {
+      container-type: size;
+      height: 40rem;
+    }
+    .lp-registro .escenario [data-pieza] {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: var(--desde);
+      transition: translate 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s;
+    }
+    .lp-registro .escenario [data-pieza="texto"] {
+      transition-delay: 0.45s;
+    }
+    .lp-registro .escenario[data-abierto="true"] [data-pieza] {
+      translate: var(--hasta);
+    }
+    /* En el centro, cada texto queda centrado en su propio eje. */
+    .lp-registro .escenario[data-abierto="true"] [data-pieza="texto"] {
+      text-align: center;
+    }
+    /* Durante el cruce con las baldosas los textos se atenúan (texto crema sobre
+       baldosas crema sería ilegible), cambian a centrados cuando están más
+       tenues (lp-cruce) y vuelven al llegar al centro. */
+    .lp-registro .escenario[data-abierto="true"] [data-pieza="texto"] {
+      animation: lp-cruce 1.6s ease-in-out 0.45s both;
+    }
+  }
+  /* Sin movimiento o sin JavaScript: directamente el estado final. */
+  @media (width >= 64rem) and (prefers-reduced-motion: reduce) {
+    .lp-registro .escenario [data-pieza] {
+      translate: var(--hasta);
+      transition: none;
+      animation: none;
+    }
+    .lp-registro .escenario [data-pieza="texto"] {
+      text-align: center;
+    }
+  }
+  @media (width >= 64rem) and (scripting: none) {
+    .lp-registro .escenario [data-pieza] {
+      translate: var(--hasta);
+      transition: none;
+    }
+    .lp-registro .escenario [data-pieza="texto"] {
+      text-align: center;
+    }
+  }
+
+  /* ── Animaciones (todas se anulan con prefers-reduced-motion en globals.css) ── */
+
+  @keyframes lp-cruce {
+    0% {
+      text-align: start;
+    }
+    30%,
+    70% {
+      opacity: 0.12;
+    }
+    /* Discreta: entre 0% y 60% cambia en el punto medio (30%), con el texto tenue. */
+    60% {
+      text-align: center;
+    }
+  }
+
+  @keyframes lp-marquesina {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .lp-registro .marquesina-pista {
+    animation: lp-marquesina 42s linear infinite;
+  }
+
+  @keyframes lp-girar {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .lp-registro .girar-lento {
+    animation: lp-girar 32s linear infinite;
+  }
+
+  @keyframes lp-modal-entrada {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+  }
+  .lp-registro dialog[open] .modal-tarjeta {
+    animation: lp-modal-entrada 0.38s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @keyframes lp-fondo-entrada {
+    from {
+      opacity: 0;
+    }
+  }
+  .lp-registro dialog[open]::backdrop {
+    animation: lp-fondo-entrada 0.3s ease-out;
+  }
+
+  @keyframes lp-scroll-rueda {
+    0% {
+      transform: translateY(-3px);
+      opacity: 0;
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(5px);
+      opacity: 0;
+    }
+  }
+  .lp-registro .scroll-rueda {
+    animation: lp-scroll-rueda 1.8s ease-in-out infinite;
+  }
+}

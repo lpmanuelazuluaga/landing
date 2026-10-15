@@ -23,8 +23,9 @@ export const site = {
     cookiesPath: "/cookies",
   },
   leads: {
-    /** Si el teléfono es obligatorio en todos los formularios del sitio. */
-    requirePhone: false,
+    /** Si el teléfono es obligatorio en todos los formularios del sitio.
+        Manuela Zuluaga: sí (WhatsApp), decisión del 2026-10-14. */
+    requirePhone: true,
     /** Exigir la casilla de aceptación de la política de privacidad. */
     requireConsent: true,
   },

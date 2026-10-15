@@ -8,8 +8,9 @@
 export const ui = {
   form: {
     name: "Nombre",
-    email: "Email",
-    phone: "Teléfono",
+    email: "Correo electrónico",
+    /* El teléfono que se pide es el de WhatsApp (recordatorios del evento). */
+    phone: "WhatsApp",
     optional: "(opcional)",
     consentBefore: "He leído y acepto la",
     consentLink: "política de privacidad",
@@ -20,9 +21,9 @@ export const ui = {
   },
   validation: {
     name: "Escribe tu nombre.",
-    email: "El email no es válido.",
-    phone: "El teléfono no es válido.",
-    phoneRequired: "El teléfono es obligatorio.",
+    email: "El correo electrónico no es válido.",
+    phone: "El número de WhatsApp no es válido.",
+    phoneRequired: "Escribe tu número de WhatsApp.",
     consent: "Debes aceptar la política de privacidad.",
   },
   consent: {

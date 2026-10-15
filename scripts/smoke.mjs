@@ -176,7 +176,9 @@ try {
   const valid = {
     name: "Persona Prueba",
     email: "prueba@example.com",
-    phone: "",
+    /* Con teléfono: el lead tiene que ser válido aunque site.leads.requirePhone
+       sea true (este proyecto pide WhatsApp obligatorio). */
+    phone: "+57 300 000 0000",
     consent: true,
     hp: "",
     source: "smoke",

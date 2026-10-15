@@ -30,7 +30,6 @@ src/
   app/
     layout.tsx                <html lang>, metadataBase, plantilla de títulos, tracking
     globals.css               @import tailwind + tema + base mínima
-    page.tsx                  "/" provisional: "Proyecto en preparación" (noindex)
     not-found.tsx             404 de cualquier URL inexistente
     error.tsx                 error de render con retry()
     robots.ts  sitemap.ts     según la regla de indexación
@@ -38,9 +37,14 @@ src/
     (legal)/cookies/
     api/leads/route.ts        recepción de leads
     <slug>/                   cada landing (creada con npm run new:landing)
-    registro/                 Landing de Registro (estructura generada, sin diseño)
+    (registro)/               Landing de la masterclass en "/" (route group) y /gracias
+      fonts.ts                Cormorant Garamond + DM Sans (solo en esta landing)
+      content.ts              copy aprobado, textos decorativos y PLACEHOLDERS
+      _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
+      _components/            Registration (botón + modal), LeadForm, CountdownBar, decor, ornaments, icons, text…
+      _assets/                fotos optimizadas, logo y texturas de papel (generadas, propias)
   components/
-    ui/                       Container, Dialog (<dialog> nativo), Reveal
+    ui/                       Container, Dialog (<dialog> nativo; opción bare sin aspecto), Reveal
     tracking/                 Tracking, ConsentGatedScripts, ConsentBanner, AttributionCapture
   content/ui.ts               textos de sistema (formularios, banner, 404, error)
   lib/

@@ -3,10 +3,11 @@
 Landing de Registro de **Manuela Zuluaga** (desarrollo personal, amor propio y
 relaciones de pareja). Mercado principal: Colombia, español (`es-CO`).
 
-**Estado: infraestructura técnica, sin diseño.** El sitio compila y funciona,
-pero todavía no hay landing: `/` es una pantalla provisional y todo es noindex.
-El diseño se construirá a partir de una landing de referencia que aún no se
-entregó (ver `docs/HANDOFF.md`).
+**Estado: diseño implementado, en revisión.** La landing de la masterclass
+gratuita "El amor no se sana" reproduce una landing de referencia con el copy,
+las fotos y la marca del cliente. Todavía tiene contenido provisional marcado
+(testimonios de ejemplo, dato de prueba, foto temporal, siguiente paso de la
+gracias) y todo es noindex. Detalle y pendientes en `docs/HANDOFF.md`.
 
 Next.js 16.3.8 (App Router, Turbopack) · React 19.2.4 · TypeScript estricto ·
 Tailwind CSS 4 · npm · Node 24.
@@ -42,9 +43,8 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| `/` | Pantalla provisional "Proyecto en preparación" | No |
-| `/registro` | Landing de Registro: estructura generada, **sin diseño ni copy** (carpeta `src/app/registro/`, `leadSource`: `registro`) | No (fuera de `PUBLISHED_LANDINGS`) |
-| `/registro/gracias` | Confirmación de registro (placeholder) | No, nunca |
+| `/` | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| `/gracias` | Confirmación tras un registro entregado (siguiente paso pendiente) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |
 | `/robots.txt`, `/sitemap.xml` | Según la regla de indexación | — |

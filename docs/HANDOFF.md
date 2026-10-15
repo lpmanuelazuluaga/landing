@@ -69,7 +69,7 @@ ni foto de la referencia.
 | 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios). La fecha lleva la bandera de Colombia en SVG (los emojis de banderas no se ven en Windows) |
 | 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
 | 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
-| 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, despacio), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
+| 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, 1,6 s), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro, centrados en su propio eje; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |

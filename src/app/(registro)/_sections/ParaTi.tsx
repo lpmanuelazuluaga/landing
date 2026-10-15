@@ -117,7 +117,7 @@ export function ParaTi() {
           <ol className="mt-14 grid gap-9 md:grid-cols-2 md:gap-x-12 lg:mt-0 lg:block">
             {PARA_TI.items.map((item, index) => (
               <li key={index} data-pieza="texto" style={motion(TEXT_MOTION[index])} className="lg:w-[14rem] xl:w-[15rem]">
-                <p className="flex items-baseline gap-2 font-serif text-rosa">
+                <p className="inline-flex items-baseline gap-2 font-serif text-rosa">
                   <span className="text-[2.5rem] leading-none">{String(index + 1).padStart(2, "0")}</span>
                   <span aria-hidden="true" className="text-2xl">–</span>
                 </p>

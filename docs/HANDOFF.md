@@ -40,7 +40,7 @@ del selector de prefijo) y `lenis` (suavizado del scroll), justificadas en
 ## Qué hay y qué no hay
 
 - **Bienvenida y último paso (2026-10-15):** tras una entrega confirmada,
-  el modal muestra «Tu lugar ya es tuyo» durante 1,8 s y después navega a
+  el modal muestra «El lugar ya es tuyo» durante 1,8 s y después navega a
   `/gracias`, precargada al abrir el registro. La tarjeta aparece suavemente
   y da una bienvenida cálida; el bloque «Último paso» destaca la invitación
   a unirse al grupo de WhatsApp. Conserva el enlace confirmado y el botón

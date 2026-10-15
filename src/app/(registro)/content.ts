@@ -238,7 +238,7 @@ export const THANKS = {
   lastStep: "Último paso",
   nextStep: "Únete al grupo de WhatsApp de la masterclass.",
   transition: {
-    title: "Tu lugar ya es tuyo",
+    title: "El lugar ya es tuyo",
     body: "Qué alegría que estés aquí.",
   },
   whatsappLabel: "Unirme al grupo de WhatsApp",

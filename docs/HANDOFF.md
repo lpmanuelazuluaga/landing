@@ -64,16 +64,17 @@ ni foto de la referencia.
 
 | # | Sección (`_sections/`) | Diseño de la referencia que reproduce |
 | --- | --- | --- |
+| 0 | `CountdownBar` (`_components/`) | Agregada a pedido (no está en la referencia): barra fija superior de vidrio esmerilado sobre papel claro, "El amor no se sana" y cuenta regresiva a `EVENT.startsAt` (25 de octubre, 10 am, hora de Colombia). Al llegar la hora muestra "Online en vivo" |
 | 1 | `Hero` | Hero (opción A aprobada: foto a sangre en lugar del recorte en arco). Escritorio: foto a la derecha, texto sobre degradado y franja vertical. Tablet: foto arriba. Móvil: foto vertical con el texto sobre la mesa |
-| 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios) |
+| 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios). La fecha lleva la bandera de Colombia en SVG (los emojis de banderas no se ven en Windows) |
 | 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
 | 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
 | 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo |
-| 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla |
+| 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |
 | 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
-| 10 | `Footer` | Pie con logo, derechos y enlaces legales |
+| 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia); la política de privacidad sigue enlazada desde el formulario |
 
 - **Registro:** todos los botones "Reservar mi lugar ahora" abren el mismo modal
   (`_components/Registration.tsx`, sobre `Dialog` con `bare`). El modal es la
@@ -102,6 +103,10 @@ ni foto de la referencia.
 | Foto de "El acceso" | La del hero, en duotono, con etiqueta "Foto temporal" | La foto definitiva |
 | Gracias | Bloque "Pendiente" en lugar del siguiente paso | Enlace al grupo de WhatsApp |
 
+**Después del evento:** la barra superior pasa a mostrar "Online en vivo" y la
+landing sigue invitando a registrarse. Pasado el 25 de octubre, actualizar
+`EVENT` (fecha y `startsAt`) o retirar la landing.
+
 **Barrera de publicación:** mientras algún valor de `PLACEHOLDERS` sea `true`,
 añadir la landing a `PUBLISHED_LANDINGS` hace fallar el build (`page.tsx`).
 Al reemplazar cada contenido, poner su valor en `false`.
@@ -127,7 +132,7 @@ src/
       content.ts              copy aprobado, detalles del evento, DECOR y PLACEHOLDERS
       landing.css             fondos con textura, botón, divisores, arco, animaciones
       _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
-      _components/            Registration (botón + modal), LeadForm, EventDetails, TestimonialsCarousel,
+      _components/            Registration (botón + modal), LeadForm, CountdownBar + Countdown, EventDetails, TestimonialsCarousel,
                               decor (✦✦✦, sello, logo…), ornaments (espejo, estampilla, marquesina), icons, text
       _assets/                fotos optimizadas, logo recortado, texturas de papel
       gracias/page.tsx        confirmación (noindex siempre)

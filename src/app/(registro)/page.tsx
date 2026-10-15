@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { isPublished } from "@/lib/landings";
 import { DECOR, LANDING, META, PLACEHOLDERS } from "./content";
+import { CountdownBar } from "./_components/CountdownBar";
 import { Marquee } from "./_components/ornaments";
 import { RegistrationProvider } from "./_components/Registration";
 import { Acceso } from "./_sections/Acceso";
@@ -34,6 +35,7 @@ export const metadata: Metadata = pageMetadata({ ...META, path: LANDING.path });
 export default function LandingPage() {
   return (
     <RegistrationProvider>
+      <CountdownBar />
       <main>
         <Hero />
         <Marquee items={DECOR.marquee} />

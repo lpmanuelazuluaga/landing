@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
-import type { Rich } from "../content";
+import type { MarqueeItem } from "../content";
+import { FlagCO } from "./decor";
 
 /*
   Ornamentos grandes recreados para la marca (SVG propios):
@@ -158,14 +159,22 @@ const STAR = "M12 0C12.6 7.2 16.8 11.4 24 12 16.8 12.6 12.6 16.8 12 24 11.4 16.8
  * están en la página: es decorativa (aria-hidden). La pista va duplicada para
  * que el bucle no tenga salto.
  */
-export function Marquee({ items }: { items: readonly Rich[] }) {
+export function Marquee({ items }: { items: readonly MarqueeItem[] }) {
   const group = (copy: number) => (
     <div className="flex shrink-0 items-center" key={copy}>
       {items.map((item, index) => (
         <span key={`${copy}-${index}`} className="flex items-center">
           <span className="whitespace-nowrap px-5 uppercase">
             {item.map((segment, i) =>
-              typeof segment === "string" ? segment : <strong key={i} className="font-bold">{segment.strong}</strong>,
+              typeof segment === "string" ? (
+                segment
+              ) : "flag" in segment ? (
+                <FlagCO key={i} className="ml-1.5 align-[-0.06em]" />
+              ) : (
+                <strong key={i} className="font-bold">
+                  {segment.strong}
+                </strong>
+              ),
             )}
           </span>
           <svg viewBox="0 0 24 24" className="size-3.5 shrink-0" focusable="false">

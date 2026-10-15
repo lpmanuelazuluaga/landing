@@ -41,7 +41,7 @@ src/
       fonts.ts                Cormorant Garamond + DM Sans (solo en esta landing)
       content.ts              copy aprobado, textos decorativos y PLACEHOLDERS
       _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
-      _components/            Registration (botón + modal), LeadForm, decor, ornaments, icons, text…
+      _components/            Registration (botón + modal), LeadForm, CountdownBar, decor, ornaments, icons, text…
       _assets/                fotos optimizadas, logo y texturas de papel (generadas, propias)
   components/
     ui/                       Container, Dialog (<dialog> nativo; opción bare sin aspecto), Reveal

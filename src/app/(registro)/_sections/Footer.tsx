@@ -1,9 +1,12 @@
-import Link from "next/link";
 import { site } from "@/lib/site";
 import { FOOTER } from "../content";
 import { Logo } from "../_components/decor";
 
-/* Pie de la referencia: línea, logo, derechos y enlaces legales sobre fondo oscuro con brillo. */
+/*
+  Pie de la referencia: línea, logo y derechos sobre fondo oscuro con brillo.
+  Sin enlaces legales (decisión de la agencia, 2026-10-14): la política de
+  privacidad sigue enlazada desde la casilla de consentimiento del formulario.
+*/
 export function Footer() {
   const year = new Date().getFullYear();
   return (
@@ -15,18 +18,6 @@ export function Footer() {
           <p className="text-crema/85">
             © {year} <strong className="font-semibold text-rosa">{site.name}</strong>. {FOOTER.rights}
           </p>
-          <nav aria-label="Enlaces legales">
-            <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-crema/85">
-              {FOOTER.links.map((link, index) => (
-                <li key={link.href} className="flex items-center gap-3">
-                  {index > 0 ? <span aria-hidden="true">|</span> : null}
-                  <Link href={link.href} className="underline-offset-4 hover:text-rosa hover:underline">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
         </div>
       </div>
     </footer>

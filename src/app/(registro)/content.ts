@@ -14,6 +14,8 @@
 
 export type Segment = string | { strong: string };
 export type Rich = readonly Segment[];
+/** Elemento de la marquesina: admite además la bandera de Colombia. */
+export type MarqueeItem = readonly (Segment | { flag: "co" })[];
 
 export const LANDING = {
   slug: "registro",
@@ -56,6 +58,19 @@ export const EVENT = {
   date: "25 de oct · 10 am Colombia",
   format: "Online en vivo",
   price: "Masterclass gratuita",
+  /** Inicio para la cuenta regresiva: hora de Colombia (UTC−5, sin horario de verano). */
+  startsAt: "2026-10-25T10:00:00-05:00",
+} as const;
+
+/** Barra fija superior con la cuenta regresiva. */
+export const COUNTDOWN = {
+  title: [["El amor ", { strong: "no se sana" }]] as readonly Rich[],
+  /** Fecha corta junto a la bandera (el país se anuncia como texto oculto). */
+  date: "25 de oct · 10 am",
+  label: "Faltan",
+  units: { days: "Días", hours: "Horas", minutes: "Min", seconds: "Seg" },
+  /** Cuando llega la hora, en lugar de los números. */
+  started: EVENT.format,
 } as const;
 
 /** Textos decorativos derivados del copy. */
@@ -65,9 +80,9 @@ export const DECOR = {
   marquee: [
     ["El amor ", { strong: "no se sana" }],
     ["Masterclass ", { strong: "gratuita" }],
-    ["25 de octubre · 10 am (Colombia)"],
+    ["25 de octubre · 10 am ", { flag: "co" }],
     ["Online ", { strong: "en vivo" }],
-  ] as readonly Rich[],
+  ] as readonly MarqueeItem[],
 } as const;
 
 export const HERO = {
@@ -197,8 +212,4 @@ export const THANKS = {
 
 export const FOOTER = {
   rights: "Todos los derechos reservados.",
-  links: [
-    { label: "Política de privacidad", href: "/privacidad" },
-    { label: "Política de cookies", href: "/cookies" },
-  ],
 } as const;

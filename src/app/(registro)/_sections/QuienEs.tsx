@@ -19,7 +19,7 @@ import { Divider, RichText } from "../_components/text";
 */
 export function QuienEs() {
   return (
-    <section aria-labelledby="quien-es-titulo" className="fondo-papel relative overflow-hidden">
+    <section aria-labelledby="quien-es-titulo" className="fondo-papel relative overflow-hidden lg:min-h-[58rem]">
       <Stamp className="pointer-events-none absolute -left-7 -top-9 w-24 -rotate-[18deg] opacity-90 md:-left-4 md:-top-6 md:w-32" />
 
       {/* Franja derecha con el nombre en vertical (escritorio). */}
@@ -29,8 +29,11 @@ export function QuienEs() {
         </p>
       </div>
 
-      <div className="mx-auto max-w-content px-gutter sm:px-gutter-lg lg:min-h-[58rem]">
-        <Reveal className="py-16 md:py-24 lg:max-w-[min(31rem,48%)]">
+      {/* Orden: encabezado → foto → texto. En móvil y tablet la foto queda entre
+          la pregunta y el texto; desde lg es absoluta (a la derecha) y el
+          encabezado y el texto se leen seguidos en la columna izquierda. */}
+      <div className="mx-auto max-w-content px-gutter sm:px-gutter-lg">
+        <Reveal className="pt-16 md:pt-24 lg:max-w-[min(31rem,48%)]">
           <Kicker className="text-tierra">{QUIEN_ES.kicker}</Kicker>
           <h2 id="quien-es-titulo" className="mt-5">
             <span className="block text-[1.5rem] font-semibold text-burgundy">{QUIEN_ES.question}</span>
@@ -45,8 +48,28 @@ export function QuienEs() {
             </span>
           </h2>
           <Divider className="mt-6" />
+        </Reveal>
+      </div>
 
-          <div className="mt-7 space-y-5 text-[1.0625rem] leading-[1.75]">
+      {/* Foto en arco: bajo la pregunta en móvil y tablet; apoyada abajo, junto a la franja, en escritorio. */}
+      <div className="relative ml-12 mr-gutter mt-12 sm:mx-auto sm:max-w-[30rem] lg:absolute lg:bottom-0 lg:right-[clamp(5.5rem,8.5vw,9rem)] lg:m-0 lg:h-[90%] lg:w-[min(32vw,31rem)] lg:max-w-none">
+        <div aria-hidden="true" className="arco absolute inset-0 -translate-x-4 -translate-y-4 bg-[linear-gradient(160deg,var(--color-malva),var(--color-rosa))] lg:-translate-x-6 lg:-translate-y-6" />
+        <div className="arco relative aspect-[4/5] overflow-hidden lg:aspect-auto lg:h-full">
+          <Image
+            src={quienEs}
+            alt={QUIEN_ES.photoAlt}
+            fill
+            sizes="(min-width: 1024px) 32vw, (min-width: 640px) 30rem, 90vw"
+            placeholder="blur"
+            className="object-cover object-[50%_30%]"
+          />
+        </div>
+        <RotatingSeal id="sello-quien-es" text={DECOR.seal} className="absolute -left-12 top-[30%] hidden size-28 text-tierra lg:block" />
+      </div>
+
+      <div className="mx-auto max-w-content px-gutter sm:px-gutter-lg">
+        <Reveal className="pb-16 pt-10 md:pb-24 lg:max-w-[min(31rem,48%)] lg:pt-7">
+          <div className="space-y-5 text-[1.0625rem] leading-[1.75]">
             {QUIEN_ES.paragraphs.map((paragraph, index) => (
               <p key={index}>
                 <RichText value={paragraph} />
@@ -61,22 +84,6 @@ export function QuienEs() {
           </div>
           <CtaButton className="mt-9" />
         </Reveal>
-      </div>
-
-      {/* Foto en arco: debajo del texto en móvil; apoyada abajo, junto a la franja, en escritorio. */}
-      <div className="relative ml-8 mr-gutter sm:mx-auto sm:max-w-[30rem] lg:absolute lg:bottom-0 lg:right-[clamp(5.5rem,8.5vw,9rem)] lg:m-0 lg:h-[90%] lg:w-[min(32vw,31rem)] lg:max-w-none">
-        <div aria-hidden="true" className="arco absolute inset-0 -translate-x-4 -translate-y-4 bg-[linear-gradient(160deg,var(--color-malva),var(--color-rosa))] lg:-translate-x-6 lg:-translate-y-6" />
-        <div className="arco relative aspect-[4/5] overflow-hidden lg:aspect-auto lg:h-full">
-          <Image
-            src={quienEs}
-            alt={QUIEN_ES.photoAlt}
-            fill
-            sizes="(min-width: 1024px) 32vw, (min-width: 640px) 30rem, 90vw"
-            placeholder="blur"
-            className="object-cover object-[50%_30%]"
-          />
-        </div>
-        <RotatingSeal id="sello-quien-es" text={DECOR.seal} className="absolute -left-12 top-[30%] hidden size-28 text-tierra lg:block" />
       </div>
     </section>
   );

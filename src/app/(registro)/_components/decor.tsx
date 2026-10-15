@@ -116,6 +116,21 @@ export function LogoSeal({ id, text }: { id: string; text: string }) {
   );
 }
 
+/**
+ * Bandera de Colombia en SVG (los emojis de banderas no se ven en Windows):
+ * amarillo, azul y rojo en proporción 2:1:1. Decorativa: el país, si hace
+ * falta, se nombra como texto oculto junto a ella.
+ */
+export function FlagCO({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 3 2" aria-hidden="true" focusable="false" className={cn("inline-block h-[0.82em] w-auto shrink-0 rounded-[2px] shadow-[0_0_0_1px_rgb(0_0_0/0.15)]", className)}>
+      <rect width="3" height="1" fill="#fcd116" />
+      <rect y="1" width="3" height="0.5" fill="#003893" />
+      <rect y="1.5" width="3" height="0.5" fill="#ce1126" />
+    </svg>
+  );
+}
+
 /** Etiqueta visible de contenido provisional (nunca debe llegar a publicarse). */
 export function PlaceholderTag({ children, className }: { children: React.ReactNode; className?: string }) {
   return (

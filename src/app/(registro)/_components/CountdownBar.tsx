@@ -1,6 +1,5 @@
 import { COUNTDOWN, EVENT } from "../content";
 import { Countdown } from "./Countdown";
-import { FlagCO } from "./decor";
 
 /*
   Barra fija superior: papel claro translúcido con desenfoque (vidrio) sobre la
@@ -25,13 +24,8 @@ export function CountdownBar() {
               ),
             )}
           </p>
-          <p className="mt-0.5 hidden items-center gap-2 text-[0.8125rem] text-tierra sm:flex">
-            {COUNTDOWN.date}
-            <FlagCO />
-            <span className="sr-only">Colombia</span>
-          </p>
           {/* Para lectores de pantalla: la fecha completa, sin los números que cambian. */}
-          <p className="sr-only sm:hidden">{EVENT.date}</p>
+          <p className="sr-only">{EVENT.date}</p>
         </div>
         <Countdown />
       </div>

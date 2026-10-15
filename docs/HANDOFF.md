@@ -64,7 +64,7 @@ ni foto de la referencia.
 
 | # | Sección (`_sections/`) | Diseño de la referencia que reproduce |
 | --- | --- | --- |
-| 0 | `CountdownBar` (`_components/`) | Agregada a pedido (no está en la referencia): barra fija superior de vidrio esmerilado sobre papel claro, "El amor no se sana" y cuenta regresiva a `EVENT.startsAt` (25 de octubre, 10 am, hora de Colombia). Al llegar la hora muestra "Online en vivo" |
+| 0 | `CountdownBar` (`_components/`) | Agregada a pedido (no está en la referencia): barra fija superior de vidrio esmerilado sobre papel claro, "El amor no se sana" y cuenta regresiva (la fecha solo como texto para lectores de pantalla) a `EVENT.startsAt` (25 de octubre, 10 am, hora de Colombia). Al llegar la hora muestra "Online en vivo" |
 | 1 | `Hero` | Hero (opción A aprobada: foto a sangre en lugar del recorte en arco). Escritorio: foto a la derecha, texto sobre degradado y franja vertical. Tablet: foto arriba. Móvil: foto vertical con el texto sobre la mesa |
 | 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios). La fecha lleva la bandera de Colombia en SVG (los emojis de banderas no se ven en Windows) |
 | 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
@@ -289,9 +289,10 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 ## NO VERIFICADO
 
-- **Vercel:** el deploy de `main` compiló (commit `6162f58`), pero la URL pública
-  de producción no se verificó (las URLs generadas piden login por la protección
-  de despliegues). El diseño todavía no está subido.
+- **Vercel:** el diseño está en el preview de la rama `feat/registro-diseno`
+  (https://landing-git-feat-registro-diseno-manuela-zuluaga.vercel.app), que
+  compiló bien. Los previews y la URL de producción piden login (protección de
+  despliegues de Vercel), así que su contenido no se revisó desde fuera.
 - **Animaciones en movimiento:** las capturas se tomaron con reducción de
   movimiento; marquesina, sello y apariciones se revisaron en código, no en video.
 - **Rendimiento** (Lighthouse, Core Web Vitals): requiere despliegue.

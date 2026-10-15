@@ -65,8 +65,6 @@ export const EVENT = {
 /** Barra fija superior con la cuenta regresiva. */
 export const COUNTDOWN = {
   title: [["El amor ", { strong: "no se sana" }]] as readonly Rich[],
-  /** Fecha corta junto a la bandera (el país se anuncia como texto oculto). */
-  date: "25 de oct · 10 am",
   label: "Faltan",
   units: { days: "Días", hours: "Horas", minutes: "Min", seconds: "Seg" },
   /** Cuando llega la hora, en lugar de los números. */

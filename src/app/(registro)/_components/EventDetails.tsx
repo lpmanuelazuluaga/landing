@@ -26,11 +26,32 @@ export function EventDetails({
   tone = "claro",
   className,
 }: {
-  variant?: "fila" | "lista";
+  /** "hero": como "fila", pero en móvil siempre con la fecha sola en la
+      primera línea y formato + precio juntos en la segunda. */
+  variant?: "fila" | "hero" | "lista";
   tone?: keyof typeof TONE;
   className?: string;
 }) {
   const colors = TONE[tone];
+
+  if (variant === "hero") {
+    return (
+      <ul
+        className={cn(
+          "grid grid-cols-[auto_auto] justify-start gap-x-5 gap-y-2.5 text-[0.9375rem] md:flex md:flex-wrap md:items-center md:gap-x-6",
+          colors.text,
+          className,
+        )}
+      >
+        {ITEMS.map(({ icon: Icon, text }, index) => (
+          <li key={text} className={cn("flex items-center gap-2", index === 0 && "col-span-2")}>
+            <Icon className={cn("size-5 shrink-0", colors.icon)} />
+            <span className="whitespace-nowrap">{text}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
   if (variant === "lista") {
     return (

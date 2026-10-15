@@ -142,6 +142,7 @@ ni foto de la referencia.
 - **Palabra partida y efectos sutiles (2026-10-15):** la marca de agua de
   «Recompensa» muestra «RECO» y media M arriba a la derecha; la otra media M
   y «PENSA» aparecen abajo a la izquierda del encabezado, antes del divisor.
+  El fragmento inferior se bajó otros 10 px a pedido del cliente (`bottom: -2px`).
   Tipografía de `14.6vw`; cada mitad usa un recorte de `0.4175em`, medido en
   Cormorant Garamond. Las barras de las tres tarjetas tienen un pulso de luz
   de 6 s con desfase; las tarjetas de vidrio 01 y 03 de «Para ti» reciben un

@@ -26,7 +26,7 @@ export function Recompensa() {
         <Reveal className="relative">
           <p
             aria-hidden="true"
-            className="recompensa-palabra pointer-events-none absolute -left-gutter bottom-2 flex whitespace-nowrap font-serif uppercase leading-none text-tierra/[0.13] sm:hidden"
+            className="recompensa-palabra pointer-events-none absolute -left-gutter -bottom-[2px] flex whitespace-nowrap font-serif uppercase leading-none text-tierra/[0.13] sm:hidden"
           >
             <span className="recompensa-media-m recompensa-media-m-final"><span>{RECOMPENSA.kicker.slice(4, 5)}</span></span>
             <span>{RECOMPENSA.kicker.slice(5)}</span>

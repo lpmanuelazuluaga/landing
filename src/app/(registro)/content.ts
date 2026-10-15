@@ -166,6 +166,7 @@ export const TESTIMONIOS = {
   hint: "Toca una portada para ver el testimonio completo.",
   listLabel: "Testimonios en video",
   play: "Reproducir testimonio",
+  playWithSound: "Reproducir con sonido",
   goTo: "Ir al testimonio",
   watch: "Ver video",
   pause: "Pausar carrusel",

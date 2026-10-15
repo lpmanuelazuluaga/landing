@@ -159,6 +159,26 @@ ni foto de la referencia.
   botón y fondo, pausa al cerrar, retorno del foco, swipe y toque en móvil,
   error de red y reintento probados. No se pide ningún video antes del clic;
   el modal cancela la inercia de Lenis. `check` y smoke (17/17) aprobados.
+- **Pulido de hero y testimonios (2026-10-15):** debajo de 768 px se elimina
+  el margen de 28 px entre logo y título, subiendo todo el contenido posterior.
+  Desde 1024 px solo el logo baja 28 px, dejando 8 px hasta el título y
+  conservando la posición del resto del bloque. En testimonios, el hover no
+  pausa el avance y el foco devuelto a una portada tras un clic tampoco: la
+  pausa por foco queda reservada a la navegación de teclado. Soltar el gesto
+  dentro o fuera de la lista permite retomar tras 900 ms; se mantiene la pausa
+  manual y la preferencia de movimiento reducido. Se ocultan los nombres
+  numerados tanto en las tarjetas como en el encabezado del modal, conservando
+  sus etiquetas accesibles. Cada apertura solicita reproducción explícita con
+  volumen 1 y sin mute; si el navegador la bloquea, muestra «Reproducir con
+  sonido», sin recurrir a reproducción silenciada. QA en Chrome a 360, 390,
+  768, 1024 y 1440 px con ambas preferencias de movimiento: separación del
+  hero y ausencia de nombres visibles verificadas. El carrusel avanza con
+  hover y tras los seis cierres, pausa al mantener pulsado y retoma al soltar
+  fuera de la lista; conserva la pausa por teclado y vuelve a avanzar con
+  interacción de puntero. Los seis videos decodifican audio a volumen 1 sin
+  mute; se midió señal real con Web Audio y se probó silenciar uno y abrir
+  otro con sonido. Apertura táctil, reintento de red y recuperación del
+  bloqueo de autoplay aprobados. `check` y smoke (17/17) en verde.
 - **Hero y scroll (2026-10-15):** en escritorio (desde 1024 px), «Online en
   vivo» pasa a la segunda fila, a la derecha de «Masterclass gratuita». La
   landing tiene un suavizado leve de scroll con Lenis 1.3.26: duración 0,65 s,

@@ -29,18 +29,25 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
   const autoRunningRef = useRef(false);
   const activeRef = useRef(0);
   const interactionTimer = useRef<number | undefined>(undefined);
+  const pointerHeldRef = useRef(false);
+  const keyboardInputRef = useRef(false);
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(true);
   const [visible, setVisible] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
-  const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const [touching, setTouching] = useState(false);
   const [selected, setSelected] = useState<VideoTestimonial | null>(null);
   const total = items.length;
   const loop = Array.from({ length: COPIES }, () => items).flat();
+
+  const pauseForInteraction = useCallback(() => {
+    window.clearTimeout(interactionTimer.current);
+    setInteracting(true);
+    interactionTimer.current = window.setTimeout(() => setInteracting(false), 900);
+  }, []);
 
   const centerOn = useCallback((index: number, smooth: boolean) => {
     const list = listRef.current;
@@ -106,10 +113,34 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updateMotion = () => setReducedMotion(motion.matches);
     const updateVisibility = () => setPageVisible(!document.hidden);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Tab" || list.contains(document.activeElement)) {
+        keyboardInputRef.current = true;
+        if (list.contains(document.activeElement)) setFocused(true);
+      }
+    };
+    const onPointerDown = () => {
+      keyboardInputRef.current = false;
+      setFocused(false);
+    };
+    const releasePointer = () => {
+      if (!pointerHeldRef.current) return;
+      pointerHeldRef.current = false;
+      pauseForInteraction();
+    };
+    const onWindowBlur = () => {
+      releasePointer();
+      setTouching(false);
+    };
     updateMotion();
     updateVisibility();
     motion.addEventListener("change", updateMotion);
     document.addEventListener("visibilitychange", updateVisibility);
+    window.addEventListener("keydown", onKeyDown, true);
+    window.addEventListener("pointerdown", onPointerDown, true);
+    window.addEventListener("pointerup", releasePointer);
+    window.addEventListener("pointercancel", releasePointer);
+    window.addEventListener("blur", onWindowBlur);
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.05 });
     observer.observe(list);
     return () => {
@@ -119,13 +150,18 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
       resize.disconnect();
       motion.removeEventListener("change", updateMotion);
       document.removeEventListener("visibilitychange", updateVisibility);
+      window.removeEventListener("keydown", onKeyDown, true);
+      window.removeEventListener("pointerdown", onPointerDown, true);
+      window.removeEventListener("pointerup", releasePointer);
+      window.removeEventListener("pointercancel", releasePointer);
+      window.removeEventListener("blur", onWindowBlur);
       observer.disconnect();
     };
-  }, [total, centerOn, centered]);
+  }, [total, centerOn, centered, pauseForInteraction]);
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list || total === 0 || !playing || reducedMotion || !visible || !pageVisible || hovered || focused || interacting || touching || selected) return;
+    if (!list || total === 0 || !playing || reducedMotion || !visible || !pageVisible || focused || interacting || touching || selected) return;
     let frame: number;
     let previous: number | undefined;
     positionRef.current = list.scrollLeft;
@@ -148,13 +184,7 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
       cancelAnimationFrame(frame);
       autoRunningRef.current = false;
     };
-  }, [total, playing, reducedMotion, visible, pageVisible, hovered, focused, interacting, touching, selected]);
-
-  function pauseForInteraction() {
-    window.clearTimeout(interactionTimer.current);
-    setInteracting(true);
-    interactionTimer.current = window.setTimeout(() => setInteracting(false), 1800);
-  }
+  }, [total, playing, reducedMotion, visible, pageVisible, focused, interacting, touching, selected]);
 
   function goTo(target: number) {
     pauseForInteraction();
@@ -180,16 +210,12 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
         ref={listRef}
         aria-label={TESTIMONIOS.listLabel}
         data-lenis-prevent-horizontal=""
-        onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
-        onPointerLeave={() => { setHovered(false); pauseForInteraction(); }}
-        onPointerDown={() => { window.clearTimeout(interactionTimer.current); setInteracting(true); }}
-        onPointerUp={pauseForInteraction}
-        onPointerCancel={pauseForInteraction}
+        onPointerDown={() => { pointerHeldRef.current = true; window.clearTimeout(interactionTimer.current); setInteracting(true); }}
         onTouchStart={() => setTouching(true)}
         onTouchEnd={() => { setTouching(false); pauseForInteraction(); }}
         onTouchCancel={() => { setTouching(false); pauseForInteraction(); }}
         onWheel={pauseForInteraction}
-        onFocusCapture={() => setFocused(true)}
+        onFocusCapture={() => setFocused(keyboardInputRef.current)}
         onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
         className="relative -mx-gutter flex gap-4 overflow-x-auto overscroll-x-contain px-gutter pb-10 pt-1 [scrollbar-width:none] sm:-mx-gutter-lg sm:px-gutter-lg lg:-mx-5 lg:items-start lg:gap-5 lg:px-5 lg:[mask-image:linear-gradient(90deg,transparent,black_1.25rem,black_calc(100%-1.25rem),transparent)]"
       >
@@ -212,10 +238,7 @@ export function TestimonialsCarousel({ items }: { items: readonly VideoTestimoni
                     <IconPlay className="ml-0.5 size-6" />
                   </span>
                 </span>
-                <span className="flex items-center justify-between gap-3 px-4 py-3.5">
-                  <span className="text-[0.9375rem] font-medium">{item.title}</span>
-                  <span className="text-sm text-rosa">{TESTIMONIOS.watch}</span>
-                </span>
+                <span className="block px-4 py-3.5 text-right text-sm text-rosa">{TESTIMONIOS.watch}</span>
               </button>
             </li>
           );

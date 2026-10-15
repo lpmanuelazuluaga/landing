@@ -87,13 +87,19 @@ los seis enlaces originales y las versiones de reproducción. Las portadas
 JPEG de `_assets/` se importan en `Testimonios` y se sirven con `next/image`.
 `TestimonialsCarousel` usa scroll horizontal nativo y `requestAnimationFrame`
 a 28 px/s sobre tres copias; las laterales no añaden paradas de teclado ni
-lecturas duplicadas. Se pausa con interacción, foco, hover, pestaña oculta,
-fuera de pantalla y mientras se reproduce un video. Incluye control de pausa
+lecturas duplicadas. Se pausa al mantener un gesto, con foco de teclado,
+pestaña oculta, fuera de pantalla y mientras se reproduce un video. El hover
+y el foco devuelto tras un clic no lo detienen; al soltar, incluso fuera de
+la lista, retoma el avance tras 900 ms. Incluye control de pausa
 y no inicia el movimiento con `prefers-reduced-motion`.
 
 `TestimonialVideoDialog` reutiliza `Dialog` y monta un único `<video>` tras
 elegir una portada; tiene controles nativos, reproducción en línea, cierre
-con Esc, restauración de foco y desmontaje al cerrar. `SmoothScroll` observa
+con Esc, restauración de foco y desmontaje al cerrar. Montar el reproductor
+tras un clic solicita `play()` con `muted/defaultMuted: false` y volumen 1;
+si el navegador bloquea la reproducción con sonido, ofrece un botón para
+iniciarla con otro gesto, sin silenciarlo. Los nombres numerados se conservan
+solo para accesibilidad. `SmoothScroll` observa
 la apertura de cualquier diálogo para cancelar también la inercia de fondo.
 Los originales MOV usan HEVC y en Chrome de Windows se detectó reproducción
 solo de audio. `public/videos/testimonios/` contiene sus copias MP4 H.264 Main

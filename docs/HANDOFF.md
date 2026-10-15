@@ -69,7 +69,7 @@ ni foto de la referencia.
 | 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios). La fecha lleva la bandera de Colombia en SVG (los emojis de banderas no se ven en Windows) |
 | 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
 | 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
-| 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo |
+| 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, despacio), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |
@@ -122,6 +122,7 @@ templates/landing/            molde que copia el generador
 src/
   app/
     layout.tsx                layout raíz
+    favicon.ico icon.png apple-icon.png   íconos con la M del logo (todo el sitio)
     not-found.tsx error.tsx   404 y error
     robots.ts  sitemap.ts     según la regla de indexación
     (legal)/privacidad|cookies  rutas legales (texto pendiente del cliente)
@@ -244,7 +245,8 @@ en Vercel, nunca en el repositorio.
 | GTM / GA4 / Meta Pixel / Clarity | Implementado, inactivo | IDs del cliente y decisión GTM (vía A) o directo (vía B) |
 | Consentimiento | Banner integrado listo; por defecto `required` | Confirmar el criterio legal para Colombia (Ley 1581 de 2012, habeas data) |
 | Textos legales (`/privacidad`, `/cookies`) | Rutas reservadas con aviso "PENDIENTE" | Texto del cliente |
-| Favicon e imagen OG | No hay | Materiales de marca |
+| Favicon | ✔ M del logo en crema sobre burdeos: `src/app/favicon.ico` (16/32/48), `icon.png` (512), `apple-icon.png` (180) | — |
+| Imagen para redes (OG) | No hay | Diseñarla con la marca (`opengraph-image.jpg` en `src/app/(registro)/`) |
 | Vercel Analytics / Speed Insights | No instalados | Decidir según plan y coste |
 | Dominio propio | No conectado | Que el cliente lo defina |
 

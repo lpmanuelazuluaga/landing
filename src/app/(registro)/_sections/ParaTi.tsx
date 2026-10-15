@@ -1,7 +1,9 @@
+import type { CSSProperties } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
 import { DECOR, PARA_TI } from "../content";
 import { Logo, RotatingSeal, ScrollHint } from "../_components/decor";
+import { Escenario } from "../_components/Escenario";
 import { ICONS } from "../_components/icons";
 import { CtaButton } from "../_components/Registration";
 import { Divider, Title } from "../_components/text";
@@ -10,7 +12,15 @@ import { Divider, Title } from "../_components/text";
   "Este evento es para ti si…": reproduce la sección oscura de la metodología
   de la referencia. Las cuatro baldosas (M-E-S-S) pasan a ser 01-04, con el
   sello del logo en el centro, los íconos en las esquinas exteriores y los
-  cuatro textos alrededor (01 y 03 a la izquierda, 02 y 04 a la derecha).
+  cuatro textos alrededor.
+
+  Escritorio (lg), al aparecer la sección (Escenario): cada baldosa se va
+  despacio a una esquina distinta y los textos se juntan en el centro; el
+  círculo central no se mueve. Cada pieza declara su posición inicial
+  (--desde) y final (--hasta) como valores de `translate` desde el centro del
+  escenario; las esquinas se calculan con unidades de contenedor (cqw/cqh).
+
+  Móvil y tablet: gráfico arriba y lista debajo, sin animación.
 
   El gráfico es decorativo (aria-hidden): la lista ordenada lleva el contenido
   en el orden de lectura correcto.
@@ -18,60 +28,42 @@ import { Divider, Title } from "../_components/text";
 
 /* Baldosa de cada número: vino con número crema, o crema con número vino. */
 const TILE = [
-  "left-0 top-0 rounded-[1.9rem] bg-[linear-gradient(135deg,#3a0a0e_0%,var(--color-burgundy)_45%,var(--color-malva)_100%)] text-crema",
-  "right-0 top-0 rounded-[1.9rem] bg-[linear-gradient(135deg,var(--color-arena)_0%,var(--color-crema)_55%,var(--color-papel)_100%)] text-burgundy",
-  "bottom-0 left-0 rounded-[1.9rem] bg-[linear-gradient(135deg,var(--color-arena)_0%,var(--color-crema)_55%,var(--color-papel)_100%)] text-burgundy",
-  "bottom-0 right-0 rounded-[1.9rem] bg-[linear-gradient(135deg,#3a0a0e_0%,var(--color-burgundy)_45%,var(--color-malva)_100%)] text-crema",
+  "rounded-[1.9rem] bg-[linear-gradient(135deg,#3a0a0e_0%,var(--color-burgundy)_45%,var(--color-malva)_100%)] text-crema",
+  "rounded-[1.9rem] bg-[linear-gradient(135deg,var(--color-arena)_0%,var(--color-crema)_55%,var(--color-papel)_100%)] text-burgundy",
+  "rounded-[1.9rem] bg-[linear-gradient(135deg,var(--color-arena)_0%,var(--color-crema)_55%,var(--color-papel)_100%)] text-burgundy",
+  "rounded-[1.9rem] bg-[linear-gradient(135deg,#3a0a0e_0%,var(--color-burgundy)_45%,var(--color-malva)_100%)] text-crema",
+] as const;
+
+/* Posición de cada baldosa dentro del cuadrado (móvil y tablet). */
+const TILE_POS = [
+  "max-lg:left-0 max-lg:top-0",
+  "max-lg:right-0 max-lg:top-0",
+  "max-lg:bottom-0 max-lg:left-0",
+  "max-lg:bottom-0 max-lg:right-0",
 ] as const;
 
 /* Ícono de cada baldosa: arriba en las superiores, abajo en las inferiores. */
-const BADGE = [
-  "-top-7 left-[23%]",
-  "-top-7 left-[77%]",
-  "-bottom-7 left-[23%]",
-  "-bottom-7 left-[77%]",
+const BADGE = ["-top-7", "-top-7", "-bottom-7", "-bottom-7"] as const;
+
+/* Movimiento de las baldosas (escritorio): juntas en el centro → esquinas. */
+const TILE_MOTION = [
+  { desde: "calc(-100% - 0.55rem) calc(-100% - 0.55rem)", hasta: "-50cqw -50cqh" },
+  { desde: "0.55rem calc(-100% - 0.55rem)", hasta: "calc(50cqw - 100%) -50cqh" },
+  { desde: "calc(-100% - 0.55rem) 0.55rem", hasta: "-50cqw calc(50cqh - 100%)" },
+  { desde: "0.55rem 0.55rem", hasta: "calc(50cqw - 100%) calc(50cqh - 100%)" },
 ] as const;
 
-/* Posición de cada texto alrededor del gráfico (escritorio). */
-const PLACE = [
-  "lg:col-start-1 lg:row-start-1",
-  "lg:col-start-3 lg:row-start-1",
-  "lg:col-start-1 lg:row-start-2",
-  "lg:col-start-3 lg:row-start-2",
+/* Movimiento de los textos (escritorio): a los costados → en el centro,
+   dejando libre el círculo central (radio 5rem). */
+const TEXT_MOTION = [
+  { desde: "-50cqw calc(-6.5rem - 50%)", hasta: "calc(-100% - 6rem) calc(-100% - 1.25rem)" },
+  { desde: "calc(50cqw - 100%) calc(-6.5rem - 50%)", hasta: "6rem calc(-100% - 1.25rem)" },
+  { desde: "-50cqw calc(6.5rem - 50%)", hasta: "calc(-100% - 6rem) 1.25rem" },
+  { desde: "calc(50cqw - 100%) calc(6.5rem - 50%)", hasta: "6rem 1.25rem" },
 ] as const;
 
-function Quadrant({ className }: { className?: string }) {
-  return (
-    <div aria-hidden="true" className={cn("relative aspect-square w-full max-w-[22rem]", className)}>
-      {PARA_TI.items.map((item, index) => {
-        const Icon = ICONS[item.icon];
-        return (
-          <div key={index}>
-            <div className={cn("absolute grid size-[47.5%] place-items-center shadow-[0_20px_40px_-24px_rgb(0_0_0/0.8)]", TILE[index])}>
-              <span className="font-serif text-[clamp(3.6rem,7vw,5.25rem)] leading-none">{String(index + 1).padStart(2, "0")}</span>
-            </div>
-            <span
-              className={cn(
-                "absolute z-10 grid size-14 -translate-x-1/2 place-items-center rounded-full border border-rosa/50 bg-papel text-burgundy shadow-md",
-                BADGE[index],
-              )}
-            >
-              <Icon className="size-6" />
-            </span>
-          </div>
-        );
-      })}
-
-      {/* Centro: aro oscuro con el sello del logo. */}
-      <div className="absolute inset-[27%] rounded-full bg-noche p-[7%]">
-        <div className="relative grid size-full place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,var(--color-malva),var(--color-burgundy)_70%)] text-crema">
-          <RotatingSeal id="sello-para-ti" text={DECOR.seal} center="none" className="absolute inset-[6%] size-[88%] text-rosa" />
-          <Logo className="w-[46%]" />
-        </div>
-      </div>
-    </div>
-  );
-}
+const motion = ({ desde, hasta }: { desde: string; hasta: string }) =>
+  ({ "--desde": desde, "--hasta": hasta }) as CSSProperties;
 
 export function ParaTi() {
   return (
@@ -83,23 +75,57 @@ export function ParaTi() {
           <Divider align="centro" tone="oscuro" className="mt-7" />
         </Reveal>
 
-        <div className="relative mt-16 md:mt-20">
-          <Quadrant className="mx-auto mb-14 lg:absolute lg:left-1/2 lg:top-1/2 lg:mb-0 lg:-translate-x-1/2 lg:-translate-y-1/2" />
+        <Escenario className="relative mt-16 lg:mt-20">
+          {/* Gráfico: en móvil y tablet, un cuadrado; en escritorio sus piezas
+              se ubican directamente en el escenario. */}
+          <div aria-hidden="true" className="relative mx-auto aspect-square w-full max-w-[22rem] lg:static lg:aspect-auto lg:max-w-none">
+            {PARA_TI.items.map((item, index) => {
+              const Icon = ICONS[item.icon];
+              return (
+                <div
+                  key={index}
+                  data-pieza="baldosa"
+                  style={motion(TILE_MOTION[index])}
+                  className={cn(
+                    "absolute grid place-items-center shadow-[0_20px_40px_-24px_rgb(0_0_0/0.8)] max-lg:size-[47.5%] lg:size-[9.5rem] xl:size-[10.5rem]",
+                    TILE[index],
+                    TILE_POS[index],
+                  )}
+                >
+                  <span className="font-serif text-[clamp(3.6rem,7vw,5.25rem)] leading-none">{String(index + 1).padStart(2, "0")}</span>
+                  <span
+                    className={cn(
+                      "absolute left-1/2 z-10 grid size-14 -translate-x-1/2 place-items-center rounded-full border border-rosa/50 bg-papel text-burgundy shadow-md",
+                      BADGE[index],
+                    )}
+                  >
+                    <Icon className="size-6" />
+                  </span>
+                </div>
+              );
+            })}
 
-          <ol className="grid gap-9 md:grid-cols-2 md:gap-x-12 lg:grid-cols-[1fr_24rem_1fr] lg:gap-x-6 lg:gap-y-20">
+            {/* Centro: aro oscuro con el sello del logo. No se mueve. */}
+            <div className="absolute inset-[27%] z-20 rounded-full bg-noche p-[7%] lg:inset-auto lg:left-1/2 lg:top-1/2 lg:size-[10rem] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:p-[0.7rem]">
+              <div className="relative grid size-full place-items-center rounded-full bg-[radial-gradient(circle_at_35%_30%,var(--color-malva),var(--color-burgundy)_70%)] text-crema">
+                <RotatingSeal id="sello-para-ti" text={DECOR.seal} center="none" className="absolute inset-[6%] size-[88%] text-rosa" />
+                <Logo className="w-[46%]" />
+              </div>
+            </div>
+          </div>
+
+          <ol className="mt-14 grid gap-9 md:grid-cols-2 md:gap-x-12 lg:mt-0 lg:block">
             {PARA_TI.items.map((item, index) => (
-              <li key={index} className={PLACE[index]}>
-                <Reveal delayMs={index * 90}>
-                  <p className="flex items-baseline gap-2 font-serif text-rosa">
-                    <span className="text-[2.5rem] leading-none">{String(index + 1).padStart(2, "0")}</span>
-                    <span aria-hidden="true" className="text-2xl">–</span>
-                  </p>
-                  <p className="mt-2 text-[1.0625rem] leading-relaxed text-crema/90">{item.text}</p>
-                </Reveal>
+              <li key={index} data-pieza="texto" style={motion(TEXT_MOTION[index])} className="lg:w-[14rem] xl:w-[15rem]">
+                <p className="flex items-baseline gap-2 font-serif text-rosa">
+                  <span className="text-[2.5rem] leading-none">{String(index + 1).padStart(2, "0")}</span>
+                  <span aria-hidden="true" className="text-2xl">–</span>
+                </p>
+                <p className="mt-2 text-[1.0625rem] leading-relaxed text-crema/90">{item.text}</p>
               </li>
             ))}
           </ol>
-        </div>
+        </Escenario>
 
         <div className="mt-16 text-center md:mt-20">
           <CtaButton />

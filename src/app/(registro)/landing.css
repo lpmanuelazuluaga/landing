@@ -180,7 +180,58 @@
     mask-size: contain;
   }
 
+  /* ── Escenario de "Para ti si…" (escritorio) ──────────────────────────
+     Cada pieza ([data-pieza]) parte del centro del escenario y se desplaza
+     con `translate` desde --desde hasta --hasta cuando Escenario marca
+     data-abierto. container-type: size habilita cqw/cqh para llegar a las
+     esquinas sin importar el ancho. */
+  @media (width >= 64rem) {
+    .lp-registro .escenario {
+      container-type: size;
+      height: 40rem;
+    }
+    .lp-registro .escenario [data-pieza] {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: var(--desde);
+      transition: translate 1.9s cubic-bezier(0.65, 0, 0.35, 1) 0.35s;
+    }
+    .lp-registro .escenario [data-pieza="texto"] {
+      transition-delay: 0.55s;
+    }
+    .lp-registro .escenario[data-abierto="true"] [data-pieza] {
+      translate: var(--hasta);
+    }
+    /* Durante el cruce con las baldosas los textos se atenúan (texto crema sobre
+       baldosas crema sería ilegible) y vuelven al llegar al centro. */
+    .lp-registro .escenario[data-abierto="true"] [data-pieza="texto"] {
+      animation: lp-cruce 1.9s ease-in-out 0.55s both;
+    }
+  }
+  /* Sin movimiento o sin JavaScript: directamente el estado final. */
+  @media (width >= 64rem) and (prefers-reduced-motion: reduce) {
+    .lp-registro .escenario [data-pieza] {
+      translate: var(--hasta);
+      transition: none;
+      animation: none;
+    }
+  }
+  @media (width >= 64rem) and (scripting: none) {
+    .lp-registro .escenario [data-pieza] {
+      translate: var(--hasta);
+      transition: none;
+    }
+  }
+
   /* ── Animaciones (todas se anulan con prefers-reduced-motion en globals.css) ── */
+
+  @keyframes lp-cruce {
+    30%,
+    70% {
+      opacity: 0.12;
+    }
+  }
 
   @keyframes lp-marquesina {
     to {

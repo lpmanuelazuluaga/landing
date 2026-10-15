@@ -16,9 +16,9 @@ export function Recompensa() {
     <section aria-labelledby="recompensa-titulo" className="fondo-luz relative overflow-clip">
       <p
         aria-hidden="true"
-        className="pointer-events-none absolute left-[55vw] top-8 whitespace-nowrap font-serif text-[20vw] uppercase leading-none text-tierra/[0.13] sm:hidden"
+        className="pointer-events-none absolute left-[55vw] top-8 flex w-[45vw] justify-end overflow-hidden font-serif text-[16vw] uppercase leading-none text-tierra/[0.13] sm:hidden"
       >
-        {RECOMPENSA.kicker}
+        <span className="shrink-0 whitespace-nowrap">{RECOMPENSA.kicker}</span>
       </p>
       <div className="relative z-10 mx-auto max-w-content px-gutter pb-20 pt-6 text-center sm:px-gutter-lg md:pb-24">
         <ScrollHint className="text-malva" />

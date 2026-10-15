@@ -131,6 +131,13 @@ ni foto de la referencia.
   movimiento (20 casos): encuadre correcto y una sola descarga de la puerta,
   marca de agua solo en móvil, correo de ejemplo y contraste del botón verde
   tanto normal como en hover. `check` y smoke (17/17) aprobados.
+- **Encuadre de «Recompensa» (2026-10-15):** la palabra de fondo mantiene su
+  ventana en el 45 % derecho del móvil, a la misma altura, pero ahora muestra
+  el final de la palabra. La tipografía baja de `20vw` a `16vw` para que entre
+  una porción mayor. El recorte queda limitado a esa ventana y sigue siendo
+  decorativo (`aria-hidden`) y estático. Verificado en Chrome a 360, 390, 430,
+  768 y 1440 px con ambas preferencias de movimiento, sin desbordamiento
+  horizontal; `check` y smoke (17/17) aprobados.
 - **Hero y scroll (2026-10-15):** en escritorio (desde 1024 px), «Online en
   vivo» pasa a la segunda fila, a la derecha de «Masterclass gratuita». La
   landing tiene un suavizado leve de scroll con Lenis 1.3.26: duración 0,65 s,

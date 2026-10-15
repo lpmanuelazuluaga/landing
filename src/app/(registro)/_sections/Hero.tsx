@@ -35,7 +35,7 @@ export function Hero() {
           <source media="(min-width: 768px)" srcSet={desktop} />
           <img {...rest} srcSet={mobile} alt={rest.alt} className="object-cover object-top lg:object-[72%_center]" />
         </picture>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(30_20_18/0)_0%,rgb(30_20_18/0)_23%,rgb(30_20_18/0.82)_33%,var(--color-noche)_42%)] md:bg-[linear-gradient(180deg,rgb(30_20_18/0)_50%,var(--color-noche)_100%)] lg:bg-[linear-gradient(90deg,rgb(30_20_18/0.95)_0%,rgb(30_20_18/0.86)_30%,rgb(30_20_18/0.35)_52%,rgb(30_20_18/0)_66%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(30_20_18/0)_0px,rgb(30_20_18/0)_240px,rgb(30_20_18/0.82)_342px,var(--color-noche)_436px)] md:bg-[linear-gradient(180deg,rgb(30_20_18/0)_50%,var(--color-noche)_100%)] lg:bg-[linear-gradient(90deg,rgb(30_20_18/0.95)_0%,rgb(30_20_18/0.86)_30%,rgb(30_20_18/0.35)_52%,rgb(30_20_18/0)_66%)]" />
         <div className="absolute inset-x-0 bottom-0 hidden h-40 bg-[linear-gradient(0deg,rgb(30_20_18/0.75),rgb(30_20_18/0))] lg:block" />
       </div>
 
@@ -58,7 +58,7 @@ export function Hero() {
         className="absolute left-[54.5%] top-[69%] hidden size-24 text-rosa/85 lg:block"
       />
 
-      <div className="mx-auto flex max-w-content flex-col justify-center px-gutter pb-14 pt-[95vw] sm:px-gutter-lg md:pb-16 md:pt-[50vw] lg:min-h-[clamp(42rem,56vw,58rem)] lg:py-24">
+      <div className="mx-auto flex max-w-content flex-col justify-center px-gutter pb-14 pt-[72vw] sm:px-gutter-lg md:pb-16 md:pt-[50vw] lg:min-h-[clamp(42rem,56vw,58rem)] lg:py-24">
         <div className="max-w-[31rem]">
           <Logo className="w-36 text-crema md:w-44" />
           <Title as="h1" id="hero-titulo" lines={HERO.title} tone="oscuro" size="hero" className="mt-7 md:mt-9" />

@@ -32,7 +32,7 @@ export function QuienEs() {
       {/* Orden: encabezado → foto → texto. En móvil y tablet la foto queda entre
           la pregunta y el texto; desde lg es absoluta (a la derecha) y el
           encabezado y el texto se leen seguidos en la columna izquierda. */}
-      <div className="mx-auto max-w-content px-gutter sm:px-gutter-lg">
+      <div className="relative z-10 mx-auto max-w-content px-gutter sm:px-gutter-lg">
         <Reveal className="pt-16 md:pt-24 lg:max-w-[min(31rem,48%)]">
           <Kicker className="text-tierra">{QUIEN_ES.kicker}</Kicker>
           <h2 id="quien-es-titulo" className="mt-5">
@@ -52,8 +52,8 @@ export function QuienEs() {
       </div>
 
       {/* Foto en arco: bajo la pregunta en móvil y tablet; apoyada abajo, junto a la franja, en escritorio. */}
-      <div className="relative ml-12 mr-gutter mt-12 sm:mx-auto sm:max-w-[30rem] lg:absolute lg:bottom-0 lg:right-[clamp(5.5rem,8.5vw,9rem)] lg:m-0 lg:h-[90%] lg:w-[min(32vw,31rem)] lg:max-w-none">
-        <div aria-hidden="true" className="arco absolute inset-0 -translate-x-4 -translate-y-4 bg-[linear-gradient(160deg,var(--color-malva),var(--color-rosa))] lg:-translate-x-6 lg:-translate-y-6" />
+      <div className="relative ml-12 mr-gutter -mt-20 sm:mx-auto sm:mt-12 sm:max-w-[30rem] lg:absolute lg:bottom-0 lg:right-[clamp(5.5rem,8.5vw,9rem)] lg:m-0 lg:h-[90%] lg:w-[min(32vw,31rem)] lg:max-w-none">
+        <div aria-hidden="true" className="arco absolute inset-0 -translate-x-4 translate-y-4 bg-[linear-gradient(160deg,var(--color-malva),var(--color-rosa))] max-sm:[mask-image:linear-gradient(180deg,transparent_0%,transparent_24%,black_38%)] sm:-translate-y-4 lg:-translate-x-6 lg:-translate-y-6" />
         <div className="arco relative aspect-[4/5] overflow-hidden lg:aspect-auto lg:h-full">
           <Image
             src={quienEs}

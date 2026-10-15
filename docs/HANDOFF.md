@@ -1,8 +1,9 @@
 # Handoff: Landing de Registro (Manuela Zuluaga)
 
 Para: Bruno y cualquier desarrollador que continúe el proyecto.
-Estado al 2026-10-14. **Fase: infraestructura técnica terminada; diseño sin
-empezar** (espera la landing de referencia y los materiales del cliente).
+Estado al 2026-10-14. **Fase: diseño implementado en local, en revisión de la
+agencia.** Antes de publicar falta reemplazar el contenido provisional y
+configurar el destino de los leads (ver "Tareas pendientes").
 
 ## Datos del proyecto
 
@@ -35,23 +36,75 @@ ninguna dependencia respecto de la plantilla.
 
 ## Qué hay y qué no hay
 
-**Hay** (heredado de la plantilla y adaptado):
+**Hay:**
 
-- `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente.
+- `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente;
+  WhatsApp obligatorio en el formulario (`leads.requirePhone`).
 - Una sola landing, en la raíz del dominio (`/`), con su página de gracias en
   `/gracias`. El registro se hace en un modal dentro de la landing: abrirlo no
   cambia la URL. Solo tras un registro confirmado se navega a `/gracias`.
-- `/` y `/gracias` generadas con `npm run new:landing`: solo
-  estructura mínima (un `h1` con texto `TODO`, el formulario base y la página de
-  gracias). **No es diseño ni copy**: se reemplaza entero en la fase visual.
-- Tokens de color neutros, sin identidad (`src/styles/theme.css`).
+- **La landing diseñada** de la masterclass gratuita "El amor no se sana"
+  (ver "Diseño de la landing").
+- Paleta del cliente en `src/styles/theme.css`; fuentes de marca solo en la
+  landing.
 - SEO con indexación consciente, 404 y error, `/api/leads` sin destino (503),
   tracking y consentimiento implementados pero inactivos, atribución, generador
   de landings, smoke test y CI.
 
-**No hay, a propósito:** hero, secciones, paleta de marca, tipografías, imágenes,
-copy comercial, animaciones ni dependencias de efectos. Llegan con el PROMPT 2
-y la landing de referencia.
+**No hay, a propósito:** preguntas frecuentes, garantía, soporte por WhatsApp
+ni precio (secciones de la referencia sin copy del cliente), ni dependencias
+nuevas: todo el diseño se hizo con Tailwind, CSS y SVG propios.
+
+## Diseño de la landing
+
+Reproduce la estructura, la composición y el estilo de una landing de
+referencia (captura de escritorio entregada por la agencia, no versionada) con
+el copy, las fotos y la marca de Manuela Zuluaga. No se usó ningún texto, logo
+ni foto de la referencia.
+
+| # | Sección (`_sections/`) | Diseño de la referencia que reproduce |
+| --- | --- | --- |
+| 1 | `Hero` | Hero (opción A aprobada: foto a sangre en lugar del recorte en arco). Escritorio: foto a la derecha, texto sobre degradado y franja vertical. Tablet: foto arriba. Móvil: foto vertical con el texto sobre la mesa |
+| 2 | `Marquee` | Banda con texto en movimiento (se repite antes de Testimonios) |
+| 3 | `TeEntiendo` | "É preciso aprender…": foto en sepia, texto vertical y sello |
+| 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
+| 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo |
+| 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla |
+| 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
+| 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |
+| 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
+| 10 | `Footer` | Pie con logo, derechos y enlaces legales |
+
+- **Registro:** todos los botones "Reservar mi lugar ahora" abren el mismo modal
+  (`_components/Registration.tsx`, sobre `Dialog` con `bare`). El modal es la
+  tarjeta de oferta de la referencia: papel, sello con el logo, título, detalles
+  del evento y formulario. Errores por campo, Esc y clic fuera cierran, el foco
+  vuelve al botón.
+- **Tipografías:** Cormorant Garamond (títulos, la de la referencia) y DM Sans
+  (cuerpo, elección del cliente), con `next/font` en `fonts.ts`.
+- **Texturas de papel** (`_assets/paper-*.jpg`): generadas para el proyecto
+  con ruido procedural (SVG `feTurbulence` + iluminación), una sola imagen
+  grande por tono, sin repetición.
+- **Textos decorativos** (marquesina, sello, textos verticales, palabra de
+  fondo, antetítulos): salen solo de frases del copy (`DECOR` en `content.ts`).
+- **Responsive:** escritorio fiel a la referencia desde 1024 px; entre 768 y
+  1023 px las composiciones a dos columnas se apilan; probado sin scroll
+  horizontal a 360, 390, 768, 1024 y 1440 px.
+- **Movimiento:** marquesina, sello giratorio, aparición al hacer scroll y
+  entrada del modal, todo con CSS; se anula con `prefers-reduced-motion`.
+
+### Contenido provisional (`PLACEHOLDERS` en `content.ts`)
+
+| Qué | Cómo se ve hoy | Qué falta |
+| --- | --- | --- |
+| Testimonios | Tres tarjetas con etiqueta "Ejemplo" y texto que dice que es de ejemplo | Testimonios reales (texto, captura o video) y su autorización |
+| Plazas registradas | 347 con etiqueta "Dato de prueba" | El número real o una fuente (CRM) |
+| Foto de "El acceso" | La del hero, en duotono, con etiqueta "Foto temporal" | La foto definitiva |
+| Gracias | Bloque "Pendiente" en lugar del siguiente paso | Enlace al grupo de WhatsApp |
+
+**Barrera de publicación:** mientras algún valor de `PLACEHOLDERS` sea `true`,
+añadir la landing a `PUBLISHED_LANDINGS` hace fallar el build (`page.tsx`).
+Al reemplazar cada contenido, poner su valor en `false`.
 
 ## Estructura de carpetas
 
@@ -69,12 +122,16 @@ src/
     (legal)/privacidad|cookies  rutas legales (texto pendiente del cliente)
     api/leads/route.ts        recepción de leads
     (registro)/               Landing de Registro, en "/" (route group: no suma segmento a la URL)
-      page.tsx layout.tsx     composición de secciones y clase .lp-registro
-      content.ts              copy y config (LANDING, META, HERO, THANKS) — hoy TODO
-      landing.css             estilos propios bajo .lp-registro
-      _sections/ _components/ _assets/   secciones, piezas (LeadForm) e imágenes
+      page.tsx layout.tsx     composición de secciones, clase .lp-registro y fuentes
+      fonts.ts                Cormorant Garamond + DM Sans
+      content.ts              copy aprobado, detalles del evento, DECOR y PLACEHOLDERS
+      landing.css             fondos con textura, botón, divisores, arco, animaciones
+      _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
+      _components/            Registration (botón + modal), LeadForm, EventDetails, TestimonialsCarousel,
+                              decor (✦✦✦, sello, logo…), ornaments (espejo, estampilla, marquesina), icons, text
+      _assets/                fotos optimizadas, logo recortado, texturas de papel
       gracias/page.tsx        confirmación (noindex siempre)
-  components/ui/              Container, Dialog (<dialog> nativo), Reveal
+  components/ui/              Container, Dialog (<dialog> nativo; opción bare), Reveal
   components/tracking/        Tracking, ConsentBanner, ConsentGatedScripts, AttributionCapture
   content/ui.ts               textos de sistema (formulario, banner, 404, error)
   lib/                        site, seo, indexing, landings, tracking, consent, leads/…
@@ -91,11 +148,13 @@ decisión de la agencia, sabiendo que el repositorio es público: cualquiera pue
 descargarlos. Revisados el 2026-10-14: sin GPS ni datos de autor en los
 metadatos.
 
-- No se importan desde el código. En la fase visual, las imágenes que se usen
-  se convierten a JPG/WebP optimizado y se copian a `src/app/(registro)/_assets/`
-  (`docs/CONVENTIONS.md`, "Imágenes").
-- `main/relacion.png` es en realidad un JPEG con extensión `.png`; corregirlo al
-  optimizarla.
+- No se importan desde el código. Las copias que usa la landing están en
+  `src/app/(registro)/_assets/`, en JPG de calidad alta (`docs/CONVENTIONS.md`,
+  "Imágenes"): hero escritorio y móvil, `quien-es-manuela` (1600 px), `espejo`
+  (recorte cuadrado centrado en Manuela) y `relacion` (era un JPEG con extensión
+  `.png`; la copia ya es `.jpg`). El logo, recortado y en PNG con transparencia.
+- Los PNG del hero son de 256 colores: en degradados oscuros puede haber
+  bandas. Si existen los originales en JPG, reemplazarlos.
 - No guardar aquí nada que no pueda ser público (contratos, datos personales,
   documentos internos).
 
@@ -202,7 +261,11 @@ Guía de activación de cada una en `docs/INTEGRATIONS.md`.
 | `npm run check` | ✔ |
 | `npm run smoke` | ✔ 17/17 |
 | `/`, `/gracias`, `/privacidad`, `/cookies` | ✔ 200, `X-Robots-Tag` y meta `noindex, nofollow`, sin canonical, `lang="es-CO"`, `og:locale` `es_CO`, sin GTM/Clarity/Pixel |
-| `/` (landing en la raíz) | ✔ responde 200 directo, sin redirección; un solo `h1`, título "Registro \| Manuela Zuluaga", honeypot presente. `/registro` y `/registro/gracias` dan 404 |
+| `/` (landing en la raíz) | ✔ responde 200 directo, sin redirección; un solo `h1`, título "El amor no se sana · Masterclass gratuita \| Manuela Zuluaga", honeypot presente. `/registro` y `/registro/gracias` dan 404 |
+| Diseño a 360, 390, 768, 1024 y 1440 px (capturas en Chrome headless) | ✔ sin scroll horizontal; revisado contra la referencia sección por sección |
+| Registro de punta a punta (build de producción + webhook falso en 127.0.0.1 + Chrome) | ✔ 19/19: el modal abre sin cambiar la URL, foco al primer campo, Esc cierra y devuelve el foco, envío vacío marca los 4 campos sin enviar nada, envío válido → 1 lead con fuente `registro`, WhatsApp, país `CO`, consentimiento, `utm_*` y `X-Webhook-Secret` → navega a `/gracias`; `generate_lead` una sola vez con el mismo `event_id` que `Idempotency-Key` |
+| Contraste de los colores del diseño | ✔ todos AA (error 7:1, textos semitransparentes sobre noche ≥ 8,4:1, malva sobre papel ≥ 5,1:1) |
+| `npm run smoke` con WhatsApp obligatorio | ✔ 17/17. El lead válido del smoke ahora lleva teléfono: sin él, `requirePhone` lo rechazaba con 400 antes de probar el 503 |
 | Sitemap | ✔ vacío; `PUBLISHED_LANDINGS` vacío |
 | Formularios sin destino real | ✔ `LEADS_WEBHOOK_URL` vacía → `/api/leads` responde 503, nunca éxito falso |
 | `.gitignore` | ✔ ignora `.env*` (salvo `.env.example`), `.vercel`, `.next/`, `node_modules/`, `*.tsbuildinfo`, `next-env.d.ts` |
@@ -218,10 +281,13 @@ de `unrs-resolver` (dependencia del lint; funciona sin aprobar el script).
 
 ## NO VERIFICADO
 
-- **Vercel:** proyecto creado, pero sin ningún deploy correcto todavía; ni
-  producción ni previews con noindex comprobados en Vercel.
+- **Vercel:** el deploy de `main` compiló (commit `6162f58`), pero la URL pública
+  de producción no se verificó (las URLs generadas piden login por la protección
+  de despliegues). El diseño todavía no está subido.
+- **Animaciones en movimiento:** las capturas se tomaron con reducción de
+  movimiento; marquesina, sello y apariciones se revisaron en código, no en video.
 - **Rendimiento** (Lighthouse, Core Web Vitals): requiere despliegue.
-- **Dispositivos reales** (Safari iOS, Android).
+- **Dispositivos reales** (Safari iOS, Android). Solo Chrome emulado.
 - **Adecuación legal** del banner y de los textos para Colombia.
 
 ## GitHub
@@ -270,7 +336,8 @@ Estado (2026-10-14):
   no detectó Next.js y lo dejó con **Framework Preset "Other"**. Corrección:
   Settings → Build and Deployment → Framework Preset **Next.js**, sin override de
   Build Command, Output Directory ni Install Command. El código no tiene nada que
-  ver: el mismo commit compila en GitHub Actions.
+  ver: el mismo commit compila en GitHub Actions. **Corregido el 2026-10-14:** el
+  deploy de `6162f58` compiló (29 s).
 - Sin variables de entorno ni dominio, a propósito.
 
 Para un proyecto nuevo: crearlo **después** del primer push (así detecta
@@ -302,19 +369,19 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 ## Tareas pendientes para Bruno
 
-1. Vercel: corregir el Framework Preset a Next.js y confirmar el primer deploy
-   correcto (sección "Vercel").
-2. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial.
-3. Comprobar en el deploy: `X-Robots-Tag: noindex, nofollow`, sin tracking, y un
-   preview de una rama.
-4. Entregar la landing de referencia y los materiales (copy, imágenes, marca)
-   con el PROMPT 2.
-5. Decidir con el cliente:
-   - campos del formulario (¿teléfono obligatorio?, `site.leads.requirePhone`);
-   - voz del copy (tuteo o usted) para `src/content/ui.ts`;
-   - CRM o automatización de destino de los leads;
-   - herramientas de tracking (GTM o directo) y criterio de consentimiento;
-   - dominio definitivo.
-6. Conseguir los textos legales (privacidad y cookies).
-7. Solo al publicar: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_INDEXABLE=true` y
+1. Revisar y aprobar el diseño en local; después, subir la rama del diseño y
+   revisarla en el preview de Vercel antes de pasarla a `main`.
+2. Reemplazar el contenido provisional (tabla "Contenido provisional") y poner
+   cada valor de `PLACEHOLDERS` en `false`.
+3. Grupo de WhatsApp para la página de gracias.
+4. Destino de los leads (CRM o automatización) y `LEADS_WEBHOOK_URL` en Vercel.
+   Sin él, el formulario muestra error a quien intente registrarse: **no
+   lanzar anuncios hasta configurarlo**.
+5. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).
+6. Originales del hero en mejor calidad y, si existe, el logo en vector.
+7. Decidir el plan de Vercel (Hobby frente a Pro) por el uso comercial y
+   verificar la URL pública de producción.
+8. Herramientas de tracking (GTM o directo) y criterio de consentimiento;
+   dominio definitivo.
+9. Solo al publicar: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_INDEXABLE=true` y
    la ruta en `PUBLISHED_LANDINGS`.

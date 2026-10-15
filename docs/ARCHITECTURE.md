@@ -37,9 +37,14 @@ src/
     (legal)/cookies/
     api/leads/route.ts        recepción de leads
     <slug>/                   cada landing (creada con npm run new:landing)
-    (registro)/               Landing de Registro en "/" (route group; estructura generada, sin diseño)
+    (registro)/               Landing de la masterclass en "/" (route group) y /gracias
+      fonts.ts                Cormorant Garamond + DM Sans (solo en esta landing)
+      content.ts              copy aprobado, textos decorativos y PLACEHOLDERS
+      _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
+      _components/            Registration (botón + modal), LeadForm, decor, ornaments, icons, text…
+      _assets/                fotos optimizadas, logo y texturas de papel (generadas, propias)
   components/
-    ui/                       Container, Dialog (<dialog> nativo), Reveal
+    ui/                       Container, Dialog (<dialog> nativo; opción bare sin aspecto), Reveal
     tracking/                 Tracking, ConsentGatedScripts, ConsentBanner, AttributionCapture
   content/ui.ts               textos de sistema (formularios, banner, 404, error)
   lib/

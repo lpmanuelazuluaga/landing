@@ -27,12 +27,19 @@ pendientes en `docs/HANDOFF.md`.
   confirmado navega a `/gracias`.
 - Repositorio **público**: nada de secretos, datos personales ni documentos
   internos en el código, los commits o `docs/`.
-- **Fase actual: solo infraestructura.** El diseño reproducirá una landing de
-  referencia que todavía no se entregó. Hasta recibirla, no diseñar secciones,
-  no fijar paleta ni tipografías, no escribir copy comercial ni instalar
-  dependencias de animación o efectos.
-- Voz del copy (tuteo o usted): PENDIENTE de definir con el cliente.
-  `src/content/ui.ts` sigue en tuteo neutro.
+- **Fase actual: diseño implementado, en revisión.** La landing reproduce con
+  fidelidad una landing de referencia (captura de escritorio entregada por la
+  agencia; no versionada) con el copy, las fotos y la marca del cliente. No
+  rediseñar por iniciativa propia: cualquier cambio visual se consulta. Nunca
+  reutilizar textos, logos ni fotos de la referencia.
+- Marca: paleta en `src/styles/theme.css`; títulos Cormorant Garamond y cuerpo
+  DM Sans (`src/app/(registro)/fonts.ts`). Logo del cliente en `_assets/logo.png`
+  (se tiñe con `Logo`, como máscara).
+- Copy aprobado y literal en `content.ts` (con las correcciones de ortografía
+  autorizadas). No cambiar el texto sin autorización. Voz: tuteo.
+- Contenido provisional en `PLACEHOLDERS` (`content.ts`): siempre con etiqueta
+  visible, y el build falla si la landing se publica con alguno en `true`.
+  Nunca presentar testimonios o datos de ejemplo como reales.
 
 ## Antes de escribir código
 

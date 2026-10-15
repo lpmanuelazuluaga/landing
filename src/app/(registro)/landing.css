@@ -327,6 +327,26 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .lp-registro .registro-puente {
+      animation: lp-gracias-entrada 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .lp-registro .registro-puente-check {
+      animation: lp-check-entrada 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .lp-registro .registro-puente-check circle,
+    .lp-registro .registro-puente-check path {
+      stroke-dasharray: 1;
+      animation: lp-check-trazo 0.55s ease both;
+    }
+    .lp-registro .registro-puente-check path {
+      animation-delay: 0.2s;
+    }
+    .lp-registro .gracias-tarjeta {
+      animation: lp-gracias-entrada 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .lp-registro .gracias-siguiente-paso {
+      animation: lp-gracias-entrada 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both;
+    }
     .lp-registro .gracias-detalles li:nth-child(1) {
       --check-delay: 0.15s;
     }
@@ -378,6 +398,16 @@
     to {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+  @keyframes lp-gracias-entrada {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
   @keyframes lp-check-trazo {

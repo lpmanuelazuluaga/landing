@@ -188,6 +188,14 @@ LeadForm (UI de la landing)
   └─ trackLead (antes de navegar, una vez) → router.push(gracias)
 ```
 
+En `registro`, `useLeadForm.beforeNavigate` permite mostrar una confirmación
+visual de 1,2 s después de la entrega y de la conversión. Es opcional, sin
+estilos en el núcleo, y sus errores no bloquean la navegación. El modal
+precarga `/gracias` al abrirse; durante la confirmación conserva su altura,
+vuelve inerte el formulario y lleva el foco al mensaje. Con reducción de
+movimiento se omite la pausa. La entrada de la tarjeta de gracias y del bloque
+«Último paso» usa CSS local, sin nuevas dependencias ni eventos de conversión.
+
 - **Nunca hay éxito sin entrega.** El navegador solo muestra éxito con un 200.
 - **Deduplicación.** La de memoria es por instancia y no sobrevive a reinicios.
   La durable es responsabilidad del receptor (`event_id` y cabecera

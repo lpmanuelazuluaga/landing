@@ -234,7 +234,13 @@ export const THANKS = {
   kicker: "Masterclass gratuita",
   /** Mensaje de sistema: solo se llega aquí tras un registro confirmado. */
   title: [["Registro"], [{ strong: "confirmado" }]] as readonly Rich[],
+  welcome: "Hoy diste un paso para ti. Qué alegría que estés aquí.",
+  lastStep: "Último paso",
   nextStep: "Únete al grupo de WhatsApp de la masterclass.",
+  transition: {
+    title: "Tu lugar ya es tuyo",
+    body: "Qué alegría que estés aquí.",
+  },
   whatsappLabel: "Unirme al grupo de WhatsApp",
   whatsappUrl: "https://chat.whatsapp.com/CkIGjqekWXe5d44D95wSso?s=cl&p=i&ilr=4&iam=2",
 };

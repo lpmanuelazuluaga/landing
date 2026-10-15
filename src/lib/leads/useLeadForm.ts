@@ -14,6 +14,8 @@ type Options = {
   source: string;
   /** Página de gracias. Sin ella el formulario se queda en estado "success". */
   thanksPath?: string;
+  /** Paso visual opcional tras confirmar y medir la entrega, antes de navegar. */
+  beforeNavigate?: () => void | Promise<void>;
   /** Añadir user_data al evento (Advanced Matching). Solo si la política lo cubre. */
   includeUserData?: boolean;
 };
@@ -28,7 +30,7 @@ type Options = {
  * - Éxito SOLO si /api/leads confirmó la entrega. La conversión se envía una
  *   vez y antes de navegar.
  */
-export function useLeadForm({ source, thanksPath, includeUserData = false }: Options) {
+export function useLeadForm({ source, thanksPath, beforeNavigate, includeUserData = false }: Options) {
   const router = useRouter();
   const [status, setStatus] = useState<LeadFormStatus>("idle");
   const [errors, setErrors] = useState<LeadFieldErrors>({});
@@ -91,7 +93,14 @@ export function useLeadForm({ source, thanksPath, includeUserData = false }: Opt
 
       setStatus("success");
       /* busyRef queda en true: el formulario ya cumplió y no se reenvía. */
-      if (thanksPath) router.push(thanksPath);
+      if (thanksPath) {
+        try {
+          await beforeNavigate?.();
+        } catch {
+          /* Un efecto visual fallido nunca debe impedir llegar a gracias. */
+        }
+        router.push(thanksPath);
+      }
     } catch {
       busyRef.current = false;
       setStatus("error");

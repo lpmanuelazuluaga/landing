@@ -1,12 +1,13 @@
 "use client";
 
 import { createContext, use, useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Dialog } from "@/components/ui/Dialog";
 import { cn } from "@/lib/cn";
-import { CTA, DECOR, MODAL } from "../content";
+import { CTA, DECOR, LANDING, MODAL, THANKS } from "../content";
 import { LogoSeal, Ornament } from "./decor";
 import { EventDetails } from "./EventDetails";
-import { IconArrowCircle, IconClose } from "./icons";
+import { IconArrowCircle, IconCheckCircle, IconClose } from "./icons";
 import { LeadForm } from "./LeadForm";
 import { SmoothScroll } from "./SmoothScroll";
 import { Divider, Title } from "./text";
@@ -24,8 +25,12 @@ import { Divider, Title } from "./text";
 const RegistrationContext = createContext<{ open: () => void } | null>(null);
 
 export function RegistrationProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const open = useCallback(() => setIsOpen(true), []);
+  const open = useCallback(() => {
+    router.prefetch(LANDING.thanksPath);
+    setIsOpen(true);
+  }, [router]);
   const value = useMemo(() => ({ open }), [open]);
 
   return (
@@ -67,34 +72,62 @@ export function CtaButton({ className, block = false }: { className?: string; bl
 }
 
 function RegistrationDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [confirmed, setConfirmed] = useState(false);
+
+  async function beforeNavigate() {
+    /* Con movimiento reducido se navega directamente, sin pausa decorativa. */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setConfirmed(true);
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 1200));
+  }
+
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      labelledBy="registro-titulo"
+      labelledBy={confirmed ? "registro-exito-titulo" : "registro-titulo"}
       bare
       className="max-h-dvh w-[min(100%-1.25rem,33.5rem)] overflow-y-auto overscroll-contain pt-12 pb-3 backdrop:bg-noche/75 backdrop:backdrop-blur-[5px]"
     >
       <div className="modal-tarjeta fondo-papel relative rounded-[1.25rem] border border-rosa/60 px-5 pb-7 pt-14 text-center shadow-[0_40px_80px_-30px_rgb(30_20_18/0.8)] sm:px-10 sm:pb-9">
-        {/* Sello con el logo sobre el borde superior, como la tarjeta de oferta de la referencia. */}
-        <LogoSeal id="sello-modal" text={DECOR.seal} />
+        <div inert={confirmed} className={confirmed ? "invisible" : undefined}>
+          {/* Sello con el logo sobre el borde superior, como la tarjeta de oferta de la referencia. */}
+          <LogoSeal id="sello-modal" text={DECOR.seal} />
 
-        <Ornament className="mx-auto text-burgundy" />
-        <p className="mt-3 text-[0.75rem] font-medium uppercase tracking-[0.5em] text-malva">{MODAL.kicker}</p>
-        <Title id="registro-titulo" lines={MODAL.title} size="card" className="mt-2" />
-        <EventDetails className="mt-4 justify-center" />
-        <Divider align="centro" className="mb-6 mt-5" />
+          <Ornament className="mx-auto text-burgundy" />
+          <p className="mt-3 text-[0.75rem] font-medium uppercase tracking-[0.5em] text-malva">{MODAL.kicker}</p>
+          <Title id="registro-titulo" lines={MODAL.title} size="card" className="mt-2" />
+          <EventDetails className="mt-4 justify-center" />
+          <Divider align="centro" className="mb-6 mt-5" />
 
-        <LeadForm />
+          <LeadForm beforeNavigate={beforeNavigate} />
 
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-3 top-3 grid size-11 place-items-center rounded-full text-tierra transition-colors hover:bg-rosa/25"
-        >
-          <IconClose className="size-5" />
-          <span className="sr-only">{MODAL.close}</span>
-        </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-3 top-3 grid size-11 place-items-center rounded-full text-tierra transition-colors hover:bg-rosa/25"
+          >
+            <IconClose className="size-5" />
+            <span className="sr-only">{MODAL.close}</span>
+          </button>
+        </div>
+
+        {confirmed ? (
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            tabIndex={-1}
+            ref={(element) => element?.focus({ preventScroll: true })}
+            className="registro-puente absolute inset-0 flex flex-col items-center justify-center rounded-[inherit] px-7 text-tierra outline-none sm:px-12"
+          >
+            <IconCheckCircle className="registro-puente-check size-20 text-burgundy" />
+            <h2 id="registro-exito-titulo" className="mt-6 font-serif text-[clamp(2.5rem,7vw,3.25rem)] leading-none text-balance text-burgundy">
+              {THANKS.transition.title}
+            </h2>
+            <p className="mt-4 text-base leading-relaxed">{THANKS.transition.body}</p>
+          </div>
+        ) : null}
       </div>
     </Dialog>
   );

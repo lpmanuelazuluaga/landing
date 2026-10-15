@@ -32,10 +32,11 @@ function withDialCode(number: string, dial: string): string {
 const FIELD =
   "mt-1.5 block min-h-12 w-full rounded-[3px] border bg-white/75 px-3.5 text-base text-tierra placeholder:text-tierra/45 transition-colors focus:border-malva focus:bg-white";
 
-export function LeadForm() {
+export function LeadForm({ beforeNavigate }: { beforeNavigate?: () => void | Promise<void> }) {
   const { status, errors, submit } = useLeadForm({
     source: LANDING.leadSource,
     thanksPath: LANDING.thanksPath,
+    beforeNavigate,
   });
   const id = useId();
   const [countryIso, setCountryIso] = useState(DEFAULT_COUNTRY);

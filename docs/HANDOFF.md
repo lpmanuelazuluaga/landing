@@ -39,6 +39,20 @@ del selector de prefijo) y `lenis` (suavizado del scroll), justificadas en
 
 ## Qué hay y qué no hay
 
+- **Bienvenida y último paso (2026-10-15):** tras una entrega confirmada,
+  el modal muestra «Tu lugar ya es tuyo» durante 1,2 s y después navega a
+  `/gracias`, precargada al abrir el registro. La tarjeta aparece suavemente
+  y da una bienvenida cálida; el bloque «Último paso» destaca la invitación
+  a unirse al grupo de WhatsApp. Conserva el enlace confirmado y el botón
+  verde. La conversión sigue ocurriendo una sola vez antes de la transición;
+  un fallo de entrega nunca muestra la confirmación. Con reducción de
+  movimiento se navega directamente y los bloques quedan estáticos.
+  Verificado sobre el build en Chrome a 360, 390, 768 y 1440 px, con ambas
+  preferencias: sin desbordamiento horizontal. API interceptada solo en la
+  prueba local: validación y error 502 sin éxito, doble envío bloqueado,
+  una conversión antes del mensaje y ninguna al recargar gracias. `check`
+  y smoke (17/17) aprobados.
+
 **Hay:**
 
 - `src/lib/site.ts` con nombre de marca, idioma, locale y país del cliente;

@@ -7,8 +7,8 @@
   entorno que Next (.env*, process.env); conviene ejecutarlo con el mismo
   entorno con el que se hizo el build.
 
-  Nunca envía un lead a un destino real: si LEADS_WEBHOOK_URL está definida,
-  la prueba de entrega se omite.
+  Nunca envía un lead a un destino real: si LEADS_WEBHOOK_URL o las variables
+  de GHL están definidas, la prueba de entrega se omite.
 */
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
@@ -186,8 +186,8 @@ try {
     attribution: { utm_source: "smoke" },
     pagePath: "/",
   };
-  if (env.LEADS_WEBHOOK_URL) {
-    skip("Lead válido sin destino → 503", "LEADS_WEBHOOK_URL definida: no se envían datos a un destino real");
+  if (env.LEADS_WEBHOOK_URL || env.GHL_API_TOKEN || env.GHL_LOCATION_ID) {
+    skip("Lead válido sin destino → 503", "destino de leads definido: no se envían datos a un destino real");
   } else {
     const response = await postLead(valid);
     const body = await response.json().catch(() => ({}));

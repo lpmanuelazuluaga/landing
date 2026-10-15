@@ -1,6 +1,5 @@
 import { validateLead } from "@/lib/leads/schema";
-import { readWebhookConfig } from "@/lib/leads/server/webhook";
-import { deliverLead } from "@/lib/leads/server/deliver";
+import { deliverLead, readDestination } from "@/lib/leads/server/deliver";
 
 /*
   POST /api/leads — recepción de leads de cualquier formulario del sitio.
@@ -50,15 +49,14 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "invalid", errors }, 400);
   }
 
-  const destination = readWebhookConfig();
+  const destination = readDestination();
   if (destination.status !== "ok") {
-    console.error(
-      `[leads] sin destino (${destination.status === "invalid" ? "LEADS_WEBHOOK_URL inválida" : "LEADS_WEBHOOK_URL vacía"}) event_id=${result.lead.idempotencyKey}`,
-    );
+    const detail = destination.status === "invalid" ? destination.detail : "GHL y LEADS_WEBHOOK_URL vacías";
+    console.error(`[leads] sin destino (${detail}) event_id=${result.lead.idempotencyKey}`);
     return json({ ok: false, error: "not_configured" }, 503);
   }
 
-  const outcome = await deliverLead(result.lead, destination.config);
+  const outcome = await deliverLead(result.lead, destination.destination);
   if (!outcome.ok) {
     console.error(`[leads] entrega fallida reason=${outcome.reason} event_id=${result.lead.idempotencyKey}`);
     return json({ ok: false, error: "delivery_failed" }, 502);

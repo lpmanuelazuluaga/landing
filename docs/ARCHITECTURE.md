@@ -82,6 +82,26 @@ src/
 Las carpetas con `_` no generan rutas (convención de carpetas privadas de Next).
 Borrar la carpeta borra la landing entera, imágenes incluidas.
 
+**Testimonios en video:** `content.ts` conserva la asociación numerada entre
+los seis enlaces originales y las versiones de reproducción. Las portadas
+JPEG de `_assets/` se importan en `Testimonios` y se sirven con `next/image`.
+`TestimonialsCarousel` usa scroll horizontal nativo y `requestAnimationFrame`
+a 28 px/s sobre tres copias; las laterales no añaden paradas de teclado ni
+lecturas duplicadas. Se pausa con interacción, foco, hover, pestaña oculta,
+fuera de pantalla y mientras se reproduce un video. Incluye control de pausa
+y no inicia el movimiento con `prefers-reduced-motion`.
+
+`TestimonialVideoDialog` reutiliza `Dialog` y monta un único `<video>` tras
+elegir una portada; tiene controles nativos, reproducción en línea, cierre
+con Esc, restauración de foco y desmontaje al cerrar. `SmoothScroll` observa
+la apertura de cualquier diálogo para cancelar también la inercia de fondo.
+Los originales MOV usan HEVC y en Chrome de Windows se detectó reproducción
+solo de audio. `public/videos/testimonios/` contiene sus copias MP4 H.264 Main
+3.1 + AAC, hasta 1280 × 720 sin recortar, con `yuv420p` y `faststart`. Son
+archivos con URL estable y se piden solo al abrir el modal. Se preparan con
+FFmpeg fuera del build, sin añadir dependencias al proyecto; los MOV
+descargados y las herramientas permanecen fuera del repositorio.
+
 **Landing en "/":** `npm run new:landing -- <slug> --root` la crea en el route
 group `src/app/(<slug>)/`. Exige retirar antes `src/app/page.tsx`: dos páginas en
 "/" rompen el build.

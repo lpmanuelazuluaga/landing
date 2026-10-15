@@ -1,49 +1,57 @@
 "use client";
 
+import Image, { type StaticImageData } from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
-import { PlaceholderTag } from "./decor";
+import { TESTIMONIOS } from "../content";
+import { IconPause, IconPlay } from "./icons";
+import { TestimonialVideoDialog } from "./TestimonialVideoDialog";
 
-/*
-  Carrusel infinito de testimonios con el estilo de la referencia (comentarios
-  oscuros, escalonados en escritorio). Sin librería: scroll-snap nativo.
-
-  - Las tarjetas se renderizan tres veces seguidas. Se arranca en la copia del
-    medio y, cada vez que el desplazamiento termina en una copia lateral, se
-    salta (sin animación) a la tarjeta equivalente de la del medio: nunca se
-    llega a un final, ni deslizando ni con los puntos.
-  - Solo se desplaza la lista (scrollTo): nunca scrollIntoView, que también
-    movería ancestros como la sección.
-  - Las copias laterales van con aria-hidden: los lectores de pantalla leen
-    cada testimonio una sola vez.
-  - Móvil: una tarjeta por vista; tablet: casi dos; escritorio: tres.
-*/
-
-type Testimonial = { name: string; text: string };
+export type VideoTestimonial = {
+  id: number;
+  title: string;
+  videoUrl: string;
+  playbackUrl: string;
+  poster: StaticImageData;
+};
 
 const COPIES = 3;
-/* Escalonado vertical de la referencia (solo en escritorio). */
+const SPEED = 28; // Píxeles por segundo: avance continuo y discreto.
 const OFFSET = ["lg:mt-10", "lg:mt-14", "lg:mt-0"] as const;
 
-export function TestimonialsCarousel({ items, placeholder }: { items: readonly Testimonial[]; placeholder: boolean }) {
+/** Tres copias permiten volver al centro sin un salto visible. Solo la copia
+ * central participa del recorrido de teclado y del árbol de accesibilidad.
+ * La rueda y el gesto táctil siguen usando el scroll horizontal nativo.
+ */
+export function TestimonialsCarousel({ items }: { items: readonly VideoTestimonial[] }) {
   const listRef = useRef<HTMLUListElement>(null);
+  const positionRef = useRef(0);
+  const autoRunningRef = useRef(false);
+  const activeRef = useRef(0);
+  const interactionTimer = useRef<number | undefined>(undefined);
   const [active, setActive] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [pageVisible, setPageVisible] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+  const [touching, setTouching] = useState(false);
+  const [selected, setSelected] = useState<VideoTestimonial | null>(null);
   const total = items.length;
   const loop = Array.from({ length: COPIES }, () => items).flat();
 
-  /** Centra en la lista la tarjeta del índice dado (sobre la lista triplicada). */
   const centerOn = useCallback((index: number, smooth: boolean) => {
     const list = listRef.current;
     const item = list?.children[index] as HTMLElement | undefined;
     if (!list || !item) return;
+    const left = item.offsetLeft - (list.clientWidth - item.offsetWidth) / 2;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    list.scrollTo({
-      left: item.offsetLeft - (list.clientWidth - item.offsetWidth) / 2,
-      behavior: smooth && !reduce ? "smooth" : "instant",
-    });
+    list.scrollTo({ left, behavior: smooth && !reduce ? "smooth" : "instant" });
+    if (!smooth || reduce) positionRef.current = left;
   }, []);
 
-  /** Índice (sobre la lista triplicada) de la tarjeta más cercana al centro. */
   const centered = useCallback(() => {
     const list = listRef.current;
     if (!list) return total;
@@ -52,9 +60,9 @@ export function TestimonialsCarousel({ items, placeholder }: { items: readonly T
     let distance = Infinity;
     Array.from(list.children).forEach((child, index) => {
       const el = child as HTMLElement;
-      const d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - middle);
-      if (d < distance) {
-        distance = d;
+      const next = Math.abs(el.offsetLeft + el.offsetWidth / 2 - middle);
+      if (next < distance) {
+        distance = next;
         best = index;
       }
     });
@@ -64,40 +72,92 @@ export function TestimonialsCarousel({ items, placeholder }: { items: readonly T
   useEffect(() => {
     const list = listRef.current;
     if (!list || total === 0) return;
-
-    /* Arranque en la copia del medio (en escritorio, con la segunda tarjeta en
-       el centro para que se vean las tres primeras). */
     const desktop = window.matchMedia("(min-width: 64rem)").matches;
     centerOn(total + (desktop && total > 1 ? 1 : 0), false);
 
-    let timer: number | undefined;
-    const settle = () => {
-      let index = centered();
-      if (index < total) index += total;
-      else if (index >= total * 2) index -= total;
-      if (index !== centered()) centerOn(index, false);
-      setActive(index % total);
+    let settleTimer: number | undefined;
+    const normalize = () => {
+      const first = list.children[0] as HTMLElement;
+      const middle = list.children[total] as HTMLElement;
+      const group = middle.offsetLeft - first.offsetLeft;
+      if (group <= 0) return;
+      const start = middle.offsetLeft - (list.clientWidth - middle.offsetWidth) / 2;
+      const left = list.scrollLeft;
+      if (left < start || left >= start + group) {
+        list.scrollLeft = start + (((left - start) % group) + group) % group;
+        positionRef.current = list.scrollLeft;
+      }
     };
-    /* scrollend donde exista; si no, fin del desplazamiento por inactividad. */
     const onScroll = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(settle, 140);
+      if (!autoRunningRef.current) positionRef.current = list.scrollLeft;
+      const index = centered() % total;
+      if (activeRef.current !== index) {
+        activeRef.current = index;
+        setActive(index);
+      }
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(normalize, 160);
     };
-    const supportsScrollEnd = "onscrollend" in window;
-    if (supportsScrollEnd) list.addEventListener("scrollend", settle);
-    else list.addEventListener("scroll", onScroll, { passive: true });
-    const onResize = () => centerOn(centered(), false);
-    window.addEventListener("resize", onResize);
+    const onResize = () => centerOn(total + centered() % total, false);
+    list.addEventListener("scroll", onScroll, { passive: true });
+    const resize = new ResizeObserver(onResize);
+    resize.observe(list);
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotion = () => setReducedMotion(motion.matches);
+    const updateVisibility = () => setPageVisible(!document.hidden);
+    updateMotion();
+    updateVisibility();
+    motion.addEventListener("change", updateMotion);
+    document.addEventListener("visibilitychange", updateVisibility);
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.05 });
+    observer.observe(list);
     return () => {
-      window.clearTimeout(timer);
-      list.removeEventListener("scrollend", settle);
+      window.clearTimeout(settleTimer);
+      window.clearTimeout(interactionTimer.current);
       list.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      resize.disconnect();
+      motion.removeEventListener("change", updateMotion);
+      document.removeEventListener("visibilitychange", updateVisibility);
+      observer.disconnect();
     };
   }, [total, centerOn, centered]);
 
-  /** Punto i: la tarjeta i de la copia del medio, por el camino más corto. */
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list || total === 0 || !playing || reducedMotion || !visible || !pageVisible || hovered || focused || interacting || touching || selected) return;
+    let frame: number;
+    let previous: number | undefined;
+    positionRef.current = list.scrollLeft;
+    autoRunningRef.current = true;
+    const advance = (time: number) => {
+      const first = list.children[0] as HTMLElement;
+      const middle = list.children[total] as HTMLElement;
+      const group = middle.offsetLeft - first.offsetLeft;
+      const start = middle.offsetLeft - (list.clientWidth - middle.offsetWidth) / 2;
+      if (previous !== undefined && group > 0) {
+        positionRef.current += Math.min(time - previous, 50) * SPEED / 1000;
+        if (positionRef.current >= start + group) positionRef.current -= group;
+        list.scrollLeft = positionRef.current;
+      }
+      previous = time;
+      frame = requestAnimationFrame(advance);
+    };
+    frame = requestAnimationFrame(advance);
+    return () => {
+      cancelAnimationFrame(frame);
+      autoRunningRef.current = false;
+    };
+  }, [total, playing, reducedMotion, visible, pageVisible, hovered, focused, interacting, touching, selected]);
+
+  function pauseForInteraction() {
+    window.clearTimeout(interactionTimer.current);
+    setInteracting(true);
+    interactionTimer.current = window.setTimeout(() => setInteracting(false), 1800);
+  }
+
   function goTo(target: number) {
+    pauseForInteraction();
     const current = centered();
     const base = current - (current % total);
     let index = base + target;
@@ -106,54 +166,79 @@ export function TestimonialsCarousel({ items, placeholder }: { items: readonly T
     centerOn(index, true);
   }
 
+  function openVideo(index: number) {
+    const original = total + index % total;
+    centerOn(original, false);
+    // El foco vuelve a la portada accesible, incluso si se pulsó una copia.
+    (listRef.current?.children[original].querySelector("button") as HTMLButtonElement | null)?.focus({ preventScroll: true });
+    setSelected(items[index % total]);
+  }
+
   return (
     <div>
       <ul
         ref={listRef}
+        aria-label={TESTIMONIOS.listLabel}
         data-lenis-prevent-horizontal=""
-        className="relative -mx-gutter flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-gutter pb-12 pt-1 [scrollbar-width:none] sm:-mx-gutter-lg sm:px-gutter-lg lg:-mx-5 lg:items-start lg:gap-5 lg:px-5 lg:[mask-image:linear-gradient(90deg,transparent,black_1.25rem,black_calc(100%-1.25rem),transparent)]"
+        onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
+        onPointerLeave={() => { setHovered(false); pauseForInteraction(); }}
+        onPointerDown={() => { window.clearTimeout(interactionTimer.current); setInteracting(true); }}
+        onPointerUp={pauseForInteraction}
+        onPointerCancel={pauseForInteraction}
+        onTouchStart={() => setTouching(true)}
+        onTouchEnd={() => { setTouching(false); pauseForInteraction(); }}
+        onTouchCancel={() => { setTouching(false); pauseForInteraction(); }}
+        onWheel={pauseForInteraction}
+        onFocusCapture={() => setFocused(true)}
+        onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
+        className="relative -mx-gutter flex gap-4 overflow-x-auto overscroll-x-contain px-gutter pb-10 pt-1 [scrollbar-width:none] sm:-mx-gutter-lg sm:px-gutter-lg lg:-mx-5 lg:items-start lg:gap-5 lg:px-5 lg:[mask-image:linear-gradient(90deg,transparent,black_1.25rem,black_calc(100%-1.25rem),transparent)]"
       >
         {loop.map((item, index) => {
           const copy = index < total || index >= total * 2;
           return (
-            <li
-              key={index}
-              aria-hidden={copy || undefined}
-              className={cn(
-                "w-[85%] shrink-0 snap-center sm:w-[58%] lg:w-[calc((100%-2.5rem)/3)]",
-                OFFSET[index % OFFSET.length],
-              )}
-            >
-              <figure className="rounded-lg bg-[#141010] p-5 text-left text-crema shadow-[0_24px_40px_-24px_rgb(30_20_18/0.7)]">
-                <figcaption className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-full bg-rosa/30 text-sm font-semibold text-rosa">
-                    {item.name.charAt(0)}
+            <li key={`${index}-${item.id}`} aria-hidden={copy || undefined} className={cn("w-[85%] shrink-0 sm:w-[58%] lg:w-[calc((100%-2.5rem)/3)]", OFFSET[index % OFFSET.length])}>
+              <button
+                type="button"
+                tabIndex={copy ? -1 : 0}
+                aria-label={`${TESTIMONIOS.play} ${item.id}`}
+                aria-haspopup="dialog"
+                onClick={() => openVideo(index)}
+                className="tono-oscuro group block w-full overflow-hidden rounded-lg border border-malva/30 bg-noche text-left text-crema shadow-[0_24px_40px_-24px_rgb(30_20_18/0.7)]"
+              >
+                <span className="relative block aspect-video overflow-hidden">
+                  <Image src={item.poster} alt="" fill sizes="(min-width: 1024px) 320px, (min-width: 640px) 58vw, 85vw" className="object-cover" draggable={false} />
+                  <span aria-hidden="true" className="absolute inset-0 bg-burgundy/10 transition-colors group-hover:bg-transparent" />
+                  <span aria-hidden="true" className="absolute left-1/2 top-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-crema/50 bg-burgundy/95 text-crema shadow-lg transition-transform group-hover:scale-110">
+                    <IconPlay className="ml-0.5 size-6" />
                   </span>
-                  <span className="text-[0.9375rem] text-crema/80">{item.name}</span>
-                  {placeholder ? <PlaceholderTag className="ml-auto text-rosa">Ejemplo</PlaceholderTag> : null}
-                </figcaption>
-                <blockquote className="mt-3 text-[1rem] leading-relaxed text-crema/95">{item.text}</blockquote>
-              </figure>
+                </span>
+                <span className="flex items-center justify-between gap-3 px-4 py-3.5">
+                  <span className="text-[0.9375rem] font-medium">{item.title}</span>
+                  <span className="text-sm text-rosa">{TESTIMONIOS.watch}</span>
+                </span>
+              </button>
             </li>
           );
         })}
       </ul>
 
-      {/* Puntos: área táctil de 24 px con el punto de 12 px de la referencia. */}
-      <div className="mt-1 flex justify-center">
-        {items.map((_, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => goTo(index)}
-            aria-label={`Ver testimonio ${index + 1}`}
-            aria-current={index === active ? "true" : undefined}
-            className="grid size-6 place-items-center"
-          >
-            <span className={cn("size-3 rounded-full bg-burgundy transition-opacity", index === active ? "opacity-100" : "opacity-30")} />
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+        <div className="flex justify-center">
+          {items.map((item, index) => (
+            <button key={item.id} type="button" onClick={() => goTo(index)} aria-label={`${TESTIMONIOS.goTo} ${item.id}`} aria-current={index === active ? "true" : undefined} className="grid size-7 place-items-center">
+              <span className={cn("size-2.5 rounded-full bg-burgundy transition-opacity", index === active ? "opacity-100" : "opacity-30")} />
+            </button>
+          ))}
+        </div>
+        {!reducedMotion ? (
+          <button type="button" onClick={() => setPlaying(!playing)} className="inline-flex min-h-10 items-center gap-2 rounded-full border border-malva/50 px-3.5 py-2 text-sm text-burgundy">
+            {playing ? <IconPause className="size-4" /> : <IconPlay className="size-4" />}
+            {playing ? TESTIMONIOS.pause : TESTIMONIOS.resume}
           </button>
-        ))}
+        ) : null}
       </div>
+
+      <TestimonialVideoDialog item={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }

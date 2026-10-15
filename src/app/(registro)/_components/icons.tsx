@@ -105,6 +105,22 @@ export function IconClose(props: IconProps) {
   );
 }
 
+export function IconPlay(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none" />
+    </Svg>
+  );
+}
+
+export function IconPause(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M8 5v14M16 5v14" strokeWidth={3} />
+    </Svg>
+  );
+}
+
 export function IconStar({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" className={className}>

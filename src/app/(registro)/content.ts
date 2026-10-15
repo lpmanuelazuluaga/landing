@@ -33,8 +33,8 @@ export const LANDING = {
  * añade a PUBLISHED_LANDINGS (ver page.tsx). Pasar a false al reemplazarlo.
  */
 export const PLACEHOLDERS = {
-  /** Testimonios de ejemplo: faltan los reales (texto, foto o video y autorización). */
-  testimonials: true,
+  /** Seis testimonios en video y sus portadas entregados por el cliente. */
+  testimonials: false,
   /** Fondo definitivo de "El acceso", con puerta para escritorio y móvil. */
   accessPhoto: false,
   /** Grupo de WhatsApp confirmado y enlazado en la página de gracias. */
@@ -163,20 +163,54 @@ export const QUE_ES = {
 export const TESTIMONIOS = {
   title: [["Testimonios"]] as readonly Rich[],
   watermark: "Testimonios",
-  rating: { value: "4.8 / 5", text: "Validado por quienes ya lo vivieron" },
-  /** EJEMPLOS PROVISIONALES (PLACEHOLDERS.testimonials): no son testimonios reales. */
+  hint: "Toca una portada para ver el testimonio completo.",
+  listLabel: "Testimonios en video",
+  play: "Reproducir testimonio",
+  goTo: "Ir al testimonio",
+  watch: "Ver video",
+  pause: "Pausar carrusel",
+  resume: "Reanudar carrusel",
+  close: "Cerrar video",
+  error: "No pudimos cargar este video. Puedes abrirlo directamente o intentar de nuevo.",
+  retry: "Intentar de nuevo",
+  openVideo: "Abrir video",
+  /** El número identifica tanto el video como la portada entregada. */
   items: [
     {
-      name: "Nombre de ejemplo",
-      text: "Testimonio de ejemplo. Aquí va el comentario real de una participante sobre la masterclass.",
+      id: 1,
+      title: "Testimonio 1",
+      playbackUrl: "/videos/testimonios/video-1.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab48cf3ec718870e147750d.mov",
     },
     {
-      name: "Nombre de ejemplo",
-      text: "Testimonio de ejemplo más largo, para probar el diseño con varias líneas. Se reemplaza por el comentario real, con el nombre de quien lo escribió y su autorización para publicarlo.",
+      id: 2,
+      title: "Testimonio 2",
+      playbackUrl: "/videos/testimonios/video-2.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab48f5e1bd7d8efc80a6e29.mov",
     },
     {
-      name: "Nombre de ejemplo",
-      text: "Testimonio de ejemplo. Puede ser texto, una captura del comentario original o un video.",
+      id: 3,
+      title: "Testimonio 3",
+      playbackUrl: "/videos/testimonios/video-3.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab48f94ec718870e147af8b.mov",
+    },
+    {
+      id: 4,
+      title: "Testimonio 4",
+      playbackUrl: "/videos/testimonios/video-4.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab48fbefb1f2e9eeb94f1aa.mov",
+    },
+    {
+      id: 5,
+      title: "Testimonio 5",
+      playbackUrl: "/videos/testimonios/video-5.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab490108d8128ee4cb935d9.mov",
+    },
+    {
+      id: 6,
+      title: "Testimonio 6",
+      playbackUrl: "/videos/testimonios/video-6.mp4",
+      videoUrl: "https://assets.cdn.filesafe.space/Uj5GpDUT4CBazRPjpFJv/media/6ab490591bd7d8efc80a85e0.mov",
     },
   ],
 } as const;

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
-/** Suavizado leve para la landing; se retira mientras el registro está abierto.
+/** Suavizado leve para la landing; se retira mientras hay un modal abierto.
  * El gesto táctil conserva su inercia nativa. Se usa el scroll de la ventana
  * para mantener la barra sticky y la posición real del documento.
  */
@@ -13,9 +13,12 @@ export function SmoothScroll({ paused }: { paused: boolean }) {
     let scroll: Lenis | undefined;
 
     function configure() {
-      scroll?.destroy();
-      scroll = undefined;
-      if (paused || reducedMotion.matches) return;
+      if (paused || reducedMotion.matches || document.querySelector("dialog[open]")) {
+        scroll?.destroy();
+        scroll = undefined;
+        return;
+      }
+      if (scroll) return;
 
       scroll = new Lenis({
         autoRaf: true,
@@ -29,8 +32,11 @@ export function SmoothScroll({ paused }: { paused: boolean }) {
 
     configure();
     reducedMotion.addEventListener("change", configure);
+    const dialogs = new MutationObserver(configure);
+    dialogs.observe(document.body, { subtree: true, attributes: true, attributeFilter: ["open"] });
     return () => {
       reducedMotion.removeEventListener("change", configure);
+      dialogs.disconnect();
       scroll?.destroy();
     };
   }, [paused]);

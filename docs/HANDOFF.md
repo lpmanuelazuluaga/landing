@@ -2,8 +2,9 @@
 
 Para: Bruno y cualquier desarrollador que continúe el proyecto.
 Estado al 2026-10-15. **Fase: diseño desplegado en Vercel, en revisión de la
-agencia.** Antes de lanzar la campaña falta reemplazar el contenido provisional
-y configurar el destino de los leads (ver "Tareas pendientes").
+agencia.** Los seis testimonios reales ya reemplazan el contenido provisional.
+Antes de lanzar la campaña falta configurar el destino de los leads y completar
+las tareas de publicación (ver "Tareas pendientes").
 
 ## Datos del proyecto
 
@@ -77,7 +78,7 @@ ni foto de la referencia.
 | 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, 1,6 s), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro, centrados en su propio eje; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
 | 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio) y tarjeta |
-| 8 | `Testimonios` | "Depoimentos": palabra de fondo y tarjetas escalonadas, en un carrusel infinito (las tarjetas van triplicadas y el carrusel se recoloca en la copia del medio al terminar cada desplazamiento). Móvil: una tarjeta por vista; escritorio: tres |
+| 8 | `Testimonios` | Palabra de fondo y seis portadas de video escalonadas en un carrusel infinito con avance continuo. Cada portada abre su video en un modal. Copias laterales ocultas para accesibilidad; controles de pausa y navegación. Móvil: una tarjeta por vista; escritorio: tres |
 | 9 | `Acceso` | Puerta de fondo, con imágenes distintas para móvil y escritorio, y tarjeta con sello (sin precio) |
 | 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia) |
 
@@ -138,6 +139,26 @@ ni foto de la referencia.
   decorativo (`aria-hidden`) y estático. Verificado en Chrome a 360, 390, 430,
   768 y 1440 px con ambas preferencias de movimiento, sin desbordamiento
   horizontal; `check` y smoke (17/17) aprobados.
+- **Testimonios reales (2026-10-15):** seis portadas numeradas asociadas a los
+  seis enlaces entregados, con aviso para pulsarlas y modal de reproducción.
+  Reemplazan los comentarios de ejemplo y la valoración provisional;
+  `testimonials: false`. Avance continuo a 28 px/s, con pausa manual,
+  interacción, hover, foco, fuera de pantalla y con el modal abierto.
+  Con reducción de movimiento conserva navegación manual y puntos. El video
+  solo se monta al elegir una portada; cerrar con botón, Esc o fondo detiene
+  la reproducción y devuelve el foco. Los MOV originales son HEVC y Chrome
+  de Windows solo reproducía audio: se sirven copias MP4 H.264/AAC con inicio
+  rápido, conservando los originales en `content.ts`. Portadas JPEG a 1280 px;
+  los seis PNG entregados también quedan versionados. Los seis MP4 pesan
+  28,8 MB en total y conservan exactamente la duración de los originales;
+  decodificación completa de imagen y audio verificada con FFmpeg.
+  QA en Chrome a 360, 390, 768, 1024 y 1440 px con y sin reducción de
+  movimiento: sin scroll horizontal, avance continuo y vuelta al inicio
+  sin salto. Las seis portadas abren el video correcto, con fotogramas
+  decodificados, sonido habilitado y controles nativos. Cierres con Esc,
+  botón y fondo, pausa al cerrar, retorno del foco, swipe y toque en móvil,
+  error de red y reintento probados. No se pide ningún video antes del clic;
+  el modal cancela la inercia de Lenis. `check` y smoke (17/17) aprobados.
 - **Hero y scroll (2026-10-15):** en escritorio (desde 1024 px), «Online en
   vivo» pasa a la segunda fila, a la derecha de «Masterclass gratuita». La
   landing tiene un suavizado leve de scroll con Lenis 1.3.26: duración 0,65 s,
@@ -177,7 +198,7 @@ ni foto de la referencia.
 
 | Qué | Cómo se ve hoy | Qué falta |
 | --- | --- | --- |
-| Testimonios | Tres tarjetas con etiqueta "Ejemplo" y texto que dice que es de ejemplo | Testimonios reales (texto, captura o video) y su autorización |
+| Testimonios | Seis videos entregados por el cliente, con sus portadas y modal de reproducción | Resuelto (`testimonials: false`); ya no se muestran ejemplos ni la valoración provisional |
 
 **Después del evento:** la barra superior pasa a mostrar "Online en vivo" y la
 landing sigue invitando a registrarse. Pasado el 25 de octubre, actualizar
@@ -468,8 +489,8 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 1. Revisar y aprobar el diseño en https://landing-omega-one-60.vercel.app/.
    La rama del diseño ya está integrada en `main` y desplegada.
-2. Reemplazar el contenido provisional (tabla "Contenido provisional") y poner
-   cada valor de `PLACEHOLDERS` en `false`.
+2. Contenido provisional reemplazado: todos los valores de `PLACEHOLDERS`
+   están en `false`. Mantener la barrera para futuros contenidos de ejemplo.
 3. Destino de los leads (CRM o automatización) y `LEADS_WEBHOOK_URL` en Vercel.
    Sin él, el formulario muestra error a quien intente registrarse: **no
    lanzar anuncios hasta configurarlo**.

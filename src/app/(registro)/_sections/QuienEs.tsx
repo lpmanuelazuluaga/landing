@@ -20,6 +20,14 @@ import { Divider, RichText } from "../_components/text";
 export function QuienEs() {
   return (
     <section aria-labelledby="quien-es-titulo" className="fondo-papel relative overflow-hidden lg:min-h-[58rem]">
+      {/* Celulares: "SOBRE" gigante y tenue de fondo, cortado por el borde derecho
+          (se ve "SOB" y parte de la "R"), como la palabra de fondo de Testimonios. */}
+      <p
+        aria-hidden="true"
+        className="marca-agua pointer-events-none absolute left-[47vw] top-5 whitespace-nowrap font-serif text-[25vw] uppercase leading-none sm:hidden"
+      >
+        {QUIEN_ES.kicker}
+      </p>
       <Stamp className="pointer-events-none absolute -left-7 -top-9 w-24 -rotate-[18deg] opacity-90 md:-left-4 md:-top-6 md:w-32" />
 
       {/* Franja derecha con el nombre en vertical (escritorio). */}

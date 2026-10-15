@@ -62,6 +62,11 @@ const TEXT_MOTION = [
   { desde: "calc(50cqw - 100%) calc(6.5rem - 50%)", hasta: "6rem 1.25rem" },
 ] as const;
 
+/* Móvil: tarjeta de vidrio muy transparente para 01 y 03 (se intercalan con
+   02 y 04 sin tarjeta) y así cada punto queda separado. */
+const GLASS =
+  "max-md:rounded-2xl max-md:border max-md:border-rosa/20 max-md:bg-[linear-gradient(135deg,rgb(238_228_218/0.08),rgb(238_228_218/0.025))] max-md:shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_18px_36px_-24px_rgb(0_0_0/0.8)] max-md:backdrop-blur-[3px]";
+
 const motion = ({ desde, hasta }: { desde: string; hasta: string }) =>
   ({ "--desde": desde, "--hasta": hasta }) as CSSProperties;
 
@@ -114,9 +119,9 @@ export function ParaTi() {
             </div>
           </div>
 
-          <ol className="mt-14 grid gap-9 md:grid-cols-2 md:gap-x-12 lg:mt-0 lg:block">
+          <ol className="mt-14 grid gap-4 md:grid-cols-2 md:gap-x-12 md:gap-y-9 lg:mt-0 lg:block">
             {PARA_TI.items.map((item, index) => (
-              <li key={index} data-pieza="texto" style={motion(TEXT_MOTION[index])} className="lg:w-[14rem] xl:w-[15rem]">
+              <li key={index} data-pieza="texto" style={motion(TEXT_MOTION[index])} className={cn("max-md:px-5 max-md:py-5 lg:w-[14rem] xl:w-[15rem]", index % 2 === 0 && GLASS)}>
                 <p className="inline-flex items-baseline gap-2 font-serif text-rosa">
                   <span className="text-[2.5rem] leading-none">{String(index + 1).padStart(2, "0")}</span>
                   <span aria-hidden="true" className="text-2xl">–</span>

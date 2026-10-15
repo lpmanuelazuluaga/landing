@@ -6,7 +6,7 @@ relaciones de pareja). Mercado principal: Colombia, español (`es-CO`).
 **Estado: diseño implementado, en revisión.** La landing de la masterclass
 gratuita "El amor no se sana" reproduce una landing de referencia con el copy,
 las fotos y la marca del cliente. Todavía tiene contenido provisional marcado
-(testimonios de ejemplo, dato de prueba, foto temporal, siguiente paso de la
+(testimonios de ejemplo, foto temporal, siguiente paso de la
 gracias) y todo es noindex. Detalle y pendientes en `docs/HANDOFF.md`.
 
 Versión de revisión en Vercel: https://landing-omega-one-60.vercel.app/.
@@ -45,8 +45,8 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. Hero con fecha y hora separadas. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
-| [`/gracias`](https://landing-omega-one-60.vercel.app/gracias) | Confirmación tras un registro entregado (siguiente paso pendiente) | No, nunca |
+| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. Hero con «El amor» en cursiva y fecha y hora separadas; sin contador de plazas. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| [`/gracias`](https://landing-omega-one-60.vercel.app/gracias) | Confirmación tras un registro entregado, sin enlace de regreso (siguiente paso pendiente) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |
 | `/robots.txt`, `/sitemap.xml` | Según la regla de indexación | — |

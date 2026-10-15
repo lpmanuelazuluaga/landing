@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { noindexMetadata } from "@/lib/seo";
-import { DECOR, LANDING, PLACEHOLDERS, THANKS } from "../content";
+import { DECOR, PLACEHOLDERS, THANKS } from "../content";
 import { LogoSeal, Ornament, PlaceholderTag } from "../_components/decor";
 import { EventDetails } from "../_components/EventDetails";
 import { Divider, Title } from "../_components/text";
@@ -35,10 +34,6 @@ export default function ThanksPage() {
           {PLACEHOLDERS.thanksNextStep ? <PlaceholderTag className="text-malva">Pendiente</PlaceholderTag> : null}
           <p className="mt-2 text-[0.9375rem] leading-relaxed">{THANKS.nextStep}</p>
         </div>
-
-        <Link href={LANDING.path} className="mt-8 inline-block font-medium text-burgundy underline underline-offset-4">
-          {THANKS.back}
-        </Link>
       </div>
     </main>
   );

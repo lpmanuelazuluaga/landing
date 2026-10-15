@@ -35,8 +35,6 @@ export const LANDING = {
 export const PLACEHOLDERS = {
   /** Testimonios de ejemplo: faltan los reales (texto, foto o video y autorización). */
   testimonials: true,
-  /** El copy no trae el número de plazas registradas: hay un dato de prueba. */
-  registeredCount: true,
   /** Foto de fondo de "El acceso": se usa una temporal. */
   accessPhoto: true,
   /** Siguiente paso de la página de gracias: falta el grupo de WhatsApp. */
@@ -161,11 +159,6 @@ export const QUE_ES = {
   title: [["¿Qué es “El amor"], [{ strong: "no se sana" }, "”?"]] as readonly Rich[],
   cardTitle: "El amor no se sana",
   text: "Una masterclass gratuita diseñada para mostrarte por qué todo lo que has hecho hasta ahora para sanar tus relaciones no ha sido suficiente, y no solo eso, sino que es justamente lo que está perjudicando tus relaciones. Y te vas a ir con el paso a paso real para dejar de repetir la misma historia y salir del ciclo interminable de sanación.",
-  counter: {
-    label: "Plazas registradas",
-    /** DATO DE PRUEBA (PLACEHOLDERS.registeredCount): reemplazar por el real. */
-    value: 347,
-  },
   photoAlt: "Manuela Zuluaga reflejada en un espejo",
 };
 
@@ -210,7 +203,6 @@ export const THANKS = {
   title: [["Registro"], [{ strong: "confirmado" }]] as readonly Rich[],
   /** PENDIENTE (PLACEHOLDERS.thanksNextStep): enlace al grupo de WhatsApp. */
   nextStep: "Aquí irá el enlace al grupo de WhatsApp de la masterclass.",
-  back: "Volver a la página",
 };
 
 export const FOOTER = {

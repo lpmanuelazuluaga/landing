@@ -71,7 +71,7 @@ ni foto de la referencia.
 | 4 | `Recompensa` | "A tríade": tres tarjetas con barra superior e ícono |
 | 5 | `ParaTi` | "Metodologia" oscura: cuatro baldosas 01-04 con el sello del logo. En escritorio, al aparecer la sección (una vez, 1,6 s), las baldosas se van a las cuatro esquinas y los textos se juntan en el centro, centrados en su propio eje; el círculo central no se mueve (`_components/Escenario.tsx` + `.escenario` en `landing.css`). Con reducción de movimiento o sin JavaScript se ve el estado final |
 | 6 | `QuienEs` | "Quem será sua mentora": foto en arco, nombre vertical, estampilla. En móvil y tablet la foto va entre la pregunta y el texto |
-| 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio), tarjeta y contador |
+| 7 | `QueEs` | "O que é a escola?": espejo tallado (SVG propio) y tarjeta |
 | 8 | `Testimonios` | "Depoimentos": palabra de fondo, tarjetas escalonadas, carrusel en móvil |
 | 9 | `Acceso` | "O que você terá acesso": foto de fondo y tarjeta con sello (sin precio) |
 | 10 | `Footer` | Pie con logo y derechos. Sin enlaces legales (decisión de la agencia); la política de privacidad sigue enlazada desde el formulario |
@@ -81,6 +81,13 @@ ni foto de la referencia.
   Textos en `EVENT.heroDate` y `EVENT.heroTime`; variante `hero` de `EventDetails`.
   Verificado en Chrome a 360, 390 y 1440 px, con y sin reducción de movimiento:
   cuatro elementos legibles y sin scroll horizontal. `check` y smoke aprobados.
+- **Ajustes pedidos por Bruno (2026-10-14):** «El amor» del título del hero en
+  cursiva; retirada la tarjeta «Plazas registradas» y su dato provisional;
+  retirado el enlace «Volver a la página» de `/gracias`. El espejo y la tarjeta
+  de «¿Qué es?» ocupan la grilla sin la fila del contador.
+  Landing y gracias verificadas en Chrome a 360, 390 y 1440 px, con y sin
+  reducción de movimiento (12 casos): sin scroll horizontal, un solo `h1` por
+  página y cursiva solo en la primera línea del hero. `check` y smoke aprobados.
 - **Registro:** todos los botones "Reservar mi lugar ahora" abren el mismo modal
   (`_components/Registration.tsx`, sobre `Dialog` con `bare`). El modal es la
   tarjeta de oferta de la referencia: papel, sello con el logo, título, detalles
@@ -104,7 +111,6 @@ ni foto de la referencia.
 | Qué | Cómo se ve hoy | Qué falta |
 | --- | --- | --- |
 | Testimonios | Tres tarjetas con etiqueta "Ejemplo" y texto que dice que es de ejemplo | Testimonios reales (texto, captura o video) y su autorización |
-| Plazas registradas | 347 con etiqueta "Dato de prueba" | El número real o una fuente (CRM) |
 | Foto de "El acceso" | La del hero, en duotono, con etiqueta "Foto temporal" | La foto definitiva |
 | Gracias | Bloque "Pendiente" en lugar del siguiente paso | Enlace al grupo de WhatsApp |
 

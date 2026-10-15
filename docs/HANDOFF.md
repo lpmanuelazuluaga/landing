@@ -161,8 +161,9 @@ ni foto de la referencia.
   el modal cancela la inercia de Lenis. `check` y smoke (17/17) aprobados.
 - **Pulido de hero y testimonios (2026-10-15):** debajo de 768 px se elimina
   el margen de 28 px entre logo y título, subiendo todo el contenido posterior.
-  Desde 1024 px solo el logo baja 28 px, dejando 8 px hasta el título y
-  conservando la posición del resto del bloque. En testimonios, el hover no
+  Desde 1024 px solo el logo baja 44 px para aproximar la separación visual
+  a la de móvil, conservando la posición del resto del bloque. En testimonios,
+  el hover no
   pausa el avance y el foco devuelto a una portada tras un clic tampoco: la
   pausa por foco queda reservada a la navegación de teclado. Soltar el gesto
   dentro o fuera de la lista permite retomar tras 900 ms; se mantiene la pausa

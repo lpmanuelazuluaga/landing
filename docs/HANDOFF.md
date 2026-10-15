@@ -352,7 +352,8 @@ salvo `.env.example`).
 | `NEXT_PUBLIC_CONSENT_MODE` | público | vacía (= `required`) | `not-required` solo con validación legal |
 | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GTM_ORIGIN` | público | vacías | GTM con Consent Mode v2 |
 | `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_META_PIXEL_ID` | público | vacías | Carga directa tras consentimiento |
-| `LEADS_WEBHOOK_URL`, `LEADS_WEBHOOK_SECRET` | servidor | vacías | Destino de `/api/leads` (hoy responde 503) |
+| `GHL_API_TOKEN`, `GHL_LOCATION_ID` | servidor | vacías | Destino de `/api/leads`: GoHighLevel (prioridad) |
+| `LEADS_WEBHOOK_URL`, `LEADS_WEBHOOK_SECRET` | servidor | vacías | Destino alternativo si GHL no está configurado |
 
 Las `NEXT_PUBLIC_*` se incrustan en el build: cambiarlas en Vercel exige
 redeploy. Los valores reales salen de las cuentas del cliente y se cargan solo
@@ -362,7 +363,7 @@ en Vercel, nunca en el repositorio.
 
 | Integración | Estado | Qué falta |
 | --- | --- | --- |
-| Destino de leads (GHL, Make, Zapier, n8n…) | Implementado, inactivo | Que el cliente defina el CRM; cargar `LEADS_WEBHOOK_URL` en Vercel |
+| Destino de leads: GoHighLevel por API | Implementado, inactivo | Token de Private Integration y Location ID; cargar `GHL_API_TOKEN` y `GHL_LOCATION_ID` en Vercel |
 | GTM / GA4 / Meta Pixel / Clarity | Implementado, inactivo | IDs del cliente y decisión GTM (vía A) o directo (vía B) |
 | Consentimiento | Banner integrado listo; por defecto `required` | Confirmar el criterio legal para Colombia (Ley 1581 de 2012, habeas data) |
 | Textos legales (`/privacidad`, `/cookies`) | Rutas reservadas con aviso "PENDIENTE" | Texto del cliente |
@@ -501,7 +502,8 @@ noindex, nofollow` y no carga ningún script de tracking.
 
 - **Deduplicación de leads:** en memoria, por instancia (15 min). La durable es
   del receptor (`event_id`, actualizar contacto por email).
-- **Un solo destino de leads** implementado (webhook).
+- **Un destino de leads por despliegue:** GoHighLevel por API si está
+  configurado; si no, el webhook genérico.
 - **Revocar consentimiento** recarga la página.
 - **Smoke test** usa el puerto 3210; si está ocupado, `SMOKE_PORT=3290 npm run smoke`.
 
@@ -511,7 +513,8 @@ noindex, nofollow` y no carga ningún script de tracking.
    La rama del diseño ya está integrada en `main` y desplegada.
 2. Contenido provisional reemplazado: todos los valores de `PLACEHOLDERS`
    están en `false`. Mantener la barrera para futuros contenidos de ejemplo.
-3. Destino de los leads (CRM o automatización) y `LEADS_WEBHOOK_URL` en Vercel.
+3. Destino de los leads: `GHL_API_TOKEN` y `GHL_LOCATION_ID` en Vercel (ver
+   docs/INTEGRATIONS.md, "Formulario → GoHighLevel").
    Sin él, el formulario muestra error a quien intente registrarse: **no
    lanzar anuncios hasta configurarlo**.
 4. Textos legales (privacidad, con la autorización de la Ley 1581, y cookies).

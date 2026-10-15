@@ -12,7 +12,8 @@ un redeploy.
 | Microsoft Clarity directo | Implementada, inactiva | `NEXT_PUBLIC_CLARITY_ID` |
 | Meta Pixel directo | Implementada, inactiva | `NEXT_PUBLIC_META_PIXEL_ID` |
 | Banner de consentimiento integrado | Implementado; solo aparece con Clarity/Pixel directos y consentimiento obligatorio | automático |
-| Formulario → webhook (GHL, Make, Zapier, n8n) | Implementado, inactivo (`/api/leads` responde 503) | `LEADS_WEBHOOK_URL` (+ `LEADS_WEBHOOK_SECRET`) |
+| Formulario → GoHighLevel (API v2, upsert de contacto) | Implementado; tiene prioridad sobre el webhook | `GHL_API_TOKEN` + `GHL_LOCATION_ID` |
+| Formulario → webhook (Make, Zapier, n8n) | Implementado; solo si GHL no está configurado (sin ninguno, `/api/leads` responde 503) | `LEADS_WEBHOOK_URL` (+ `LEADS_WEBHOOK_SECRET`) |
 | Atribución (utm_*, click IDs) | Implementada, siempre activa (sessionStorage, sin cookies) | — |
 | GA4 | Sin código: se configura dentro de GTM | — |
 | Supabase (respaldo de leads) | **No implementado.** Receta abajo | — |
@@ -51,9 +52,42 @@ un redeploy.
 - Pixel envía `PageView` al cargar y `Lead` (con `eventID`) desde `trackLead`.
   La navegación del cliente no genera nuevos `PageView`.
 
+## Formulario → GoHighLevel (API)
+
+Con `GHL_API_TOKEN` y `GHL_LOCATION_ID` definidas, `/api/leads` crea o actualiza
+el contacto con `POST https://services.leadconnectorhq.com/contacts/upsert`
+(cabecera `Version: 2021-07-28`). Adaptador: `src/lib/leads/server/ghl.ts`.
+
+- **Sin costo por ejecución**, a diferencia del trigger Inbound Webhook (premium).
+- La deduplicación la hace GHL según "Allow Duplicate Contact" de la subcuenta.
+- Las automatizaciones se arman en GHL con el trigger **Contact Created** (no
+  premium), filtrando por el campo `Lead Source`.
+- Definir solo una de las dos variables es un error de configuración (503).
+
+Configuración en la subcuenta:
+
+1. Settings → **Private Integrations** → crear una con el scope
+   `contacts.write` (y `locations/customFields.readonly` para poder listar los
+   campos). Copiar el token (`pit-…`): GHL lo muestra una sola vez.
+2. Settings → Business Profile: el **Location ID** de la subcuenta.
+3. Settings → Custom Fields (objeto Contact, tipo Single line): `Lead Source`,
+   `Event ID`, `UTM Source`, `UTM Medium`, `UTM Campaign`. Sus **ids** van en
+   `FIELD_IDS` de `ghl.ts` (la API exige el id, no el key); listarlos con
+   `GET /locations/{locationId}/customFields?model=contact`.
+4. Cargar `GHL_API_TOKEN` y `GHL_LOCATION_ID` en Vercel (solo servidor) y
+   redeploy.
+
+| Contacto GHL | Origen |
+| --- | --- |
+| `firstName`, `lastName`, `name` | nombre, separado en la primera palabra |
+| `email`, `phone` | tal como se validaron (`phone` se omite si está vacío) |
+| `source` (campo estándar) | `leadSource` de la landing |
+| `Lead Source`, `Event ID`, `UTM *` | campos personalizados; los vacíos no se envían |
+
 ## Formulario → webhook
 
-`LEADS_WEBHOOK_URL` es el destino de `/api/leads`:
+`LEADS_WEBHOOK_URL` es el destino de `/api/leads` cuando GHL no está
+configurado:
 
 - debe ser `https` (`http` solo para `localhost`/`127.0.0.1`);
 - una URL insegura o mal formada se trata como no configurada (503).
@@ -76,7 +110,8 @@ Payload (JSON plano, una clave por campo):
 Cabecera opcional `X-Webhook-Secret` (= `LEADS_WEBHOOK_SECRET`) para que el
 receptor descarte peticiones ajenas.
 
-**GoHighLevel:**
+**GoHighLevel por webhook** (trigger premium, con costo por ejecución; preferir
+la API de arriba):
 
 1. Automation → Workflows → trigger **Inbound Webhook**; copiar la URL.
 2. Enviar un lead de prueba para que GHL "aprenda" los campos.

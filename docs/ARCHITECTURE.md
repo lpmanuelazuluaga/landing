@@ -58,7 +58,7 @@ src/
     attribution.ts            utm_* y click IDs → lead y enlaces salientes
     leads/schema.ts           validación compartida navegador/servidor
     leads/useLeadForm.ts      lógica de formulario sin UI
-    leads/server/             entrega (webhook) y deduplicación, solo servidor
+    leads/server/             entrega (GHL o webhook) y deduplicación, solo servidor
     cn.ts  id.ts              utilidades
   styles/theme.css            único @theme: tokens de marca
   types/global.d.ts           dataLayer, gtag, fbq
@@ -168,8 +168,9 @@ LeadForm (UI de la landing)
   └─ useLeadForm: valida (schema.ts) · idempotencyKey · bloqueo de doble envío
        └─ POST /api/leads
             ├─ 415/413/400  tipo, tamaño, validación (mismo schema.ts) y honeypot
-            ├─ 503          sin destino configurado (LEADS_WEBHOOK_URL)
+            ├─ 503          sin destino configurado (GHL_* ni LEADS_WEBHOOK_URL)
             ├─ deliverLead  dedupe en memoria (en vuelo + entregados, 15 min)
+            │    ├─ ghl      upsert de contacto (API v2), timeout 8 s; prioridad
             │    └─ webhook  POST plano, timeout 8 s, Idempotency-Key, X-Webhook-Secret
             ├─ 502          el destino falló → el formulario ofrece reintentar
             └─ 200          entregado (o duplicado de uno ya entregado)

@@ -70,7 +70,8 @@ Todas opcionales; vacías, cada integración queda inactiva. Detalle en
 | `NEXT_PUBLIC_CONSENT_MODE` | público | `required` (defecto) o `not-required` |
 | `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_GTM_ORIGIN` | público | GTM con Consent Mode v2 |
 | `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_META_PIXEL_ID` | público | Carga directa tras consentimiento |
-| `LEADS_WEBHOOK_URL`, `LEADS_WEBHOOK_SECRET` | servidor | Destino de `/api/leads` |
+| `GHL_API_TOKEN`, `GHL_LOCATION_ID` | servidor | Destino de `/api/leads`: GoHighLevel (prioridad) |
+| `LEADS_WEBHOOK_URL`, `LEADS_WEBHOOK_SECRET` | servidor | Destino de `/api/leads` si GHL no está configurado |
 
 ## Documentación
 

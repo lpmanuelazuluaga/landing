@@ -1,11 +1,12 @@
 import "server-only";
 import { site } from "@/lib/site";
 import type { Lead } from "@/lib/leads/schema";
+import type { DeliveryResult } from "@/lib/leads/server/deliver";
 
 /*
-  Destino de leads por webhook: sirve para GoHighLevel (Inbound Webhook), Make,
-  Zapier o n8n. Es el único destino implementado; ver docs/INTEGRATIONS.md
-  para añadir otros (Supabase, API nativa de un CRM).
+  Destino de leads por webhook genérico: Make, Zapier, n8n o el Inbound Webhook
+  de GoHighLevel (trigger premium, con costo por ejecución; para GHL se prefiere
+  la API, ver ghl.ts). Se usa solo si GHL no está configurado.
 */
 
 const TIMEOUT_MS = 8000;
@@ -60,8 +61,6 @@ export function toWebhookPayload(lead: Lead, submittedAt: string) {
     ...lead.attribution,
   };
 }
-
-export type DeliveryResult = { ok: true } | { ok: false; reason: string };
 
 export async function deliverToWebhook(lead: Lead, config: WebhookConfig): Promise<DeliveryResult> {
   const submittedAt = new Date().toISOString();

@@ -1,13 +1,14 @@
 "use client";
 
-import { useId, type FormEvent } from "react";
+import { useId, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { site } from "@/lib/site";
 import { useLeadForm } from "@/lib/leads/useLeadForm";
 import { ui } from "@/content/ui";
 import { CTA, LANDING } from "../content";
-import { IconArrowCircle } from "./icons";
+import { COUNTRIES, DEFAULT_COUNTRY, findCountry } from "./countries";
+import { IconArrowCircle, IconChevronDown } from "./icons";
 
 /*
   Formulario de registro de la masterclass (vive en el modal). La lógica
@@ -16,8 +17,17 @@ import { IconArrowCircle } from "./icons";
   la referencia: campos rectos, borde rosa, botón con degradado.
 
   Se conservan los name="" y el honeypot hp_check. Nombre, correo y WhatsApp
-  son obligatorios (site.leads.requirePhone).
+  son obligatorios (site.leads.requirePhone). El WhatsApp se envía con el
+  prefijo del país elegido delante ("+57 300 000 0000").
 */
+
+/** Antepone el prefijo salvo que la persona ya haya escrito uno (+…). Vacío
+    sigue vacío, para que la validación diga "Escribe tu número". */
+function withDialCode(number: string, dial: string): string {
+  const value = number.trim();
+  if (!value || value.startsWith("+")) return value;
+  return `${dial} ${value}`;
+}
 
 const FIELD =
   "mt-1.5 block min-h-12 w-full rounded-[3px] border bg-white/75 px-3.5 text-base text-tierra placeholder:text-tierra/45 transition-colors focus:border-malva focus:bg-white";
@@ -28,6 +38,8 @@ export function LeadForm() {
     thanksPath: LANDING.thanksPath,
   });
   const id = useId();
+  const [countryIso, setCountryIso] = useState(DEFAULT_COUNTRY);
+  const country = findCountry(countryIso);
   const busy = status === "submitting" || status === "success";
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -36,7 +48,7 @@ export function LeadForm() {
     void submit({
       name: String(data.get("name") ?? ""),
       email: String(data.get("email") ?? ""),
-      phone: String(data.get("phone") ?? ""),
+      phone: withDialCode(String(data.get("phone") ?? ""), country.dial),
       consent: data.get("consent") === "on",
       hp: String(data.get("hp_check") ?? ""),
     });
@@ -78,18 +90,46 @@ export function LeadForm() {
         label={site.leads.requirePhone ? ui.form.phone : `${ui.form.phone} ${ui.form.optional}`}
         error={errors.phone}
       >
-        <input
-          id={`${id}-phone`}
-          name="phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          required={site.leads.requirePhone}
-          placeholder="+57 300 000 0000"
-          aria-invalid={Boolean(errors.phone)}
-          aria-describedby={errors.phone ? `${id}-phone-error` : undefined}
-          className={cn(FIELD, errors.phone ? "border-danger" : "border-rosa")}
-        />
+        <div
+          className={cn(
+            "mt-1.5 flex min-h-12 rounded-[3px] border bg-white/75 transition-colors focus-within:border-malva focus-within:bg-white has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-focus",
+            errors.phone ? "border-danger" : "border-rosa",
+          )}
+        >
+          {/* Prefijo: el <select> nativo (transparente) cubre la bandera y el
+              prefijo visibles, así se conserva el selector del sistema y su
+              accesibilidad (en móvil abre la rueda o la hoja nativa). */}
+          <div className="relative flex shrink-0 items-center gap-1.5 border-r border-rosa/70 pl-3 pr-2.5 text-base text-tierra has-[select:focus-visible]:outline-2 has-[select:focus-visible]:outline-offset-2 has-[select:focus-visible]:outline-focus">
+            <country.Flag aria-hidden="true" className="h-[0.95rem] w-auto rounded-[2px] shadow-[0_0_0_1px_rgb(74_58_50/0.18)]" />
+            <IconChevronDown className="size-3.5 text-tierra/60" />
+            <span className="tabular-nums">{country.dial}</span>
+            <select
+              name="phone_country"
+              value={country.iso}
+              onChange={(event) => setCountryIso(event.target.value)}
+              aria-label={ui.form.phoneCountry}
+              className="absolute inset-0 cursor-pointer opacity-0"
+            >
+              {COUNTRIES.map((option) => (
+                <option key={option.iso} value={option.iso}>
+                  {option.name} ({option.dial})
+                </option>
+              ))}
+            </select>
+          </div>
+          <input
+            id={`${id}-phone`}
+            name="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel-national"
+            required={site.leads.requirePhone}
+            placeholder={country.iso === DEFAULT_COUNTRY ? "300 000 0000" : ui.form.phonePlaceholder}
+            aria-invalid={Boolean(errors.phone)}
+            aria-describedby={errors.phone ? `${id}-phone-error` : undefined}
+            className="min-w-0 flex-1 bg-transparent px-3 text-base text-tierra outline-none placeholder:text-tierra/45"
+          />
+        </div>
       </Field>
 
       {site.leads.requireConsent ? (

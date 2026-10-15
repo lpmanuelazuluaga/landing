@@ -12,6 +12,7 @@
     "new:landing": "node scripts/new-landing.mjs"
   },
   "dependencies": {
+    "country-flag-icons": "1.6.20",
     "next": "16.3.8",
     "react": "19.2.4",
     "react-dom": "19.2.4"

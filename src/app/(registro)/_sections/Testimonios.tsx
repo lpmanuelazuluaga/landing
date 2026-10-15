@@ -13,7 +13,7 @@ import { Title } from "../_components/text";
 */
 export function Testimonios() {
   return (
-    <section aria-labelledby="testimonios-titulo" className="fondo-luz relative overflow-hidden">
+    <section aria-labelledby="testimonios-titulo" className="fondo-luz relative overflow-clip">
       <p
         aria-hidden="true"
         className="marca-agua pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 whitespace-nowrap font-serif text-[clamp(4.5rem,15vw,14rem)] uppercase leading-none md:top-14"

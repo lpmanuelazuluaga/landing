@@ -32,11 +32,31 @@ export function EventDetails({
   tone = "claro",
   className,
 }: {
+  /** En móvil: fecha y hora en la primera fila; formato y precio en la segunda. */
   variant?: "hero" | "fila" | "lista";
   tone?: keyof typeof TONE;
   className?: string;
 }) {
   const colors = TONE[tone];
+
+  if (variant === "hero") {
+    return (
+      <ul
+        className={cn(
+          "grid grid-cols-[auto_auto] justify-start gap-x-5 gap-y-2.5 text-[0.9375rem] md:flex md:flex-wrap md:items-center md:gap-x-6",
+          colors.text,
+          className,
+        )}
+      >
+        {HERO_ITEMS.map(({ icon: Icon, text }) => (
+          <li key={text} className="flex items-center gap-2">
+            <Icon className={cn("size-5 shrink-0", colors.icon)} />
+            <span className="whitespace-nowrap">{text}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
   if (variant === "lista") {
     return (
@@ -53,7 +73,7 @@ export function EventDetails({
 
   return (
     <ul className={cn("flex flex-wrap items-center gap-x-6 gap-y-2.5 text-[0.9375rem]", colors.text, className)}>
-      {(variant === "hero" ? HERO_ITEMS : ITEMS).map(({ icon: Icon, text }) => (
+      {ITEMS.map(({ icon: Icon, text }) => (
         <li key={text} className="flex items-center gap-2">
           <Icon className={cn("size-5 shrink-0", colors.icon)} />
           <span>{text}</span>

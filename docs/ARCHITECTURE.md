@@ -41,7 +41,7 @@ src/
       fonts.ts                Cormorant Garamond + DM Sans (solo en esta landing)
       content.ts              copy aprobado, textos decorativos y PLACEHOLDERS
       _sections/              Hero, TeEntiendo, Recompensa, ParaTi, QuienEs, QueEs, Testimonios, Acceso, Footer
-      _components/            Registration (botón + modal), LeadForm, CountdownBar, decor, ornaments, icons, text…
+      _components/            Registration (botón + modal), LeadForm, countries (prefijos), CountdownBar, decor, ornaments, icons, text…
       _assets/                fotos optimizadas, logo y texturas de papel (generadas, propias)
   components/
     ui/                       Container, Dialog (<dialog> nativo; opción bare sin aspecto), Reveal
@@ -179,8 +179,9 @@ LeadForm (UI de la landing)
 | `typescript`, `@types/*` | Tipado estricto; `tsc` como barrera |
 | `tailwindcss`, `@tailwindcss/postcss` | Estilos con tokens |
 | `eslint`, `eslint-config-next` | Reglas de Core Web Vitals, accesibilidad y hooks |
+| `country-flag-icons` 1.6.20 (exacta, MIT, sin dependencias) | Banderas del selector de prefijo de WhatsApp en el modal de registro. SVG y no emojis porque Windows no muestra los emojis de banderas (aparecen como dos letras). Se importa país por país desde `country-flag-icons/react/3x2`, así que el bundle solo lleva las ~28 banderas de `_components/countries.ts` |
 
-No se instala nada más por defecto. `server-only` se importa sin paquete: Next lo
+Fuera de esa bandera (pedido de diseño del 2026-10-14), no se instala nada más por defecto. `server-only` se importa sin paquete: Next lo
 resuelve internamente (`docs/02-guides/data-security.md`). Las dependencias
 opcionales y su criterio de activación están en `INTEGRATIONS.md` y
 `CONVENTIONS.md`.

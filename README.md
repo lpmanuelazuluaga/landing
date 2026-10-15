@@ -11,6 +11,11 @@ gracias) y todo es noindex. Detalle y pendientes en `docs/HANDOFF.md`.
 
 Versión de revisión en Vercel: https://landing-omega-one-60.vercel.app/.
 
+Producción se despliega desde `main`. El preview de `feat/registro-diseno`
+muestra esa rama; sus commits deben integrarse en `main` para aparecer en la
+URL de producción. El trabajo local continúa en `main` con ambas versiones
+integradas.
+
 Next.js 16.3.8 (App Router, Turbopack) · React 19.2.4 · TypeScript estricto ·
 Tailwind CSS 4 · npm · Node 24.
 
@@ -45,7 +50,7 @@ npm run dev
 
 | URL | Qué es | Indexable |
 | --- | --- | --- |
-| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. Hero con «El amor» en cursiva y fecha y hora separadas; sin contador de plazas. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
+| [`/`](https://landing-omega-one-60.vercel.app/) | Landing de la masterclass "El amor no se sana" (única del sitio). Carpeta `src/app/(registro)/` (route group), `leadSource`: `registro`. Hero con «El amor» en cursiva y fecha y hora separadas; barra superior sin fecha visible, «Sobre» de fondo en móvil y sin contador de plazas. El registro es un modal: no cambia la URL | No (fuera de `PUBLISHED_LANDINGS`) |
 | [`/gracias`](https://landing-omega-one-60.vercel.app/gracias) | Confirmación tras un registro entregado, sin enlace de regreso (siguiente paso pendiente) | No, nunca |
 | `/privacidad`, `/cookies` | Rutas legales reservadas (texto pendiente del cliente) | No |
 | `/api/leads` | Recepción de leads (POST) | — |

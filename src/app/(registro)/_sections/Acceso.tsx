@@ -17,7 +17,7 @@ import { Divider, Title } from "../_components/text";
 */
 export function Acceso() {
   return (
-    <section aria-labelledby="acceso-titulo" className="tono-oscuro relative isolate overflow-hidden bg-noche">
+    <section aria-labelledby="acceso-titulo" className="tono-oscuro relative isolate overflow-clip bg-noche">
       <Image
         src={fotoTemporal}
         alt={ACCESO.photoAlt}

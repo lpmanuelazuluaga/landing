@@ -14,6 +14,7 @@ un redeploy.
 | Banner de consentimiento integrado | Implementado; solo aparece con Clarity/Pixel directos y consentimiento obligatorio | automático |
 | Formulario → GoHighLevel (API v2, upsert de contacto) | Implementado; tiene prioridad sobre el webhook | `GHL_API_TOKEN` + `GHL_LOCATION_ID` |
 | Formulario → webhook (Make, Zapier, n8n) | Implementado; solo si GHL no está configurado (sin ninguno, `/api/leads` responde 503) | `LEADS_WEBHOOK_URL` (+ `LEADS_WEBHOOK_SECRET`) |
+| Sierra Launch Kit (panel de sierra labs: visitas y leads en vivo) | Implementado, inactivo. Visitas: `<SierraTracking />` en el layout raíz. Leads: `registrarLead` en `/api/leads` tras la entrega confirmada | `NEXT_PUBLIC_SIERRA_URL`, `NEXT_PUBLIC_SIERRA_SITE_KEY`, `SIERRA_INGEST_SECRET` |
 | Atribución (utm_*, click IDs) | Implementada, siempre activa (sessionStorage, sin cookies) | — |
 | GA4 | Sin código: se configura dentro de GTM | — |
 | Supabase (respaldo de leads) | **No implementado.** Receta abajo | — |

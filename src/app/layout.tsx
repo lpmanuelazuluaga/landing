@@ -3,6 +3,7 @@ import { site } from "@/lib/site";
 import { NOINDEX, siteIndexable, siteUrl } from "@/lib/seo";
 import { Tracking } from "@/components/tracking/Tracking";
 import { AttributionCapture } from "@/components/tracking/AttributionCapture";
+import { SierraTracking } from "@/components/sierra-tracking";
 import "./globals.css";
 
 /*
@@ -33,6 +34,7 @@ export default function RootLayout({
         {children}
         <AttributionCapture />
         <Tracking />
+        <SierraTracking />
       </body>
     </html>
   );

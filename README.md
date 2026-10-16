@@ -72,6 +72,8 @@ Todas opcionales; vacías, cada integración queda inactiva. Detalle en
 | `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_META_PIXEL_ID` | público | Carga directa tras consentimiento |
 | `GHL_API_TOKEN`, `GHL_LOCATION_ID` | servidor | Destino de `/api/leads`: GoHighLevel (prioridad) |
 | `LEADS_WEBHOOK_URL`, `LEADS_WEBHOOK_SECRET` | servidor | Destino de `/api/leads` si GHL no está configurado |
+| `NEXT_PUBLIC_SIERRA_URL`, `NEXT_PUBLIC_SIERRA_SITE_KEY` | público | Panel de sierra labs: visitas y leads en vivo |
+| `SIERRA_INGEST_SECRET` | servidor | Firma de los leads enviados al panel de sierra labs |
 
 ## Documentación
 

@@ -1,5 +1,6 @@
 import { validateLead } from "@/lib/leads/schema";
 import { deliverLead, readDestination } from "@/lib/leads/server/deliver";
+import { registrarLead } from "@/lib/sierra";
 
 /*
   POST /api/leads — recepción de leads de cualquier formulario del sitio.
@@ -60,6 +61,26 @@ export async function POST(request: Request) {
   if (!outcome.ok) {
     console.error(`[leads] entrega fallida reason=${outcome.reason} event_id=${result.lead.idempotencyKey}`);
     return json({ ok: false, error: "delivery_failed" }, 502);
+  }
+
+  /* Panel de sierra labs: solo tras la entrega confirmada y una vez por lead
+     (event_id como id). Nunca lanza y corta a los 4 s. */
+  if (!outcome.duplicate) {
+    const { lead } = result;
+    await registrarLead({
+      id: lead.idempotencyKey,
+      email: lead.email,
+      name: lead.name,
+      phone: lead.phone,
+      /* Ruta y UTM de la atribución propia del sitio, ya validados por schema.ts. */
+      path: lead.pagePath,
+      utm: {
+        utm_source: lead.attribution.utm_source,
+        utm_medium: lead.attribution.utm_medium,
+        utm_campaign: lead.attribution.utm_campaign,
+        utm_content: lead.attribution.utm_content,
+      },
+    });
   }
 
   return json({ ok: true, duplicate: outcome.duplicate }, 200);

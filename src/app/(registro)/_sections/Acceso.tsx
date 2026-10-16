@@ -33,7 +33,7 @@ export function Acceso() {
         <div className="fondo-papel relative mx-auto max-w-[40rem] rounded-[1.25rem] border border-rosa/50 px-6 pb-10 pt-16 text-center text-tierra shadow-[0_40px_80px_-30px_rgb(0_0_0/0.85)] [--color-focus:var(--color-malva)] sm:px-14 sm:pb-12">
           <LogoSeal id="sello-acceso" text={DECOR.seal} />
           <Kicker className="justify-center text-malva">{ACCESO.kicker}</Kicker>
-          <Title id="acceso-titulo" lines={ACCESO.title} className="mt-3" />
+          <Title id="acceso-titulo" lines={ACCESO.title} size="card" className="mt-3" />
           <Divider align="centro" className="my-8" />
           <EventDetails variant="lista" className="mx-auto w-fit text-left" />
           <Divider align="centro" className="my-8" />

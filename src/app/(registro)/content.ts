@@ -218,7 +218,7 @@ export const TESTIMONIOS = {
 
 export const ACCESO = {
   kicker: "El acceso",
-  title: [["Las puertas se abren."], [{ strong: "¿Te animas?" }]] as readonly Rich[],
+  title: [["¿Estás lista para cerrar"], [{ strong: "con el ciclo interminable de sanación?" }]] as readonly Rich[],
   /** La puerta es un fondo decorativo. */
   photoAlt: "",
 };

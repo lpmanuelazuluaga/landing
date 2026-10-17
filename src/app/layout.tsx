@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/lib/site";
 import { NOINDEX, siteIndexable, siteUrl } from "@/lib/seo";
 import { Tracking } from "@/components/tracking/Tracking";
@@ -35,6 +36,7 @@ export default function RootLayout({
         <AttributionCapture />
         <Tracking />
         <SierraTracking />
+        <Analytics />
       </body>
     </html>
   );

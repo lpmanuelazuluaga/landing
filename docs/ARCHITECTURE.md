@@ -226,6 +226,7 @@ movimiento se omite la pausa. La entrada de la tarjeta de gracias y del bloque
 | `tailwindcss`, `@tailwindcss/postcss` | Estilos con tokens |
 | `eslint`, `eslint-config-next` | Reglas de Core Web Vitals, accesibilidad y hooks |
 | `country-flag-icons` 1.6.20 (exacta, MIT, sin dependencias) | Banderas del selector de prefijo de WhatsApp en el modal de registro. SVG y no emojis porque Windows no muestra los emojis de banderas (aparecen como dos letras). Se importa país por país desde `country-flag-icons/react/3x2`, así que el bundle solo lleva las ~28 banderas de `_components/countries.ts` |
+| `@vercel/analytics` 2.0.1 (exacta, MIT, sin dependencias) | Visitas y páginas vistas en el dashboard de Vercel, sin cookies. Montado en el layout raíz (`<Analytics />` de `@vercel/analytics/next`); fuera de Vercel no envía nada |
 | `lenis` 1.3.26 (exacta, MIT) | Suavizado leve del scroll solicitado para toda la landing: 0,65 s de inercia y multiplicador de rueda 0,9. Lo administra `_components/SmoothScroll.tsx`, montado solo por `RegistrationProvider`; se destruye al abrir el modal, con reducción de movimiento y al abandonar la landing. El gesto táctil y el carrusel horizontal usan su desplazamiento nativo |
 
 Las banderas y el suavizado del scroll responden a pedidos de diseño concretos.

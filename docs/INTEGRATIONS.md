@@ -19,7 +19,8 @@ un redeploy.
 | GA4 | Sin código: se configura dentro de GTM | — |
 | Supabase (respaldo de leads) | **No implementado.** Receta abajo | — |
 | Systeme.io nativo | **No implementado.** Usar webhook vía Make/Zapier | — |
-| Vercel Analytics / Speed Insights | **No instalados** | ver abajo |
+| Vercel Analytics | Instalado; activo en Vercel con Analytics habilitado en el dashboard | ver abajo |
+| Vercel Speed Insights | **No instalado** | ver abajo |
 
 ## Google Tag Manager (vía A, recomendada)
 
@@ -167,12 +168,16 @@ Para clientes con volumen de pauta o requisito de auditoría. Pasos:
    está migrando de las claves `anon`/`service_role` a `publishable`/`secret`;
    confirmar el nombre vigente al integrar.
 
-## Vercel Analytics / Speed Insights (no instalados)
+## Vercel Analytics (instalado) / Speed Insights (no instalado)
 
-`npm install @vercel/analytics` (o `@vercel/speed-insights`) y montar el
-componente en `src/app/layout.tsx`. Activarlo antes en el dashboard del proyecto.
-Speed Insights aporta Core Web Vitals de campo. **No verificado:** el coste según
-el plan de Vercel de cada cliente.
+`@vercel/analytics` está montado en `src/app/layout.tsx` (`<Analytics />` de
+`@vercel/analytics/next`): visitas y páginas vistas, sin cookies. Solo envía
+datos en despliegues de Vercel con Analytics activado en el dashboard del
+proyecto; en local no hace nada.
+
+Speed Insights (`@vercel/speed-insights`, Core Web Vitals de campo) se monta
+igual si se necesita. **No verificado:** el coste según el plan de Vercel de
+cada cliente.
 
 ## Checkout y enlaces salientes
 

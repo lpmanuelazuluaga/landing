@@ -242,7 +242,7 @@ export const THANKS = {
     body: "Qué alegría que estés aquí.",
   },
   whatsappLabel: "Unirme al grupo de WhatsApp",
-  whatsappUrl: "https://chat.whatsapp.com/LRqwBjIWwEF0XwP5Esl9yy?s=cl&p=i&mlu=4&ilr=4&iam=2",
+  whatsappUrl: "https://chat.whatsapp.com/CXoZWogW0Bg3IZzefTdZPj?s=cl&p=i&mlu=4&ilr=4&iam=2",
 };
 
 export const FOOTER = {

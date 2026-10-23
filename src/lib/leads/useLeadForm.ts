@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { newId } from "@/lib/id";
 import { getAttribution } from "@/lib/attribution";
+import { recordarPersona } from "@/components/sierra-tracking";
 import { trackLead, type LeadUserData } from "@/lib/analytics";
 import { validateLead, type Lead, type LeadFieldErrors, type LeadFields } from "@/lib/leads/schema";
 
@@ -81,6 +82,9 @@ export function useLeadForm({ source, thanksPath, beforeNavigate, includeUserDat
         }
       }
       if (!response.ok) throw new Error(`leads ${response.status}`);
+
+      // Sierra: recuerda a la persona registrada para atribuir sus clics posteriores.
+      recordarPersona(check.lead.email);
 
       if (trackedRef.current !== idempotencyKey) {
         trackedRef.current = idempotencyKey;

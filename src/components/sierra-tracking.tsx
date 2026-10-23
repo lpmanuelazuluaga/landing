@@ -17,19 +17,43 @@ import { usePathname } from "next/navigation";
 const UTM = ["utm_source", "utm_medium", "utm_campaign", "utm_content"] as const;
 type Utm = Partial<Record<(typeof UTM)[number], string>>;
 
-/** UTM de la URL; si no hay, los guardados en la sesión (la visita anterior). */
+const CLAVE_UTM = "sl_utm";
+/* Quien entra por un anuncio y vuelve otro día sigue atribuido a ese anuncio. */
+const VIGENCIA_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * UTM de la URL; si no trae, los guardados de una visita anterior (hasta 7
+ * días). Una URL con UTM reemplaza el juego completo: último toque.
+ */
 function leerUtm(): Utm {
   const resultado: Utm = {};
   try {
     const consulta = new URLSearchParams(window.location.search);
     for (const nombre of UTM) {
-      let valor = consulta.get(nombre);
-      if (valor) window.sessionStorage.setItem(`sl_${nombre}`, valor);
-      else valor = window.sessionStorage.getItem(`sl_${nombre}`);
+      const valor = consulta.get(nombre);
+      if (valor) resultado[nombre] = valor.slice(0, 120);
+    }
+    if (Object.keys(resultado).length > 0) {
+      window.localStorage.setItem(CLAVE_UTM, JSON.stringify({ utm: resultado, t: Date.now() }));
+      return resultado;
+    }
+
+    const guardado = JSON.parse(window.localStorage.getItem(CLAVE_UTM) ?? "null") as { utm?: Utm; t?: number } | null;
+    if (guardado?.utm && typeof guardado.t === "number" && Date.now() - guardado.t < VIGENCIA_MS) {
+      for (const nombre of UTM) {
+        const valor = guardado.utm[nombre];
+        if (typeof valor === "string" && valor) resultado[nombre] = valor.slice(0, 120);
+      }
+      return resultado;
+    }
+
+    // Visitas que empezaron antes del cambio a localStorage.
+    for (const nombre of UTM) {
+      const valor = window.sessionStorage.getItem(`sl_${nombre}`);
       if (valor) resultado[nombre] = valor.slice(0, 120);
     }
   } catch {
-    /* sessionStorage bloqueado: sin UTM guardados */
+    /* almacenamiento bloqueado: sin UTM guardados */
   }
   return resultado;
 }

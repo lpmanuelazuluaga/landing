@@ -3,7 +3,9 @@
 
   Se captura al entrar (components/tracking/AttributionCapture) y viaja con el
   lead al CRM, y opcionalmente al checkout (withAttribution). Vive en
-  sessionStorage: dura la visita y no persiste entre sesiones.
+  localStorage durante 7 días: quien entra por un anuncio y vuelve otro día a
+  registrarse sigue atribuido a ese anuncio (con sessionStorage se perdía al
+  cerrar la app o la pestaña).
 
   Modelo: último toque con parámetros. Una URL con utm_* o click IDs reemplaza
   lo guardado; una URL sin parámetros no borra lo anterior.
@@ -45,10 +47,21 @@ export function sanitizeAttribution(input: unknown): Attribution {
   return clean;
 }
 
+const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
 function readStored(): Attribution | null {
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
-    return raw ? sanitizeAttribution(JSON.parse(raw)) : null;
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw) as { value?: unknown; savedAt?: number };
+      if (typeof saved.savedAt === "number" && Date.now() - saved.savedAt < MAX_AGE_MS) {
+        return sanitizeAttribution(saved.value);
+      }
+      window.localStorage.removeItem(STORAGE_KEY);
+    }
+    // Visitas que empezaron antes del cambio a localStorage.
+    const legacy = window.sessionStorage.getItem(STORAGE_KEY);
+    return legacy ? sanitizeAttribution(JSON.parse(legacy)) : null;
   } catch {
     return null;
   }
@@ -56,7 +69,7 @@ function readStored(): Attribution | null {
 
 function store(value: Attribution) {
   try {
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ value, savedAt: Date.now() }));
   } catch {
     /* sin almacenamiento la atribución se pierde, el formulario sigue igual */
   }

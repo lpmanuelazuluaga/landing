@@ -16,7 +16,14 @@ const nextConfig: NextConfig = {
   },
 
   async rewrites() {
-    return panelSierra ? [{ source: "/vivo/:token", destination: `${panelSierra}/w/:token` }] : [];
+    /* /grupo/<token>: grupo de WhatsApp fijo del lanzamiento; el panel rota
+       solo entre los grupos cargados cuando uno se llena. */
+    return panelSierra
+      ? [
+          { source: "/vivo/:token", destination: `${panelSierra}/w/:token` },
+          { source: "/grupo/:token", destination: `${panelSierra}/g/:token` },
+        ]
+      : [];
   },
 
   async headers() {

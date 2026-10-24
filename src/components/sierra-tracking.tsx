@@ -17,6 +17,17 @@
  * Además, <SierraTracking /> captura solo los clics en enlaces a grupos de
  * WhatsApp (chat.whatsapp.com) y a checkouts. Se puede forzar con
  * data-sierra="whatsapp" | "checkout" y nombrar con data-sierra-target.
+ *
+ * A los links de pago de Stripe (buy.stripe.com) les agrega, al hacer clic,
+ * `client_reference_id` con la ruta y los UTM: es lo único que Stripe le pasa
+ * al webhook, y así la compra llega al panel con su landing y su anuncio
+ * (el servidor lo lee con atribucionDeReferencia()). También lo hace con los
+ * links de PixelBridge (/go?c=…): le suma la referencia al link de Stripe que
+ * lleva dentro de su configuración, porque PixelBridge no reenvía nada solo.
+ *
+ * Los links al grupo fijo del lanzamiento (/grupo/<token>, que la landing
+ * reenvía al panel) cuentan como clic al grupo de WhatsApp, y llevan el correo
+ * de quien se registró: así vuelve siempre a su mismo grupo.
  */
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
@@ -126,6 +137,87 @@ function esCheckout(host: string, ruta: string): boolean {
   return false;
 }
 
+/** Texto en base64url: usa solo letras, números, - y _, lo que acepta Stripe. */
+function base64url(texto: string): string {
+  let binario = "";
+  for (const byte of new TextEncoder().encode(texto)) binario += String.fromCharCode(byte);
+  return btoa(binario).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+/**
+ * Ruta y UTM empaquetados para `client_reference_id` (máximo 200 caracteres).
+ * Si no entra, se resigna primero el anuncio, después la campaña y la fuente:
+ * la ruta es lo que ubica la venta en su lanzamiento.
+ */
+function referenciaCompra(path: string, utm: Utm): string | null {
+  const datos: Record<string, string> = { p: path.slice(0, 60) };
+  if (utm.utm_source) datos.s = utm.utm_source.slice(0, 30);
+  if (utm.utm_campaign) datos.c = utm.utm_campaign.slice(0, 40);
+  if (utm.utm_content) datos.a = utm.utm_content.slice(0, 40);
+  for (const quitar of ["", "a", "c", "s"]) {
+    if (quitar) delete datos[quitar];
+    const ref = base64url(JSON.stringify(datos));
+    if (ref.length <= 200) return ref;
+  }
+  return null;
+}
+
+/** Link al grupo fijo del lanzamiento en esta misma landing (/grupo/<token>). */
+function esLinkDeGrupo(url: URL): boolean {
+  return url.origin === window.location.origin && url.pathname.startsWith("/grupo/");
+}
+
+/** Le suma al link del grupo el correo de quien se registró, si no lo trae. */
+function etiquetarGrupo(origen: EventTarget | null): void {
+  if (!(origen instanceof Element)) return;
+  const enlace = origen.closest("a[href]") as HTMLAnchorElement | null;
+  if (!enlace) return;
+  const url = new URL(enlace.href, window.location.href);
+  if (!esLinkDeGrupo(url) || url.searchParams.has("e")) return;
+  const persona = personaGuardada();
+  if (!persona) return;
+  url.searchParams.set("e", persona.e);
+  enlace.href = url.toString();
+}
+
+/** Suma la referencia a un link de Stripe; false si no es de Stripe o ya trae una. */
+function conReferencia(url: URL, ref: string): boolean {
+  if (url.hostname.toLowerCase() !== "buy.stripe.com" || url.searchParams.has("client_reference_id")) return false;
+  url.searchParams.set("client_reference_id", ref);
+  return true;
+}
+
+/** Etiqueta un link de pago (de Stripe o vía PixelBridge) antes de que el navegador lo siga. */
+function etiquetarPagoStripe(origen: EventTarget | null): void {
+  if (!(origen instanceof Element)) return;
+  const enlace = origen.closest("a[href]") as HTMLAnchorElement | null;
+  if (!enlace) return;
+  const url = new URL(enlace.href, window.location.href);
+  const host = url.hostname.toLowerCase();
+  const esStripe = host === "buy.stripe.com";
+  const esPixelBridge = host === "pixelbridge-theta.vercel.app" && url.pathname === "/go" && url.searchParams.has("c");
+  if (!esStripe && !esPixelBridge) return;
+  const ref = referenciaCompra(window.location.pathname, leerUtm());
+  if (!ref) return;
+
+  if (esStripe) {
+    if (conReferencia(url, ref)) enlace.href = url.toString();
+    return;
+  }
+  // PixelBridge: la configuración viaja en `c` (JSON UTF-8 en base64); el link
+  // de Stripe va adentro, en `s`.
+  const bytes = Uint8Array.from(atob(url.searchParams.get("c") ?? ""), (ch) => ch.charCodeAt(0));
+  const config = JSON.parse(new TextDecoder().decode(bytes)) as { s?: unknown };
+  if (typeof config.s !== "string") return;
+  const stripe = new URL(config.s);
+  if (!conReferencia(stripe, ref)) return;
+  config.s = stripe.toString();
+  let binario = "";
+  for (const byte of new TextEncoder().encode(JSON.stringify(config))) binario += String.fromCharCode(byte);
+  url.searchParams.set("c", btoa(binario));
+  enlace.href = url.toString();
+}
+
 function clasificarClic(origen: EventTarget | null): { tipo: TipoEvento; destino: string } | null {
   if (!(origen instanceof Element)) return null;
   const forzado = origen.closest("[data-sierra]");
@@ -139,7 +231,7 @@ function clasificarClic(origen: EventTarget | null): { tipo: TipoEvento; destino
       const url = new URL(enlace.href, window.location.href);
       host = url.hostname.toLowerCase();
       if (!tipo) {
-        if (host === "chat.whatsapp.com") tipo = "whatsapp_click";
+        if (host === "chat.whatsapp.com" || esLinkDeGrupo(url)) tipo = "whatsapp_click";
         else if (esCheckout(host, url.pathname)) tipo = "checkout_click";
       }
     } catch {
@@ -159,6 +251,14 @@ export function SierraTracking() {
 
   useEffect(() => {
     const alHacerClic = (evento: MouseEvent) => {
+      // auxclick también llega con el botón derecho: solo cuenta la rueda.
+      if (evento.type === "auxclick" && evento.button !== 1) return;
+      try {
+        etiquetarPagoStripe(evento.target);
+        etiquetarGrupo(evento.target);
+      } catch {
+        /* sin etiqueta, el link funciona igual */
+      }
       try {
         const clasificado = clasificarClic(evento.target);
         if (clasificado) sierraEvento(clasificado.tipo, clasificado.destino);
@@ -166,8 +266,13 @@ export function SierraTracking() {
         /* nunca interferir con el clic */
       }
     };
+    // El clic con la rueda (abrir en pestaña nueva) llega como auxclick, no como click.
     document.addEventListener("click", alHacerClic, { capture: true, passive: true });
-    return () => document.removeEventListener("click", alHacerClic, { capture: true });
+    document.addEventListener("auxclick", alHacerClic, { capture: true, passive: true });
+    return () => {
+      document.removeEventListener("click", alHacerClic, { capture: true });
+      document.removeEventListener("auxclick", alHacerClic, { capture: true });
+    };
   }, []);
 
   useEffect(() => {

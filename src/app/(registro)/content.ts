@@ -242,7 +242,10 @@ export const THANKS = {
     body: "Qué alegría que estés aquí.",
   },
   whatsappLabel: "Unirme al grupo de WhatsApp",
-  whatsappUrl: "https://chat.whatsapp.com/Bf6QQa6rEQXEmvReMxrRys?s=cl&p=i&mlu=4&ilr=4&iam=2",
+  /* Link fijo del lanzamiento: el panel de Sierra manda al grupo vigente y
+     rota solo cuando uno se llena. Los grupos se cargan en el panel o en el
+     portal, NO acá: este link no se cambia más. */
+  whatsappUrl: "/grupo/3db8e7a37c4d41de9d9a720547a8b351",
 };
 
 export const FOOTER = {
